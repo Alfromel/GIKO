@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#FFFFFF">
+    <meta name="theme-color" content="#2563eb" id="theme-color">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -21,21 +21,57 @@
             --accent-dark: #2563eb;
             --safe-area-inset-top: env(safe-area-inset-top);
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
+            
+            /* Modo claro */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --header-bg: #ffffff;
+            --nav-bg: #ffffff;
+            --input-bg: #f8fafc;
+            --hover-bg: #f1f5f9;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #3b82f6;
+            --secondary-dark: #2563eb;
+            --accent: #60a5fa;
+            --accent-dark: #3b82f6;
+            
+            /* Modo oscuro - Negro puro */
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a2a2a;
+            --card-bg: #111111;
+            --header-bg: #000000;
+            --nav-bg: #0a0a0a;
+            --input-bg: #1a1a1a;
+            --hover-bg: #1a1a1a;
+            --shadow-color: rgba(0, 0, 0, 0.5);
         }
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             padding-top: var(--safe-area-inset-top);
             padding-bottom: var(--safe-area-inset-bottom);
             -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         /* Estilo de aplicación móvil */
         @media (max-width: 768px) {
             body {
-                background-color: white;
+                background-color: var(--bg-secondary);
                 max-width: 100vw;
                 overflow-x: hidden;
             }
@@ -69,8 +105,8 @@
                 left: 0;
                 right: 0;
                 height: 60px;
-                background: white;
-                border-top: 1px solid #e2e8f0;
+                background: var(--nav-bg);
+                border-top: 1px solid var(--border-color);
                 display: flex;
                 z-index: 50;
                 padding-bottom: var(--safe-area-inset-bottom);
@@ -82,7 +118,7 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                color: #64748b;
+                color: var(--text-secondary);
                 font-size: 10px;
                 text-decoration: none;
                 transition: all 0.2s;
@@ -101,9 +137,9 @@
                 position: sticky;
                 top: 0;
                 z-index: 40;
-                background: white;
+                background: var(--header-bg);
                 padding: 12px 16px;
-                border-bottom: 1px solid #f1f5f9;
+                border-bottom: 1px solid var(--border-color);
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -113,18 +149,39 @@
             .mobile-header-title {
                 font-size: 18px;
                 font-weight: 600;
-                color: #1e293b;
+                color: var(--text-primary);
             }
             
             .mobile-header-actions {
                 display: flex;
                 align-items: center;
+                gap: 12px;
+            }
+            
+            .theme-toggle {
+                background: none;
+                border: none;
+                color: var(--text-primary);
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 4px;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.2s;
+            }
+            
+            .theme-toggle:hover {
+                background-color: var(--hover-bg);
             }
             
             .mobile-card {
-                background: white;
+                background: var(--card-bg);
                 border-radius: 12px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 2px 8px var(--shadow-color);
                 margin: 16px;
                 overflow: hidden;
             }
@@ -132,7 +189,7 @@
             .mobile-section-title {
                 font-size: 16px;
                 font-weight: 600;
-                color: #1e293b;
+                color: var(--text-primary);
                 margin: 16px 16px 8px;
             }
             
@@ -143,8 +200,8 @@
                 flex-direction: column;
                 padding: 12px;
                 border-radius: 12px;
-                background: white;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                background: var(--card-bg);
+                box-shadow: 0 2px 8px var(--shadow-color);
                 transition: all 0.2s;
             }
             
@@ -163,14 +220,14 @@
             .mobile-action-btn span {
                 font-size: 12px;
                 font-weight: 500;
-                color: #334155;
+                color: var(--text-primary);
             }
             
             .mobile-transaction-item {
                 display: flex;
                 align-items: center;
                 padding: 12px 16px;
-                border-bottom: 1px solid #f1f5f9;
+                border-bottom: 1px solid var(--border-color);
             }
             
             .mobile-transaction-icon {
@@ -191,13 +248,13 @@
             .mobile-transaction-title {
                 font-size: 14px;
                 font-weight: 500;
-                color: #1e293b;
+                color: var(--text-primary);
                 margin-bottom: 2px;
             }
             
             .mobile-transaction-date {
                 font-size: 12px;
-                color: #64748b;
+                color: var(--text-secondary);
             }
             
             .mobile-transaction-amount {
@@ -207,7 +264,7 @@
             
             .mobile-tabs {
                 display: flex;
-                border-bottom: 1px solid #e2e8f0;
+                border-bottom: 1px solid var(--border-color);
                 margin: 0 16px;
             }
             
@@ -217,7 +274,7 @@
                 padding: 12px 0;
                 font-size: 14px;
                 font-weight: 500;
-                color: #64748b;
+                color: var(--text-secondary);
                 position: relative;
             }
             
@@ -243,7 +300,7 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
+                background: rgba(0, 0, 0, 0.7);
                 z-index: 100;
                 display: flex;
                 align-items: flex-end;
@@ -258,7 +315,7 @@
             }
             
             .mobile-modal-content {
-                background: white;
+                background: var(--card-bg);
                 width: 100%;
                 border-radius: 24px 24px 0 0;
                 padding: 24px;
@@ -282,28 +339,34 @@
             .mobile-modal-title {
                 font-size: 18px;
                 font-weight: 600;
-                color: #1e293b;
+                color: var(--text-primary);
             }
             
             .mobile-modal-close {
-                color: #64748b;
+                color: var(--text-secondary);
                 font-size: 20px;
+                cursor: pointer;
             }
             
             .mobile-input {
                 width: 100%;
                 padding: 14px 16px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid var(--border-color);
                 border-radius: 12px;
                 font-size: 16px;
                 margin-bottom: 16px;
-                background: #f8fafc;
+                background: var(--input-bg);
+                color: var(--text-primary);
             }
             
             .mobile-input:focus {
                 border-color: var(--primary);
                 outline: none;
-                background: white;
+                background: var(--card-bg);
+            }
+            
+            .mobile-input::placeholder {
+                color: var(--text-secondary);
             }
             
             .mobile-btn {
@@ -314,6 +377,7 @@
                 font-weight: 500;
                 text-align: center;
                 margin-top: 8px;
+                cursor: pointer;
             }
             
             .mobile-btn-primary {
@@ -321,9 +385,17 @@
                 color: white;
             }
             
+            .mobile-btn-primary:hover {
+                background: var(--primary-dark);
+            }
+            
             .mobile-btn-secondary {
-                background: #f1f5f9;
-                color: #334155;
+                background: var(--border-color);
+                color: var(--text-primary);
+            }
+            
+            .mobile-btn-secondary:hover {
+                background: var(--hover-bg);
             }
             
             .mobile-operator-btn {
@@ -331,27 +403,36 @@
                 align-items: center;
                 justify-content: center;
                 padding: 12px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid var(--border-color);
                 border-radius: 12px;
                 margin-bottom: 8px;
+                background: var(--card-bg);
+                color: var(--text-primary);
+                cursor: pointer;
+                transition: all 0.2s;
             }
             
             .mobile-operator-btn.selected {
                 border-color: var(--primary);
-                background: #eff6ff;
+                background: var(--primary);
+                color: white;
+            }
+            
+            .mobile-operator-btn.selected img {
+                filter: brightness(0) invert(1);
             }
             
             .mobile-avatar {
                 width: 80px;
                 height: 80px;
                 border-radius: 50%;
-                background: #dbeafe;
+                background: var(--primary);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 24px;
                 font-weight: 600;
-                color: var(--primary);
+                color: white;
                 margin: 0 auto 16px;
                 position: relative;
                 overflow: hidden;
@@ -367,16 +448,16 @@
                 display: flex;
                 justify-content: space-between;
                 padding: 12px 0;
-                border-bottom: 1px solid #f1f5f9;
+                border-bottom: 1px solid var(--border-color);
             }
             
             .mobile-profile-label {
-                color: #64748b;
+                color: var(--text-secondary);
                 font-size: 14px;
             }
             
             .mobile-profile-value {
-                color: #1e293b;
+                color: var(--text-primary);
                 font-weight: 500;
                 font-size: 14px;
             }
@@ -554,17 +635,17 @@
                 width: 60px;
                 height: 60px;
                 border-radius: 50%;
-                background: #f1f5f9;
+                background: var(--border-color);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin-bottom: 16px;
-                color: #94a3b8;
+                color: var(--text-secondary);
                 font-size: 24px;
             }
             
             .mobile-empty-text {
-                color: #64748b;
+                color: var(--text-secondary);
                 font-size: 14px;
                 margin-top: 8px;
             }
@@ -582,7 +663,7 @@
             .qr-code {
                 width: 200px;
                 height: 200px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid var(--border-color);
                 border-radius: 12px;
                 padding: 10px;
                 background: white;
@@ -592,17 +673,19 @@
                 display: block;
                 width: 100%;
                 padding: 12px;
-                border: 1px dashed #e2e8f0;
+                border: 1px dashed var(--border-color);
                 border-radius: 12px;
                 text-align: center;
                 cursor: pointer;
                 margin-bottom: 16px;
                 transition: all 0.2s;
+                color: var(--text-primary);
             }
             
             .file-input-label:hover {
                 border-color: var(--primary);
-                background: #eff6ff;
+                background: var(--primary);
+                color: white;
             }
             
             .file-input-label i {
@@ -611,7 +694,7 @@
             
             .file-name {
                 font-size: 12px;
-                color: #64748b;
+                color: var(--text-secondary);
                 margin-top: 8px;
                 word-break: break-all;
             }
@@ -628,31 +711,6 @@
                 box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
                 background: #fff;
             }
-
-            .operator-btn[data-operator="entel"],
-            .mobile-operator-btn[data-operator="entel"] {
-                opacity: 0.5;
-                cursor: not-allowed;
-                position: relative;
-                background: #f1f1f1;
-                border-color: #ccc;
-            }
-            
-            .operator-btn[data-operator="entel"]::after,
-            .mobile-operator-btn[data-operator="entel"]::after {
-                content: "EN CUARENTENA";
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background: #dc2626;
-                color: white;
-                font-size: 10px;
-                font-weight: bold;
-                padding: 2px 6px;
-                border-radius: 12px;
-                white-space: nowrap;
-                z-index: 10;
-            }
         }
         
         @media (min-width: 769px) {
@@ -661,11 +719,11 @@
             }
             
             .glass-card {
-                background: rgba(255, 255, 255, 0.95);
+                background: var(--card-bg);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 8px 32px var(--shadow-color);
             }
             
             .btn-primary {
@@ -734,15 +792,15 @@
             
             .card {
                 border-radius: 20px;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+                box-shadow: 0 10px 25px -5px var(--shadow-color);
                 transition: all 0.3s;
-                border: 1px solid rgba(226, 232, 240, 0.7);
-                background: white;
+                border: 1px solid var(--border-color);
+                background: var(--card-bg);
             }
             
             .card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 20px 25px -5px var(--shadow-color);
             }
             
             .tab-active {
@@ -769,9 +827,9 @@
             }
             
             .transaction-item:hover {
-                background-color: #f8fafc;
+                background-color: var(--hover-bg);
                 transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+                box-shadow: 0 4px 15px var(--shadow-color);
             }
             
             .avatar {
@@ -783,9 +841,9 @@
                 justify-content: center;
                 font-size: 2rem;
                 font-weight: 600;
-                color: var(--primary);
-                background-color: #dbeafe;
-                border: 4px solid white;
+                color: white;
+                background-color: var(--primary);
+                border: 4px solid var(--card-bg);
                 box-shadow: 0 8px 25px rgba(37, 99, 235, 0.1);
                 position: relative;
                 overflow: hidden;
@@ -947,15 +1005,15 @@
             }
             
             .modal-overlay {
-                background-color: rgba(0, 0, 0, 0.6);
+                background-color: rgba(0, 0, 0, 0.7);
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
             }
             
             .modal-content {
-                background: white;
+                background: var(--card-bg);
                 border-radius: 24px;
-                box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
                 transform: translateY(20px);
                 opacity: 0;
                 transition: all 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
@@ -973,14 +1031,20 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: 1px solid #e2e8f0;
-                background-color: white;
+                border: 1px solid var(--border-color);
+                background-color: var(--card-bg);
+                color: var(--text-primary);
+                cursor: pointer;
             }
             
             .operator-btn.selected {
-                border-color: var(--secondary);
-                background-color: #dbeafe;
-                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+                border-color: var(--primary);
+                background-color: var(--primary);
+                color: white;
+            }
+            
+            .operator-btn.selected img {
+                filter: brightness(0) invert(1);
             }
             
             @keyframes fadeIn {
@@ -1003,18 +1067,23 @@
             
             .input-field {
                 border-radius: 12px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid var(--border-color);
                 padding: 14px 16px;
                 transition: all 0.2s;
-                background-color: #f8fafc;
+                background-color: var(--input-bg);
                 font-size: 0.95rem;
+                color: var(--text-primary);
             }
             
             .input-field:focus {
-                border-color: var(--secondary);
+                border-color: var(--primary);
                 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
                 outline: none;
-                background-color: white;
+                background-color: var(--card-bg);
+            }
+            
+            .input-field::placeholder {
+                color: var(--text-secondary);
             }
             
             .select-field {
@@ -1066,7 +1135,7 @@
             .qr-code-desktop {
                 width: 200px;
                 height: 200px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid var(--border-color);
                 border-radius: 12px;
                 padding: 10px;
                 background: white;
@@ -1076,17 +1145,19 @@
                 display: block;
                 width: 100%;
                 padding: 12px;
-                border: 1px dashed #e2e8f0;
+                border: 1px dashed var(--border-color);
                 border-radius: 12px;
                 text-align: center;
                 cursor: pointer;
                 margin-bottom: 16px;
                 transition: all 0.2s;
+                color: var(--text-primary);
             }
             
             .file-input-label-desktop:hover {
                 border-color: var(--primary);
-                background: #eff6ff;
+                background: var(--primary);
+                color: white;
             }
             
             .file-input-label-desktop i {
@@ -1095,7 +1166,7 @@
             
             .file-name-desktop {
                 font-size: 12px;
-                color: #64748b;
+                color: var(--text-secondary);
                 margin-top: 8px;
                 word-break: break-all;
             }
@@ -1112,51 +1183,27 @@
                 box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
                 background: #fff;
             }
-
-            .operator-btn[data-operator="entel"],
-            .mobile-operator-btn[data-operator="entel"] {
-                opacity: 0.5;
-                cursor: not-allowed;
-                position: relative;
-                background: #f1f1f1;
-                border-color: #ccc;
-            }
-            
-            .operator-btn[data-operator="entel"]::after,
-            .mobile-operator-btn[data-operator="entel"]::after {
-                content: "EN CUARENTENA";
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background: #dc2626;
-                color: white;
-                font-size: 10px;
-                font-weight: bold;
-                padding: 2px 6px;
-                border-radius: 12px;
-                white-space: nowrap;
-                z-index: 10;
-            }
         }
 
         .invoice-container {
-            background: white;
+            background: var(--card-bg);
             border-radius: 8px;
             padding: 16px;
             max-width: 100%;
+            color: var(--text-primary);
         }
         
         .invoice-header {
             text-align: center;
             margin-bottom: 16px;
-            border-bottom: 1px solid #2563eb;
+            border-bottom: 1px solid var(--primary);
             padding-bottom: 12px;
         }
         
         .invoice-logo {
             font-size: 18px;
             font-weight: bold;
-            color: #2563eb;
+            color: var(--primary);
             margin-bottom: 4px;
         }
         
@@ -1164,7 +1211,7 @@
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 4px;
-            color: #1e293b;
+            color: var(--text-primary);
         }
         
         .invoice-details {
@@ -1180,13 +1227,13 @@
         
         .invoice-label {
             font-weight: 600;
-            color: #4b5563;
+            color: var(--text-secondary);
             margin-bottom: 2px;
             font-size: 11px;
         }
         
         .invoice-value {
-            color: #1f2937;
+            color: var(--text-primary);
             font-size: 12px;
             line-height: 1.3;
         }
@@ -1197,9 +1244,9 @@
             font-weight: bold;
             margin: 16px 0;
             padding: 12px;
-            background: #f8fafc;
+            background: var(--input-bg);
             border-radius: 8px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
             grid-column: 1 / -1;
         }
         
@@ -1207,19 +1254,19 @@
             text-align: center;
             margin-top: 16px;
             padding-top: 12px;
-            border-top: 1px solid #e5e7eb;
-            color: #6b7280;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
             font-size: 10px;
             line-height: 1.2;
             grid-column: 1 / -1;
         }
         
         .positive-amount {
-            color: #059669;
+            color: #10b981;
         }
         
         .negative-amount {
-            color: #dc2626;
+            color: #ef4444;
         }
         
         .success-animation {
@@ -1302,27 +1349,121 @@
         
         /* Estilo para inputs deshabilitados */
         .mobile-input:disabled, .input-field:disabled {
-            background-color: #f1f5f9;
-            color: #64748b;
+            background-color: var(--border-color);
+            color: var(--text-secondary);
             cursor: not-allowed;
         }
         
         .phone-field-static {
-            background-color: #f1f5f9;
-            color: #64748b;
-            border: 1px solid #e2e8f0;
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
         }
         
+        /* Theme toggle desktop */
+        .desktop-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .theme-toggle-desktop {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .theme-toggle-desktop:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Ajustes para tablas en modo oscuro */
+        table {
+            color: var(--text-primary);
+        }
+        
+        thead {
+            background-color: var(--input-bg);
+        }
+        
+        thead th {
+            color: var(--text-secondary) !important;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Ajustes para selects */
+        select {
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        
+        select option {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        /* Ajustes para los textos en el perfil */
+        .bg-gray-50, .bg-gray-100 {
+            background-color: var(--input-bg) !important;
+        }
+        
+        .text-gray-500, .text-gray-600, .text-gray-400 {
+            color: var(--text-secondary) !important;
+        }
+        
+        .text-gray-700, .text-gray-800, .text-gray-900 {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Ajustes para bordes */
+        .border-gray-100, .border-gray-200, .border-gray-300 {
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Ajustes para la tarjeta de perfil */
+        .bg-gradient-to-br.from-blue-600.to-blue-800 {
+            background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+        }
+
+        /* Ajustes para el modal de factura */
+        #invoice-modal .modal-content {
+            background: var(--card-bg);
+        }
+        
+        #invoice-modal .border-gray-200 {
+            border-color: var(--border-color) !important;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gray-50">
+<body class="min-h-screen">
     <!-- Versión Mobile -->
     <div class="mobile-only mobile-app-container">
         <!-- Header -->
         <div class="mobile-header">
             <div class="mobile-header-title" id="mobile-header-title">Inicio</div>
             <div class="mobile-header-actions">
-                <button id="mobile-logout-btn" class="text-blue-600">
+                <button id="mobile-theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="mobile-logout-btn" style="color: var(--primary);">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
@@ -1381,7 +1522,7 @@
                     </a>
 <a href="#" class="mobile-action-btn" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; opacity: 0.6; cursor: not-allowed;" onclick="return false;">
     <i class="fas fa-dice" style="font-size: 37px; width: 37px; height: 37px; background: #000000; color: white; display: flex; align-items: center; justify-content: center; border-radius: 25%; margin-bottom: 6px;"></i>
-    <span>Bets <small style="display: block; font-size: 10px; color: #999;">Próximamente</small></span>
+    <span>Bets <small style="display: block; font-size: 10px; color: var(--text-secondary);">Próximamente</small></span>
 </a>
                 </div>
                 
@@ -1391,7 +1532,7 @@
                     <div id="mobile-transactions-list">
                         <div class="mobile-transaction-item">
                             <div class="w-full text-center py-8">
-                                <i class="fas fa-spinner fa-spin text-gray-400"></i>
+                                <i class="fas fa-spinner fa-spin" style="color: var(--text-secondary);"></i>
                             </div>
                         </div>
                     </div>
@@ -1410,7 +1551,7 @@
                     <div class="mobile-card mt-2">
                         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
                             <div class="text-sm font-medium">Filtrar por:</div>
-                            <select id="mobile-transactions-filter" class="text-sm border-none bg-transparent text-blue-600 font-medium">
+                            <select id="mobile-transactions-filter" class="text-sm border-none bg-transparent" style="color: var(--primary);">
                                 <option value="all">Todas</option>
                                 <option value="deposit">Ingresos</option>
                                 <option value="withdrawal">Retiros</option>
@@ -1420,7 +1561,7 @@
                         <div id="mobile-transactions-full-list">
                             <div class="mobile-transaction-item">
                                 <div class="w-full text-center py-8">
-                                    <i class="fas fa-spinner fa-spin text-gray-400"></i>
+                                    <i class="fas fa-spinner fa-spin" style="color: var(--text-secondary);"></i>
                                 </div>
                             </div>
                         </div>
@@ -1431,7 +1572,7 @@
                     <div class="mobile-card mt-2">
                         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
                             <div class="text-sm font-medium">Historial de recargas</div>
-                            <button id="mobile-new-recharge-btn" class="text-sm text-blue-600 font-medium flex items-center">
+                            <button id="mobile-new-recharge-btn" class="text-sm font-medium flex items-center" style="color: var(--primary);">
                                 <i class="fas fa-plus mr-1"></i>
                                 <span>Nueva</span>
                             </button>
@@ -1439,7 +1580,7 @@
                         <div id="mobile-recharges-full-list">
                             <div class="mobile-transaction-item">
                                 <div class="w-full text-center py-8">
-                                    <i class="fas fa-spinner fa-spin text-gray-400"></i>
+                                    <i class="fas fa-spinner fa-spin" style="color: var(--text-secondary);"></i>
                                 </div>
                             </div>
                         </div>
@@ -1484,8 +1625,8 @@
                 <!-- Tarjeta de información personal -->
                 <div class="mobile-card mt-4">
                     <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                        <h3 class="font-semibold text-gray-800">Información personal</h3>
-                        <button id="mobile-edit-profile-btn" class="text-blue-600 text-sm font-medium flex items-center">
+                        <h3 class="font-semibold">Información personal</h3>
+                        <button id="mobile-edit-profile-btn" class="text-sm font-medium flex items-center" style="color: var(--primary);">
                             <i class="fas fa-pen mr-1"></i>
                             Editar nombre
                         </button>
@@ -1496,8 +1637,8 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-500">Nombre completo</div>
-                                <div id="mobile-profile-name" class="font-medium text-gray-800"></div>
+                                <div class="text-xs" style="color: var(--text-secondary);">Nombre completo</div>
+                                <div id="mobile-profile-name" class="font-medium" style="color: var(--text-primary);"></div>
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -1505,8 +1646,8 @@
                                 <i class="fas fa-phone-alt"></i>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-500">Teléfono (permanente)</div>
-                                <div id="mobile-profile-phone" class="font-medium text-gray-800">No especificado</div>
+                                <div class="text-xs" style="color: var(--text-secondary);">Teléfono (permanente)</div>
+                                <div id="mobile-profile-phone" class="font-medium" style="color: var(--text-primary);">No especificado</div>
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -1514,8 +1655,8 @@
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-500">Miembro desde</div>
-                                <div id="mobile-profile-created-at" class="font-medium text-gray-800"></div>
+                                <div class="text-xs" style="color: var(--text-secondary);">Miembro desde</div>
+                                <div id="mobile-profile-created-at" class="font-medium" style="color: var(--text-primary);"></div>
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -1523,8 +1664,8 @@
                                 <i class="fas fa-shield-alt"></i>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-500">Verificación</div>
-                                <div class="font-medium text-gray-800 flex items-center">
+                                <div class="text-xs" style="color: var(--text-secondary);">Verificación</div>
+                                <div class="font-medium flex items-center" style="color: var(--text-primary);">
                                     <i class="fas fa-check-circle text-green-500 mr-1 text-xs"></i>
                                     Cuenta verificada
                                 </div>
@@ -1535,40 +1676,40 @@
                 
                 <!-- Opciones de configuración -->
                 <div class="mobile-card mt-4">
-                    <div class="divide-y divide-gray-100">
-                        <a href="seguridad.html" class="flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                    <div class="divide-y" style="border-color: var(--border-color);">
+                        <a href="seguridad.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background: var(--input-bg); color: var(--text-secondary);">
                                     <i class="fas fa-lock"></i>
                                 </div>
-                                <span class="font-medium text-gray-700">Seguridad</span>
+                                <span class="font-medium">Seguridad</span>
                             </div>
-                            <i class="fas fa-chevron-right text-gray-400"></i>
+                            <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
                         </a>
-                        <a href="ayuda.html" class="flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                        <a href="ayuda.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background: var(--input-bg); color: var(--text-secondary);">
                                     <i class="fas fa-question-circle"></i>
                                 </div>
-                                <span class="font-medium text-gray-700">Ayuda</span>
+                                <span class="font-medium">Ayuda</span>
                             </div>
-                            <i class="fas fa-chevron-right text-gray-400"></i>
+                            <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
                         </a>
-                        <a href="acerca.html" class="flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                        <a href="acerca.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background: var(--input-bg); color: var(--text-secondary);">
                                     <i class="fas fa-info-circle"></i>
                                 </div>
-                                <span class="font-medium text-gray-700">Acerca de Giko</span>
+                                <span class="font-medium">Acerca de Giko</span>
                             </div>
-                            <i class="fas fa-chevron-right text-gray-400"></i>
+                            <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
                         </a>
                     </div>
                 </div>
                 
                 <!-- Botón de cerrar sesión -->
                 <div class="mx-4 my-6">
-                    <button id="mobile-logout-btn-profile" class="w-full py-3 px-4 bg-red-50 text-red-600 rounded-xl font-medium flex items-center justify-center space-x-2 hover:bg-red-100 transition">
+                    <button id="mobile-logout-btn-profile" class="w-full py-3 px-4 rounded-xl font-medium flex items-center justify-center space-x-2 transition" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Cerrar sesión</span>
                     </button>
@@ -1606,14 +1747,14 @@
                     <div class="text-center">
                         <div id="mobile-avatar-preview" class="mobile-avatar mx-auto mb-4"></div>
                         <input type="file" id="mobile-avatar-input" accept="image/*" class="hidden">
-                        <button id="mobile-change-avatar-btn" class="text-sm text-blue-600 font-medium">
+                        <button id="mobile-change-avatar-btn" class="text-sm font-medium" style="color: var(--primary);">
                             Cambiar foto de perfil
                         </button>
                     </div>
                 </div>
                 
                 <div class="mb-4">
-                    <label for="mobile-full-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+                    <label for="mobile-full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
                     <input type="text" id="mobile-full-name" class="mobile-input">
                 </div>
                 
@@ -1639,9 +1780,9 @@
                 </div>
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Operadora</label>
+                    <label class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Operadora</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button data-operator="entel" class="mobile-operator-btn" disabled>
+                        <button data-operator="entel" class="mobile-operator-btn">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Logo-entel.png" class="h-6 mr-2">
                             Entel
                         </button>
@@ -1657,16 +1798,16 @@
                 </div>
                 
                 <div class="mb-4">
-                    <label for="mobile-phone-number" class="block text-sm font-medium text-gray-700 mb-1">Número de teléfono</label>
+                    <label for="mobile-phone-number" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Número de teléfono</label>
                     <input type="tel" id="mobile-phone-number" class="mobile-input" placeholder="Ej: 77712345">
                 </div>
                 
                 <div class="mb-4">
-                    <label for="mobile-recharge-amount" class="block text-sm font-medium text-gray-700 mb-1">Monto (Bs)</label>
+                    <label for="mobile-recharge-amount" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto (Bs)</label>
                     <input type="number" id="mobile-recharge-amount" class="mobile-input" placeholder="Ej: 10, 20, 50" min="1" step="0.01">
                 </div>
                 
-                <div class="text-sm text-gray-500 mb-4">
+                <div class="text-sm mb-4" style="color: var(--text-secondary);">
                     <i class="fas fa-info-circle mr-1"></i>
                     <span>Recarga normal - El monto ingresado se acreditará como saldo</span>
                 </div>
@@ -1692,17 +1833,17 @@
                 </div>
                 
                 <div class="mb-4">
-                    <label for="mobile-recipient-phone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono del destinatario</label>
+                    <label for="mobile-recipient-phone" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Teléfono del destinatario</label>
                     <input type="tel" id="mobile-recipient-phone" class="mobile-input" placeholder="Ej: 77712345">
                 </div>
                 
                 <div class="mb-4">
-                    <label for="mobile-send-amount" class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+                    <label for="mobile-send-amount" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto</label>
                     <input type="number" id="mobile-send-amount" class="mobile-input" min="1">
                 </div>
                 
                 <div class="mb-4">
-                    <label for="mobile-send-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción (opcional)</label>
+                    <label for="mobile-send-description" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Descripción (opcional)</label>
                     <textarea id="mobile-send-description" rows="2" class="mobile-input"></textarea>
                 </div>
                 
@@ -1729,27 +1870,27 @@
                 
                 <!-- CÓDIGO DEL CREADOR (OPCIONAL) -->
                 <div class="mb-4">
-                    <label for="mobile-creator-code" class="block text-sm font-medium text-gray-700 mb-1">Código del Creador (Opcional)</label>
+                    <label for="mobile-creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
                     <input type="text" id="mobile-creator-code" class="mobile-input creator-code-input" placeholder="Ingrese el código de referido">
-                    <p class="text-xs text-gray-500 mt-1">Si tienes un código de creador, ingrésalo aquí</p>
+                    <p class="text-xs mt-1" style="color: var(--text-secondary);">Si tienes un código de creador, ingrésalo aquí</p>
                 </div>
                 
                 <!-- MONTO A RECARGAR -->
                 <div class="mb-4">
-                    <label for="mobile-recharge-amount-input" class="block text-sm font-medium text-gray-700 mb-1">Monto a recargar (Bs)</label>
+                    <label for="mobile-recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
                     <input type="number" id="mobile-recharge-amount-input" class="mobile-input" placeholder="Ej: 100" min="1">
                 </div>
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Método de pago</label>
+                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
                     <div class="qr-code-container">
                         <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago">
                     </div>
-                    <p class="text-sm text-center text-gray-500 mt-2">Escanee el código QR para realizar el pago</p>
+                    <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
                 </div>
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Comprobante de pago</label>
+                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
                     <input type="file" id="mobile-recharge-receipt" accept="image/*" class="hidden">
                     <label for="mobile-recharge-receipt" class="file-input-label">
                         <i class="fas fa-cloud-upload-alt"></i>
@@ -1774,8 +1915,8 @@
         <div class="modal-content w-full max-w-md mx-4">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="flex justify-between items-center p-4 border-b border-gray-200">
-                    <div class="text-lg font-semibold text-gray-800">Comprobante de Transacción</div>
-                    <button id="close-invoice-modal" class="text-gray-400 hover:text-gray-500">
+                    <div class="text-lg font-semibold" style="color: var(--text-primary);">Comprobante de Transacción</div>
+                    <button id="close-invoice-modal" class="hover:opacity-70" style="color: var(--text-secondary);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -1784,12 +1925,12 @@
                     <!-- Contenido de la factura se generará dinámicamente -->
                 </div>
                 
-                <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <div class="p-4 border-t border-gray-200" style="background: var(--input-bg);">
                     <button id="download-invoice" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition-colors mb-2 text-sm">
                         <i class="fas fa-download mr-2"></i>
                         <span>Descargar Comprobante</span>
                     </button>
-                    <button id="close-invoice" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors text-sm">
+                    <button id="close-invoice" class="w-full py-2 px-4 rounded-lg font-medium transition-colors text-sm" style="background: var(--border-color); color: var(--text-primary);">
                         Continuar
                     </button>
                 </div>
@@ -1799,20 +1940,25 @@
     <!-- Versión Desktop -->
     <div class="desktop-only">
         <!-- Header -->
-        <header class="bg-white shadow-sm py-5 px-6 sticky top-0 z-20">
+        <header class="py-5 px-6 sticky top-0 z-20" style="background: var(--header-bg); border-bottom: 1px solid var(--border-color);">
             <div class="container mx-auto flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-blue-100 p-2 rounded-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="p-2 rounded-xl" style="background: var(--primary);">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
                     <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Giko</h1>
                 </div>
-                <button id="logout-btn" class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors">
-                    <span class="font-medium">Cerrar sesión</span>
-                    <i class="fas fa-sign-out-alt text-lg"></i>
-                </button>
+                <div class="desktop-header-actions">
+                    <button id="desktop-theme-toggle" class="theme-toggle-desktop">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="logout-btn" class="flex items-center space-x-2 transition-colors" style="color: var(--text-secondary);">
+                        <span class="font-medium">Cerrar sesión</span>
+                        <i class="fas fa-sign-out-alt text-lg"></i>
+                    </button>
+                </div>
             </div>
         </header>
         
@@ -1826,28 +1972,28 @@
                             <div id="user-avatar" class="avatar mb-5">
                                 <span id="user-initials"></span>
                             </div>
-                            <h2 id="user-name" class="text-xl font-semibold text-center text-gray-800"></h2>
-                            <p id="user-email" class="text-gray-500 text-sm mt-1 text-center"></p>
+                            <h2 id="user-name" class="text-xl font-semibold text-center"></h2>
+                            <p id="user-email" class="text-sm mt-1 text-center" style="color: var(--text-secondary);"></p>
                             
                             <div class="mt-6 w-full space-y-3">
-                                <div class="flex justify-between items-center py-2.5 px-4 bg-gray-50 rounded-xl">
-                                    <span class="text-gray-600 text-sm">Teléfono (permanente)</span>
-                                    <span id="profile-phone" class="font-medium text-gray-800"></span>
+                                <div class="flex justify-between items-center py-2.5 px-4 rounded-xl" style="background: var(--input-bg);">
+                                    <span class="text-sm" style="color: var(--text-secondary);">Teléfono (permanente)</span>
+                                    <span id="profile-phone" class="font-medium"></span>
                                 </div>
-                                <div class="flex justify-between items-center py-2.5 px-4 bg-gray-50 rounded-xl">
-                                    <span class="text-gray-600 text-sm">Miembro desde</span>
-                                    <span id="profile-created-at" class="font-medium text-gray-800"></span>
+                                <div class="flex justify-between items-center py-2.5 px-4 rounded-xl" style="background: var(--input-bg);">
+                                    <span class="text-sm" style="color: var(--text-secondary);">Miembro desde</span>
+                                    <span id="profile-created-at" class="font-medium"></span>
                                 </div>
-                                <div class="flex justify-between items-center py-2.5 px-4 bg-gray-50 rounded-xl">
-                                    <span class="text-gray-600 text-sm">Verificación</span>
-                                    <span class="font-medium text-green-600 flex items-center">
+                                <div class="flex justify-between items-center py-2.5 px-4 rounded-xl" style="background: var(--input-bg);">
+                                    <span class="text-sm" style="color: var(--text-secondary);">Verificación</span>
+                                    <span class="font-medium text-green-500 flex items-center">
                                         <i class="fas fa-check-circle mr-1"></i>
                                         Verificado
                                     </span>
                                 </div>
                             </div>
                             
-                            <button id="edit-profile-btn" class="mt-6 w-full py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 border border-blue-100 font-medium">
+                            <button id="edit-profile-btn" class="mt-6 w-full py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 border font-medium" style="color: var(--primary); border-color: var(--primary); background: transparent;">
                                 <i class="fas fa-user-edit"></i>
                                 <span>Editar nombre</span>
                             </button>
@@ -1888,7 +2034,7 @@
                     
                     <!-- Acciones rápidas -->
                     <div class="space-y-4">
-                        <h3 class="text-lg font-semibold text-gray-800 px-2">Acciones rápidas</h3>
+                        <h3 class="text-lg font-semibold px-2">Acciones rápidas</h3>
                         
                         <button id="send-money-btn" class="action-card btn-primary w-full p-5 flex items-center justify-between text-white">
                             <div class="flex items-center space-x-4">
@@ -1910,7 +2056,7 @@
                                 </div>
                                 <div class="text-left">
                                     <p class="text-sm font-medium">Recarga móvil</p>
-                                    <p class="text-xs text-white text-opacity-80">Tigo, Viva</p>
+                                    <p class="text-xs text-white text-opacity-80">Entel, Tigo, Viva</p>
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right text-white text-opacity-70"></i>
@@ -1960,12 +2106,12 @@
                 <div class="lg:col-span-3 space-y-8">
                     <!-- Pestañas -->
                     <div class="card overflow-hidden">
-                        <div class="border-b border-gray-200 px-6">
+                        <div class="border-b px-6" style="border-color: var(--border-color);">
                             <nav class="flex -mb-px space-x-8">
                                 <button id="transactions-tab" class="tab-active py-5 px-1 text-center font-medium text-sm whitespace-nowrap">
                                     Transacciones
                                 </button>
-                                <button id="recharges-tab" class="py-5 px-1 text-center font-medium text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                <button id="recharges-tab" class="py-5 px-1 text-center font-medium text-sm whitespace-nowrap" style="color: var(--text-secondary);">
                                     Recargas
                                 </button>
                             </nav>
@@ -1976,7 +2122,7 @@
                             <!-- Transacciones -->
                             <div id="transactions-content" class="tab-content">
                                 <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-semibold text-gray-800">Historial de transacciones</h3>
+                                    <h3 class="text-lg font-semibold">Historial de transacciones</h3>
                                     <div class="relative">
                                         <select id="transactions-filter" class="input-field select-field pr-10 text-sm">
                                             <option value="all">Todas</option>
@@ -1988,19 +2134,19 @@
                                 </div>
                                 
                                 <div class="overflow-x-auto scrollbar-hide">
-                                    <table class="min-w-full divide-y divide-gray-200">
-                                        <thead class="bg-gray-50">
+                                    <table class="min-w-full divide-y" style="border-color: var(--border-color);">
+                                        <thead>
                                             <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Monto</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tipo</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
+                                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Monto</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="transactions-list" class="bg-white divide-y divide-gray-200">
+                                        <tbody id="transactions-list" class="divide-y" style="border-color: var(--border-color);">
                                             <!-- Las transacciones se cargarán aquí dinámicamente -->
                                             <tr>
-                                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                                                <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
                                                     <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
                                                     <p>Cargando transacciones...</p>
                                                 </td>
@@ -2013,27 +2159,27 @@
                             <!-- Recargas -->
                             <div id="recharges-content" class="tab-content hidden">
                                 <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-semibold text-gray-800">Historial de recargas</h3>
-                                    <button id="new-recharge-btn" class="bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-lg text-sm flex items-center space-x-2 transition-colors font-medium">
+                                    <h3 class="text-lg font-semibold">Historial de recargas</h3>
+                                    <button id="new-recharge-btn" class="text-white py-2.5 px-4 rounded-lg text-sm flex items-center space-x-2 transition-colors font-medium" style="background: var(--primary);">
                                         <i class="fas fa-plus"></i>
                                         <span>Nueva recarga</span>
                                     </button>
                                 </div>
                                 
                                 <div class="overflow-x-auto scrollbar-hide">
-                                    <table class="min-w-full divide-y divide-gray-200">
-                                        <thead class="bg-gray-50">
+                                    <table class="min-w-full divide-y" style="border-color: var(--border-color);">
+                                        <thead>
                                             <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Operadora</th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Número</th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Monto</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Operadora</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Número</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
+                                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Monto</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="recharges-list" class="bg-white divide-y divide-gray-200">
+                                        <tbody id="recharges-list" class="divide-y" style="border-color: var(--border-color);">
                                             <!-- Las recargas se cargarán aquí dinámicamente -->
                                             <tr>
-                                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                                                <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
                                                     <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
                                                     <p>Cargando recargas...</p>
                                                 </td>
@@ -2053,8 +2199,8 @@
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Editar perfil</h3>
-                    <button id="close-profile-modal" class="text-gray-400 hover:text-gray-500">
+                    <h3 class="text-xl font-semibold">Editar perfil</h3>
+                    <button id="close-profile-modal" style="color: var(--text-secondary);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -2064,22 +2210,22 @@
                         <div class="avatar-upload">
                             <div id="avatar-preview" class="avatar mb-4"></div>
                             <input type="file" id="avatar-input" accept="image/*" class="hidden">
-                            <button class="text-sm text-blue-600 hover:text-blue-700 font-medium">Cambiar foto de perfil</button>
+                            <button class="text-sm font-medium" style="color: var(--primary);">Cambiar foto de perfil</button>
                         </div>
                     </div>
                     
                     <div>
-                        <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+                        <label for="full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
                         <input type="text" id="full-name" class="input-field w-full">
                     </div>
                     
                     <!-- NOTA: El campo de teléfono ha sido eliminado porque es permanente -->
                     
                     <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-profile-edit" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium">
+                        <button id="cancel-profile-edit" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
                             Cancelar
                         </button>
-                        <button id="save-profile" class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors font-medium">
+                        <button id="save-profile" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium" style="background: var(--primary);">
                             Guardar cambios
                         </button>
                     </div>
@@ -2092,17 +2238,17 @@
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Recarga móvil</h3>
-                    <button id="close-recharge-modal" class="text-gray-400 hover:text-gray-500">
+                    <h3 class="text-xl font-semibold">Recarga móvil</h3>
+                    <button id="close-recharge-modal" style="color: var(--text-secondary);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Operadora</label>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Operadora</label>
                         <div class="grid grid-cols-3 gap-2">
-                            <button data-operator="entel" class="operator-btn" disabled>
+                            <button data-operator="entel" class="operator-btn">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Logo-entel.png" class="h-6 mr-2">
                                 Entel
                             </button>
@@ -2118,25 +2264,25 @@
                     </div>
                     
                     <div>
-                        <label for="phone-number" class="block text-sm font-medium text-gray-700 mb-1">Número de teléfono</label>
+                        <label for="phone-number" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Número de teléfono</label>
                         <input type="tel" id="phone-number" class="input-field w-full" placeholder="Ej: 77712345">
                     </div>
                     
                     <div>
-                        <label for="recharge-amount" class="block text-sm font-medium text-gray-700 mb-1">Monto (Bs)</label>
+                        <label for="recharge-amount" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto (Bs)</label>
                         <input type="number" id="recharge-amount" class="input-field w-full" placeholder="Ej: 10, 20, 50" min="1" step="0.01">
                     </div>
                     
-                    <div class="text-sm text-gray-500 mb-4">
+                    <div class="text-sm mb-4" style="color: var(--text-secondary);">
                         <i class="fas fa-info-circle mr-1"></i>
                         <span>Recarga normal - El monto ingresado se acreditará como saldo</span>
                     </div>
                     
                     <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-recharge" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium">
+                        <button id="cancel-recharge" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
                             Cancelar
                         </button>
-                        <button id="confirm-recharge" class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors font-medium flex items-center justify-center min-w-32">
+                        <button id="confirm-recharge" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium flex items-center justify-center min-w-32" style="background: var(--primary);">
                             <span id="confirm-recharge-text">Confirmar</span>
                             <div id="confirm-recharge-spinner" class="loading-spinner ml-2 hidden"></div>
                         </button>
@@ -2150,33 +2296,33 @@
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Enviar dinero</h3>
-                    <button id="close-send-modal" class="text-gray-400 hover:text-gray-500">
+                    <h3 class="text-xl font-semibold">Enviar dinero</h3>
+                    <button id="close-send-modal" style="color: var(--text-secondary);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
                 
                 <div class="space-y-4">
                     <div>
-                        <label for="recipient-phone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono del destinatario</label>
+                        <label for="recipient-phone" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Teléfono del destinatario</label>
                         <input type="tel" id="recipient-phone" class="input-field w-full" placeholder="Ej: 77712345">
                     </div>
                     
                     <div>
-                        <label for="send-amount" class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+                        <label for="send-amount" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto</label>
                         <input type="number" id="send-amount" class="input-field w-full" min="1">
                     </div>
                     
                     <div>
-                        <label for="send-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción (opcional)</label>
+                        <label for="send-description" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Descripción (opcional)</label>
                         <textarea id="send-description" rows="2" class="input-field w-full"></textarea>
                     </div>
                     
                     <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-send" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium">
+                        <button id="cancel-send" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
                             Cancelar
                         </button>
-                        <button id="confirm-send" class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors font-medium">
+                        <button id="confirm-send" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium" style="background: var(--primary);">
                             Enviar dinero
                         </button>
                     </div>
@@ -2189,8 +2335,8 @@
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Recargar saldo</h3>
-                    <button id="close-recharge-balance-modal" class="text-gray-400 hover:text-gray-500">
+                    <h3 class="text-xl font-semibold">Recargar saldo</h3>
+                    <button id="close-recharge-balance-modal" style="color: var(--text-secondary);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -2200,27 +2346,27 @@
                     
                     <!-- CÓDIGO DEL CREADOR (OPCIONAL) -->
                     <div>
-                        <label for="creator-code" class="block text-sm font-medium text-gray-700 mb-1">Código del Creador (Opcional)</label>
+                        <label for="creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
                         <input type="text" id="creator-code" class="input-field w-full creator-code-input-desktop" placeholder="Ingrese el código de referido">
-                        <p class="text-xs text-gray-500 mt-1">Si tienes un código de creador, ingrésalo aquí</p>
+                        <p class="text-xs mt-1" style="color: var(--text-secondary);">Si tienes un código de creador, ingrésalo aquí</p>
                     </div>
                     
                     <!-- MONTO A RECARGAR -->
                     <div>
-                        <label for="recharge-amount-input" class="block text-sm font-medium text-gray-700 mb-1">Monto a recargar (Bs)</label>
+                        <label for="recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
                         <input type="number" id="recharge-amount-input" class="input-field w-full" placeholder="Ej: 100" min="1">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Método de pago</label>
+                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
                         <div class="qr-code-container-desktop">
                             <img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago">
                         </div>
-                        <p class="text-sm text-center text-gray-500 mt-2">Escanee el código QR para realizar el pago</p>
+                        <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Comprobante de pago</label>
+                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
                         <input type="file" id="recharge-receipt" accept="image/*" class="hidden">
                         <label for="recharge-receipt" class="file-input-label-desktop">
                             <i class="fas fa-cloud-upload-alt"></i>
@@ -2230,10 +2376,10 @@
                     </div>
                     
                     <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium">
+                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
                             Cancelar
                         </button>
-                        <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors font-medium flex items-center justify-center min-w-32">
+                        <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium flex items-center justify-center min-w-32" style="background: var(--primary);">
                             <span id="confirm-recharge-balance-text">Enviar solicitud</span>
                             <div id="confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
                         </button>
@@ -2249,8 +2395,8 @@
         <div class="modal-content w-full max-w-md mx-4">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="flex justify-between items-center p-4 border-b border-gray-200">
-                    <div class="text-lg font-semibold text-gray-800">Comprobante de Transacción</div>
-                    <button id="close-invoice-modal" class="text-gray-400 hover:text-gray-500">
+                    <div class="text-lg font-semibold" style="color: var(--text-primary);">Comprobante de Transacción</div>
+                    <button id="close-invoice-modal" class="hover:opacity-70" style="color: var(--text-secondary);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -2259,12 +2405,12 @@
                     <!-- Contenido de la factura se generará dinámicamente -->
                 </div>
                 
-                <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <div class="p-4 border-t border-gray-200" style="background: var(--input-bg);">
                     <button id="download-invoice" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition-colors mb-2 text-sm">
                         <i class="fas fa-download mr-2"></i>
                         <span>Descargar Comprobante</span>
                     </button>
-                    <button id="close-invoice" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors text-sm">
+                    <button id="close-invoice" class="w-full py-2 px-4 rounded-lg font-medium transition-colors text-sm" style="background: var(--border-color); color: var(--text-primary);">
                         Continuar
                     </button>
                 </div>
@@ -2647,72 +2793,72 @@
             }
             
             const invoiceHTML = `
-<div class="invoice-container success-animation" style="font-size: 8px; line-height: 1.1; padding: 5px;">
-    <div class="invoice-header" style="margin-bottom: 3px;">
-        <div class="invoice-logo" style="font-size: 10px; margin-bottom: 1px;">Giko</div>
-        <div class="invoice-title" style="font-size: 9px; margin-bottom: 1px;">${invoiceTitle}</div>
-        <div class="text-xs text-green-600" style="font-size: 7px;">
+<div class="invoice-container success-animation">
+    <div class="invoice-header">
+        <div class="invoice-logo">Giko</div>
+        <div class="invoice-title">${invoiceTitle}</div>
+        <div class="text-xs" style="color: #10b981;">
             <i class="fas fa-check-circle mr-1"></i>Transacción completada
         </div>
     </div>
     
     <div class="invoice-details">
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Fecha:</span>
-            <span class="invoice-value" style="font-size: 7px;">${new Date().toLocaleString('es-ES')}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Fecha:</span>
+            <span class="invoice-value">${new Date().toLocaleString('es-ES')}</span>
         </div>
         
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Tipo:</span>
-            <span class="invoice-value capitalize" style="font-size: 7px;">${transactionTypeName}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Tipo:</span>
+            <span class="invoice-value capitalize">${transactionTypeName}</span>
         </div>
         
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Estado:</span>
-            <span class="status-badge-small status-success" style="font-size: 6px; padding: 1px 3px;">Completado</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Estado:</span>
+            <span class="status-badge-small status-success">Completado</span>
         </div>
         
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">ID:</span>
-            <span class="invoice-value" style="font-size: 6px;">${transaction.id || invoiceId}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">ID:</span>
+            <span class="invoice-value">${transaction.id || invoiceId}</span>
         </div>
         
         ${transaction.operator ? `
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Operadora:</span>
-            <span class="invoice-value capitalize" style="font-size: 7px;">${transaction.operator}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Operadora:</span>
+            <span class="invoice-value capitalize">${transaction.operator}</span>
         </div>
         ` : ''}
         
         ${transaction.phone_number ? `
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Número:</span>
-            <span class="invoice-value" style="font-size: 7px;">${transaction.phone_number}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Número:</span>
+            <span class="invoice-value">${transaction.phone_number}</span>
         </div>
         ` : ''}
         
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Usuario:</span>
-            <span class="invoice-value" style="font-size: 7px;">${userProfile?.full_name || currentUser?.email || 'Usuario'}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Usuario:</span>
+            <span class="invoice-value">${userProfile?.full_name || currentUser?.email || 'Usuario'}</span>
         </div>
         
-        <div class="invoice-section" style="margin-bottom: 3px;">
-            <span class="invoice-label" style="font-size: 7px;">Email:</span>
-            <span class="invoice-value" style="font-size: 7px;">${currentUser?.email || 'No disponible'}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Email:</span>
+            <span class="invoice-value">${currentUser?.email || 'No disponible'}</span>
         </div>
         
-        <div class="invoice-amount ${amountClass}" style="font-size: 12px; margin: 3px 0;">
+        <div class="invoice-amount ${amountClass}">
             ${amountSign}${formatCurrency(transaction.amount).replace('Bs', '')}
         </div>
         
         ${transaction.description ? `
-        <div class="invoice-section" style="margin-bottom: 2px;">
-            <span class="invoice-label" style="font-size: 7px;">Descripción:</span>
-            <span class="invoice-value" style="font-size: 7px;">${transaction.description}</span>
+        <div class="invoice-section">
+            <span class="invoice-label">Descripción:</span>
+            <span class="invoice-value">${transaction.description}</span>
         </div>
         ` : ''}
         
-        <div class="invoice-footer" style="font-size: 6px; margin-top: 3px;">
+        <div class="invoice-footer">
             Comprobante digital - No requiere firma - Giko Wallet
         </div>
     </div>
@@ -2988,7 +3134,7 @@
                         <div class="mobile-empty-icon">
                             <i class="fas fa-exchange-alt"></i>
                         </div>
-                        <h3 class="font-medium text-gray-800">No hay transacciones</h3>
+                        <h3 class="font-medium" style="color: var(--text-primary);">No hay transacciones</h3>
                         <p class="mobile-empty-text">No se encontraron transacciones recientes</p>
                     </div>
                 `;
@@ -2996,7 +3142,7 @@
                 if (container) {
                     container.innerHTML = `
                         <tr>
-                            <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                            <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
                                 <i class="fas fa-exchange-alt fa-2x mb-2"></i>
                                 <p>No hay transacciones recientes</p>
                             </td>
@@ -3011,7 +3157,7 @@
             
             const desktopHtml = transactions.map(transaction => {
                 const isPositive = transaction.type === 'deposit';
-                const textColor = isPositive ? 'text-green-600' : 'text-red-600';
+                const textColor = isPositive ? 'positive-amount' : 'negative-amount';
                 const sign = isPositive ? '+' : '-';
                 const typeNames = {
                     'deposit': 'Ingreso',
@@ -3028,7 +3174,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">${transaction.description || 'Sin descripción'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">${formatDate(transaction.created_at)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" style="color: var(--text-secondary);">${formatDate(transaction.created_at)}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right ${textColor} font-semibold">${sign}${transaction.amount.toFixed(2)}</td>
                     </tr>
                 `;
@@ -3037,7 +3183,7 @@
             const mobileHtml = transactions.slice(0, 3).map(transaction => {
                 const isPositive = transaction.type === 'deposit';
                 const iconColor = isPositive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600';
-                const textColor = isPositive ? 'text-green-600' : 'text-red-600';
+                const textColor = isPositive ? 'positive-amount' : 'negative-amount';
                 const sign = isPositive ? '+' : '-';
                 const typeNames = {
                     'deposit': 'Ingreso',
@@ -3062,7 +3208,7 @@
             const mobileFullHtml = transactions.map(transaction => {
                 const isPositive = transaction.type === 'deposit';
                 const iconColor = isPositive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600';
-                const textColor = isPositive ? 'text-green-600' : 'text-red-600';
+                const textColor = isPositive ? 'positive-amount' : 'negative-amount';
                 const sign = isPositive ? '+' : '-';
                 const typeNames = {
                     'deposit': 'Ingreso',
@@ -3099,7 +3245,7 @@
                         <div class="mobile-empty-icon">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
-                        <h3 class="font-medium text-gray-800">No hay recargas</h3>
+                        <h3 class="font-medium" style="color: var(--text-primary);">No hay recargas</h3>
                         <p class="mobile-empty-text">No se encontraron recargas recientes</p>
                     </div>
                 `;
@@ -3107,7 +3253,7 @@
                 if (container) {
                     container.innerHTML = `
                         <tr>
-                            <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                            <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
                                 <i class="fas fa-mobile-alt fa-2x mb-2"></i>
                                 <p>No hay recargas recientes</p>
                             </td>
@@ -3136,8 +3282,8 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap font-medium">${recharge.phone_number}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">${formatDate(recharge.created_at)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-green-600 font-semibold">-${recharge.amount.toFixed(2)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" style="color: var(--text-secondary);">${formatDate(recharge.created_at)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right negative-amount font-semibold">-${recharge.amount.toFixed(2)}</td>
                     </tr>
                 `;
             }).join('');
@@ -3159,7 +3305,7 @@
                             <div class="mobile-transaction-title">Recarga ${operatorName} (${recharge.credit || 'sin detalles'})</div>
                             <div class="mobile-transaction-date">${recharge.phone_number} • ${formatDate(recharge.created_at)}</div>
                         </div>
-                        <div class="mobile-transaction-amount text-green-600">-${recharge.amount.toFixed(2)}</div>
+                        <div class="mobile-transaction-amount negative-amount">-${recharge.amount.toFixed(2)}</div>
                     </div>
                 `;
             }).join('');
@@ -3216,8 +3362,35 @@
                 }
             }
             
-            // Actualizar campos de nombre y teléfono en los modales de recarga de saldo (ya no hay, pero se mantiene la lógica por si acaso)
-            // NOTA: Los campos han sido eliminados, pero la función sendRechargeRequest usa userProfile
+            // Actualizar perfil desktop
+            const desktopNameElements = document.querySelectorAll('#user-name, #profile-phone, #profile-created-at');
+            if (document.getElementById('user-name')) {
+                document.getElementById('user-name').textContent = userProfile?.full_name || currentUser.email.split('@')[0];
+            }
+            if (document.getElementById('profile-phone')) {
+                document.getElementById('profile-phone').textContent = userProfile?.phone || 'No especificado';
+            }
+            if (document.getElementById('profile-created-at')) {
+                const createdAt = new Date(userProfile.created_at || currentUser.created_at);
+                document.getElementById('profile-created-at').textContent = createdAt.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+            
+            // Avatar desktop
+            const desktopAvatar = document.getElementById('user-avatar');
+            const desktopInitials = document.getElementById('user-initials');
+            if (desktopAvatar) {
+                if (userProfile?.avatar_url) {
+                    desktopAvatar.innerHTML = `<img src="${userProfile.avatar_url}" alt="Avatar">`;
+                    if (desktopInitials) desktopInitials.textContent = '';
+                } else {
+                    const initials = getInitials(userProfile?.full_name || currentUser.email);
+                    if (desktopInitials) desktopInitials.textContent = initials;
+                }
+            }
         };
         
         // Sobrescribir la función de confirmar recarga normal (simplificada)
@@ -3404,6 +3577,30 @@
             }
         };
 
+        // Función para cambiar tema
+        const setTheme = (theme) => {
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-color')?.setAttribute('content', '#000000');
+                document.querySelectorAll('.theme-toggle i, .theme-toggle-desktop i').forEach(el => {
+                    el.className = 'fas fa-sun';
+                });
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                document.getElementById('theme-color')?.setAttribute('content', '#2563eb');
+                document.querySelectorAll('.theme-toggle i, .theme-toggle-desktop i').forEach(el => {
+                    el.className = 'fas fa-moon';
+                });
+                localStorage.setItem('theme', 'light');
+            }
+        };
+
+        const toggleTheme = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        };
+
         // Event Listeners
         document.addEventListener('DOMContentLoaded', async () => {
             const setVh = () => {
@@ -3413,6 +3610,16 @@
             
             setVh();
             window.addEventListener('resize', setVh);
+            
+            // Cargar tema guardado
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                setTheme('dark');
+            }
+            
+            // Theme toggle buttons
+            document.getElementById('mobile-theme-toggle')?.addEventListener('click', toggleTheme);
+            document.getElementById('desktop-theme-toggle')?.addEventListener('click', toggleTheme);
             
             const { data: { session }, error } = await supabase.auth.getSession();
             
@@ -3702,11 +3909,6 @@
             const operatorButtons = document.querySelectorAll('[data-operator]');
             operatorButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    if (btn.dataset.operator === 'entel') {
-                        showToast('ENTEL está en cuarentena, no disponible temporalmente', 'error');
-                        return;
-                    }
-                    
                     selectedOperator = btn.dataset.operator;
                     const allButtons = document.querySelectorAll(`.operator-btn, .mobile-operator-btn`);
                     allButtons.forEach(b => {
@@ -4198,4 +4400,3 @@
     </style>
 </body>
 </html>
-
