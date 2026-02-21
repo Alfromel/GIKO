@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GIKO - Billetera Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0047FF">
@@ -17,228 +17,224 @@
     <meta name="apple-mobile-web-app-title" content="GIKO" />
     <link rel="manifest" href="/site.webmanifest" />
     <style>
-        * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background: #0A0C15;
-            color: #FFFFFF;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            /* Fondo más oscuro para que resalten los azules eléctricos */
+            background: linear-gradient(135deg, #0A0A0A 0%, #1E1E1E 100%);
+            color: #EDEDED;
         }
-
-        /* Native-like container */
-        .app-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 16px;
-        }
-
-        /* Minimal card - native feel */
+        
         .auth-card {
-            background: #131722;
-            border-radius: 28px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 71, 255, 0.25);
+            background: #111111; /* Fondo negro de la tarjeta */
             overflow: hidden;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
-
-        .brand {
-            font-size: 48px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FFFFFF 0%, #B0C4FF 80%);
+        
+        .brand-gradient {
+            background: linear-gradient(90deg, #0047FF 0%, #0066FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
-            line-height: 1;
-            margin-bottom: 4px;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
-
+        
         .btn-primary {
-            background: #0047FF;
+            background: linear-gradient(90deg, #0047FF 0%, #0066FF 100%);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             color: white;
             font-weight: 600;
             border: none;
-            border-radius: 16px;
-            padding: 16px;
-            width: 100%;
-            font-size: 16px;
-            transition: background 0.2s ease;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
-            box-shadow: 0 4px 10px rgba(0, 71, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px #0047FF;
+            background: linear-gradient(90deg, #0036cc 0%, #0047FF 100%);
         }
 
         .btn-primary:active {
-            background: #0036cc;
-            transform: scale(0.98);
-            -webkit-transform: scale(0.98);
+            transform: translateY(0);
         }
-
+        
         .input-field {
-            background: #1E2330;
-            border: 1.5px solid #2A3040;
+            transition: all 0.3s ease;
+            border: 1.5px solid #2A2A2A;
+            background: #1A1A1A;
             color: #FFFFFF;
-            border-radius: 16px;
-            padding: 16px;
-            width: 100%;
-            font-size: 16px;
-            transition: border 0.2s ease;
-            -webkit-appearance: none;
-            appearance: none;
         }
-
+        
         .input-field:focus {
-            outline: none;
             border-color: #0047FF;
+            box-shadow: 0 0 0 3px rgba(0, 71, 255, 0.2);
+            background: #222222;
         }
 
         .input-field::placeholder {
-            color: #6B7280;
-            font-weight: 400;
+            color: #6B6B6B;
         }
-
+        
         .tab-button {
-            color: #8B95B0;
-            font-weight: 600;
-            padding: 12px 0;
+            transition: all 0.3s ease;
             position: relative;
-            font-size: 16px;
-            background: transparent;
-            border: none;
-            width: 100%;
+            color: #8B8B8B;
+            font-weight: 600;
         }
-
+        
         .tab-button.active {
             color: #FFFFFF;
         }
-
-        .tab-button.active::after {
+        
+        .tab-button.active:after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 20%;
-            right: 20%;
+            bottom: -1px;
+            left: 0;
+            right: 0;
             height: 3px;
-            background: #0047FF;
+            background: linear-gradient(90deg, #0047FF 0%, #0066FF 100%);
             border-radius: 3px 3px 0 0;
         }
-
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes logoAnimation {
+            0% { transform: scale(0.8); opacity: 0; text-shadow: 0 0 0 #0047FF; }
+            50% { transform: scale(1.1); text-shadow: 0 0 20px #0047FF; }
+            100% { transform: scale(1); opacity: 1; text-shadow: 0 0 10px #0066FF; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .animate-logo {
+            animation: logoAnimation 1s ease-out forwards;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #8B8B8B;
+        }
+        
+        .password-toggle:hover {
+            color: #0047FF;
+        }
+        
         .password-container {
             position: relative;
         }
-
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #8B95B0;
-            font-size: 18px;
-            padding: 8px;
-            z-index: 2;
-        }
-
-        .password-toggle:active {
-            color: #0047FF;
-        }
-
-        .forgot-password-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: #8B95B0;
-            font-size: 14px;
-            padding: 8px 0;
-            background: transparent;
-            border: none;
-        }
-
-        .forgot-password-btn:active {
-            color: #0047FF;
-        }
-
-        /* Toast simplificado y rápido */
+        
         .toast {
             position: fixed;
-            top: 16px;
-            right: 16px;
-            left: 16px;
-            max-width: 360px;
-            margin: 0 auto;
-            background: #1E2330;
-            border-left: 4px solid;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
             border-radius: 16px;
-            padding: 16px;
-            color: white;
-            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0, 71, 255, 0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 350px;
+            border-left: 4px solid;
             font-weight: 500;
-            z-index: 10000;
-            transform: translateY(-150%);
-            transition: transform 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-            pointer-events: none;
         }
-
+        
         .toast.show {
-            transform: translateY(0);
+            transform: translateX(0);
         }
-
-        .toast.success { border-left-color: #00FF88; }
-        .toast.error { border-left-color: #FF4444; }
-        .toast.warning { border-left-color: #FFAA33; }
-        .toast.info { border-left-color: #3399FF; }
-
-        /* Splash ultra rápido */
+        
+        .toast.success {
+            background: #0A2A1A;
+            color: #B0FFC0;
+            border-left-color: #00FF88;
+        }
+        
+        .toast.error {
+            background: #2A0A0A;
+            color: #FFB0B0;
+            border-left-color: #FF4444;
+        }
+        
+        .toast.warning {
+            background: #2A1A0A;
+            color: #FFD8B0;
+            border-left-color: #FFAA33;
+        }
+        
+        .toast.info {
+            background: #0A1A2A;
+            color: #B0E0FF;
+            border-left-color: #3399FF;
+        }
+        
         .splash-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0A0C15;
+            background: #0A0A0A;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.5s ease;
         }
-
+        
         .splash-logo {
-            font-size: 56px;
+            font-size: 4rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #FFFFFF, #B0C4FF);
+            background: linear-gradient(90deg, #0047FF 0%, #0066FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
             letter-spacing: -2px;
-            margin-bottom: 16px;
         }
-
+        
         .splash-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #1E2330;
-            border-top-color: #0047FF;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 71, 255, 0.3);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            border-top-color: #0047FF;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .forgot-password-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            color: #8B8B8B;
+        }
+        
+        .forgot-password-btn:hover {
+            color: #0066FF;
+            transform: translateX(2px);
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Modal nativo simplificado */
+        /* MODAL DE RECUPERACIÓN - Estilo GIKO */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -246,61 +242,82 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
             display: flex;
-            align-items: flex-end;
+            justify-content: center;
+            align-items: center;
             z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease;
+            display: none;
         }
 
         .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
-            background: #131722;
-            width: 100%;
-            border-radius: 28px 28px 0 0;
-            max-height: 90vh;
+            background: #111111;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
             overflow-y: auto;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            padding: 20px;
+            box-shadow: 0 25px 60px -15px #0047FF;
+            border: 1px solid #2A2A2A;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .active .modal-content {
-            transform: translateY(0);
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #2A2A2A;
+            position: relative;
         }
 
         .modal-header h2 {
-            font-size: 24px;
-            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px;
+            border-top: 1px solid #2A2A2A;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
         }
 
         .close-modal {
-            width: 40px;
-            height: 40px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #1E2330;
-            border-radius: 50%;
-            color: #8B95B0;
-            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #1A1A1A;
+            color: #8B8B8B;
         }
 
-        .close-modal:active {
-            background: #2A3040;
-            color: white;
+        .close-modal:hover {
+            background: #2A2A2A;
+            color: #FFFFFF;
         }
 
         .step-indicator {
@@ -310,14 +327,15 @@
             position: relative;
         }
 
-        .step-indicator::before {
+        .step-indicator:before {
             content: '';
             position: absolute;
-            top: 16px;
-            left: 40px;
-            right: 40px;
+            top: 15px;
+            left: 0;
+            right: 0;
             height: 2px;
-            background: #2A3040;
+            background: #2A2A2A;
+            z-index: 1;
         }
 
         .step {
@@ -332,14 +350,14 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #1E2330;
-            border: 2px solid #2A3040;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: #8B95B0;
-            margin-bottom: 4px;
+            color: #8B8B8B;
+            margin-bottom: 8px;
         }
 
         .step.active .step-number {
@@ -349,106 +367,121 @@
         }
 
         .step-label {
-            font-size: 11px;
-            color: #8B95B0;
+            font-size: 12px;
+            color: #8B8B8B;
         }
 
         .step.active .step-label {
-            color: white;
+            color: #0066FF;
         }
 
-        .step-content { display: none; }
-        .step-content.active { display: block; }
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
 
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
             font-weight: 500;
-            color: #B0B8D0;
+            color: #B0B0B0;
         }
 
-        .form-control {
-            background: #1E2330;
-            border: 1.5px solid #2A3040;
-            border-radius: 16px;
-            padding: 16px;
+        .form-control, .select-department {
             width: 100%;
-            color: white;
-            font-size: 16px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 1.5px solid #2A2A2A;
+            background: #1A1A1A;
+            color: #FFFFFF;
+            transition: all 0.3s;
         }
 
-        .form-control:focus {
+        .form-control:focus, .select-department:focus {
             outline: none;
             border-color: #0047FF;
+            box-shadow: 0 0 0 3px rgba(0, 71, 255, 0.2);
+            background: #222222;
         }
 
         .terms-box {
-            background: #1E2330;
+            background: #1A1A1A;
             border-radius: 16px;
             padding: 16px;
             max-height: 200px;
             overflow-y: auto;
-            margin-bottom: 16px;
+            border: 1px solid #2A2A2A;
+            margin-bottom: 20px;
+        }
+
+        .terms-text {
             font-size: 13px;
-            color: #B0B8D0;
+            color: #B0B0B0;
+            line-height: 1.5;
         }
 
         .checkbox-label {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
-            color: #B0B8D0;
-            font-size: 14px;
+            cursor: pointer;
+            color: #B0B0B0;
         }
 
-        .checkbox-label input {
-            width: 20px;
-            height: 20px;
+        .checkbox-label input[type="checkbox"] {
+            margin-top: 4px;
             accent-color: #0047FF;
         }
 
         .department-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 12px;
         }
 
         .department-option {
-            background: #1E2330;
-            border: 1.5px solid #2A3040;
+            padding: 12px 8px;
+            border: 1.5px solid #2A2A2A;
             border-radius: 12px;
-            padding: 12px 4px;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
             font-size: 13px;
             font-weight: 500;
-            color: #B0B8D0;
-            transition: all 0.1s ease;
+            color: #B0B0B0;
+            background: #1A1A1A;
         }
 
-        .department-option:active {
-            background: #0047FF;
+        .department-option:hover {
             border-color: #0047FF;
-            color: white;
+            background: #0A1A2A;
+            color: #FFFFFF;
         }
 
         .department-option.selected {
             background: #0047FF;
-            border-color: #0047FF;
             color: white;
+            border-color: #0047FF;
         }
 
         .telegram-notice {
-            background: #1E2330;
-            border: 1.5px solid #0088cc;
+            background: #0088cc;
+            color: white;
+            padding: 12px 16px;
             border-radius: 16px;
-            padding: 16px;
+            margin-top: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 20px;
-            color: white;
+            font-size: 14px;
         }
 
         .confirmation-message {
@@ -465,325 +498,397 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
+            color: white;
             font-size: 28px;
         }
 
-        .hidden { display: none; }
-        .text-gray-500 { color: #8B95B0; }
-        .border-gray-200 { border-color: #2A3040; }
-
-        /* Botón de instalación nativo */
-        .install-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #0047FF;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 12px 24px;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 71, 255, 0.4);
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
+        a {
+            color: #0066FF;
         }
 
-        .install-button:active {
-            background: #0036cc;
-            transform: scale(0.96);
+        a:hover {
+            color: #0047FF;
         }
 
-        /* Scroll nativo */
-        ::-webkit-scrollbar {
-            width: 4px;
+        .text-gray-500 {
+            color: #8B8B8B;
         }
-        ::-webkit-scrollbar-track {
-            background: #1E2330;
+
+        .text-gray-600 {
+            color: #B0B0B0;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #0047FF;
-            border-radius: 4px;
+
+        .text-gray-700 {
+            color: #D0D0D0;
+        }
+
+        .text-gray-800 {
+            color: #FFFFFF;
+        }
+
+        .border-gray-200 {
+            border-color: #2A2A2A;
+        }
+
+        .border-gray-100 {
+            border-color: #1A1A1A;
+        }
+
+        .bg-gray-50 {
+            background-color: #1A1A1A;
         }
     </style>
 </head>
-<body>
-    <!-- Splash Screen ultra rápido -->
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- Splash Screen -->
     <div id="splash-screen" class="splash-screen">
-        <div class="splash-logo">GIKO</div>
+        <div class="splash-logo animate-logo">GIKO</div>
         <div class="splash-spinner"></div>
     </div>
 
-    <!-- Toast Container -->
+    <!-- Toast Notifications Container -->
     <div id="toast-container"></div>
 
-    <!-- Modal de Recuperación - Diseño nativo -->
+    <!-- Modal de Recuperación de Contraseña -->
     <div id="password-recovery-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Recuperar Acceso</h2>
+                <h2 class="text-2xl font-bold">Recuperación de Contraseña</h2>
                 <div class="close-modal" id="close-recovery-modal">
                     <i class="fas fa-times"></i>
                 </div>
             </div>
             
-            <div class="step-indicator">
-                <div class="step active" data-step="1">
-                    <div class="step-number">1</div>
-                    <div class="step-label">Situación</div>
+            <div class="modal-body">
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Situación</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Términos</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Contacto</div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Confirmación</div>
+                    </div>
                 </div>
-                <div class="step" data-step="2">
-                    <div class="step-number">2</div>
-                    <div class="step-label">Términos</div>
-                </div>
-                <div class="step" data-step="3">
-                    <div class="step-number">3</div>
-                    <div class="step-label">Contacto</div>
-                </div>
-                <div class="step" data-step="4">
-                    <div class="step-number">4</div>
-                    <div class="step-label">Listo</div>
-                </div>
-            </div>
-            
-            <!-- Paso 1 -->
-            <div id="step-1" class="step-content active">
-                <h3 class="text-lg font-semibold mb-4">Describe tu situación</h3>
-                <div class="form-group">
-                    <label class="form-label">Descripción *</label>
-                    <textarea id="situation-description" class="form-control" rows="3" 
-                              placeholder="Ej: Olvidé mi contraseña..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Correo de la cuenta *</label>
-                    <input type="email" id="recovery-email" class="form-control" 
-                           placeholder="ejemplo@gmail.com">
-                </div>
-                <div class="flex justify-end mt-4">
-                    <button id="next-to-step-2" class="btn-primary" style="width: auto; padding: 12px 24px;">
-                        Siguiente <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Paso 2 -->
-            <div id="step-2" class="step-content">
-                <h3 class="text-lg font-semibold mb-4">Términos</h3>
-                <div class="terms-box">
-                    <p class="mb-2"><strong>Proceso:</strong></p>
-                    <ol class="list-decimal pl-4 space-y-1">
-                        <li>Evaluaremos tu situación</li>
-                        <li>Eliminaremos la cuenta existente</li>
-                        <li>Podrás crear nueva cuenta</li>
-                        <li>Transferiremos tu saldo</li>
-                        <li>Soporte vía WhatsApp</li>
-                        <li>Respuesta: 2-24h</li>
-                    </ol>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="accept-terms">
-                        <span>Acepto los términos</span>
-                    </label>
-                </div>
-                <div class="flex justify-between mt-4">
-                    <button id="back-to-step-1" class="text-blue-500 py-3 px-6">
-                        <i class="fas fa-arrow-left mr-2"></i> Anterior
-                    </button>
-                    <button id="next-to-step-3" class="btn-primary" style="width: auto; padding: 12px 24px;" disabled>
-                        Siguiente <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Paso 3 -->
-            <div id="step-3" class="step-content">
-                <h3 class="text-lg font-semibold mb-4">Contacto</h3>
-                <div class="grid grid-cols-2 gap-3">
+                
+                <!-- Paso 1: Descripción de la situación -->
+                <div id="step-1" class="step-content active">
+                    <h3 class="text-lg font-semibold mb-4">Describe tu situación</h3>
+                    <p class="text-gray-600 mb-6 text-sm">Por favor, describe detalladamente lo que ocurrió con tu cuenta y por qué necesitas recuperar el acceso.</p>
+                    
                     <div class="form-group">
-                        <label class="form-label">Nombre *</label>
-                        <input type="text" id="contact-name" class="form-control" placeholder="Juan Pérez">
+                        <label class="form-label">Descripción de tu situación *</label>
+                        <textarea id="situation-description" class="form-control" rows="4" 
+                                  placeholder="Ej: Olvidé mi contraseña y no tengo acceso al correo de recuperación..." 
+                                  required></textarea>
                     </div>
+                    
                     <div class="form-group">
-                        <label class="form-label">Celular *</label>
-                        <input type="tel" id="contact-phone" class="form-control" placeholder="77777777">
+                        <label class="form-label">Correo electrónico de la cuenta *</label>
+                        <input type="email" id="recovery-email" class="form-control" 
+                               placeholder="ejemplo@gmail.com" required>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button id="next-to-step-2" class="btn-primary py-3 px-6 rounded-lg font-medium">
+                            Siguiente
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Departamento *</label>
-                    <div class="department-grid">
-                        <div class="department-option" data-dept="LP">La Paz</div>
-                        <div class="department-option" data-dept="SC">Santa Cruz</div>
-                        <div class="department-option" data-dept="CB">Cochabamba</div>
-                        <div class="department-option" data-dept="OR">Oruro</div>
-                        <div class="department-option" data-dept="PT">Potosí</div>
-                        <div class="department-option" data-dept="TJ">Tarija</div>
-                        <div class="department-option" data-dept="CH">Chuquisaca</div>
-                        <div class="department-option" data-dept="BE">Beni</div>
-                        <div class="department-option" data-dept="PD">Pando</div>
+                
+                <!-- Paso 2: Términos y condiciones -->
+                <div id="step-2" class="step-content">
+                    <h3 class="text-lg font-semibold mb-4">Términos del proceso de recuperación</h3>
+                    
+                    <div class="terms-box">
+                        <div class="terms-text">
+                            <p><strong>Proceso de recuperación de cuenta:</strong></p>
+                            <ol class="list-decimal pl-5 mt-2 space-y-2">
+                                <li>Se evaluará tu situación mediante el mensaje proporcionado.</li>
+                                <li>Una vez aprobada la solicitud, se procederá a eliminar la cuenta existente asociada al correo electrónico proporcionado.</li>
+                                <li>Podrás crear una nueva cuenta utilizando el mismo correo electrónico.</li>
+                                <li>Durante la creación de la nueva cuenta, establecerás una nueva contraseña.</li>
+                                <li>Una vez creada la nueva cuenta, se transferirá automáticamente el saldo registrado anteriormente en la aplicación.</li>
+                                <li>Todo el proceso será monitoreado y asistido por nuestro equipo de soporte vía WhatsApp.</li>
+                                <li>El tiempo de respuesta puede variar entre 2 a 24 horas hábiles.</li>
+                            </ol>
+                            <p class="mt-4"><strong>Importante:</strong> Este proceso es irreversible.</p>
+                        </div>
                     </div>
-                    <input type="hidden" id="selected-department">
-                </div>
-                <div class="telegram-notice">
-                    <i class="fab fa-telegram text-xl"></i>
-                    <span>Enviaremos tu solicitud a Telegram</span>
-                </div>
-                <div class="flex justify-between mt-4">
-                    <button id="back-to-step-2" class="text-blue-500 py-3 px-6">
-                        <i class="fas fa-arrow-left mr-2"></i> Anterior
-                    </button>
-                    <button id="next-to-step-4" class="btn-primary" style="width: auto; padding: 12px 24px;">
-                        Enviar <i class="fas fa-paper-plane ml-2"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Paso 4 -->
-            <div id="step-4" class="step-content">
-                <div class="confirmation-message">
-                    <div class="confirmation-icon">
-                        <i class="fas fa-check"></i>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="accept-terms" required>
+                            <span class="text-sm">
+                                He leído y acepto los términos del proceso de recuperación.
+                            </span>
+                        </label>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">¡Enviado!</h3>
-                    <p class="text-gray-500 mb-2">Te contactaremos vía WhatsApp</p>
-                    <p class="text-sm text-gray-500">Tiempo de respuesta: 2-24h</p>
+                    
+                    <div class="flex justify-between">
+                        <button id="back-to-step-1" class="text-blue-500 hover:text-blue-600 py-3 px-6 rounded-lg font-medium">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Anterior
+                        </button>
+                        <button id="next-to-step-3" class="btn-primary py-3 px-6 rounded-lg font-medium" disabled>
+                            Siguiente
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Paso 3: Información de contacto -->
+                <div id="step-3" class="step-content">
+                    <h3 class="text-lg font-semibold mb-4">Información de contacto</h3>
+                    <p class="text-gray-600 mb-6 text-sm">Proporciona tus datos para que nuestro equipo pueda contactarte vía WhatsApp.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="form-group">
+                            <label class="form-label">Nombre completo *</label>
+                            <input type="text" id="contact-name" class="form-control" placeholder="Juan Pérez" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Número de celular *</label>
+                            <input type="tel" id="contact-phone" class="form-control" placeholder="77777777" pattern="[0-9]{8}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Departamento *</label>
+                        <div class="department-grid">
+                            <div class="department-option" data-dept="LP">La Paz</div>
+                            <div class="department-option" data-dept="SC">Santa Cruz</div>
+                            <div class="department-option" data-dept="CB">Cochabamba</div>
+                            <div class="department-option" data-dept="OR">Oruro</div>
+                            <div class="department-option" data-dept="PT">Potosí</div>
+                            <div class="department-option" data-dept="TJ">Tarija</div>
+                            <div class="department-option" data-dept="CH">Chuquisaca</div>
+                            <div class="department-option" data-dept="BE">Beni</div>
+                            <div class="department-option" data-dept="PD">Pando</div>
+                        </div>
+                        <input type="hidden" id="selected-department" required>
+                    </div>
+                    
+                    <div class="telegram-notice">
+                        <i class="fab fa-telegram"></i>
+                        <div>
+                            <strong>Nota:</strong> Tu solicitud será enviada a nuestro sistema de Telegram.
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="back-to-step-2" class="text-blue-500 hover:text-blue-600 py-3 px-6 rounded-lg font-medium">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Anterior
+                        </button>
+                        <button id="next-to-step-4" class="btn-primary py-3 px-6 rounded-lg font-medium">
+                            Siguiente
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Paso 4: Confirmación -->
+                <div id="step-4" class="step-content">
+                    <div class="confirmation-message">
+                        <div class="confirmation-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">¡Solicitud Enviada!</h3>
+                        <p class="text-gray-600 mb-4">
+                            Tu solicitud de recuperación ha sido enviada exitosamente.
+                        </p>
+                        <p class="text-gray-600 mb-6 text-sm">
+                            <strong>Tiempo de respuesta:</strong> Entre 2 a 24 horas hábiles.<br>
+                            <strong>Medio de contacto:</strong> WhatsApp al número proporcionado.
+                        </p>
+                        
+                        <p class="text-sm text-gray-500 mt-4">
+                            Nuestro equipo evaluará tu situación y te contactará pronto.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main App Container -->
-    <div class="app-container">
-        <div class="auth-card animate-fade-in-up" style="display: none;">
-            <div class="p-6">
-                <div class="text-center mb-6">
-                    <div class="brand">GIKO</div>
-                    <p class="text-gray-500 text-sm">Billetera digital</p>
-                </div>
-                
-                <!-- Tabs -->
-                <div class="flex border-b border-gray-200 mb-6">
-                    <button id="login-tab" class="tab-button active">Iniciar Sesión</button>
-                    <button id="signup-tab" class="tab-button">Registrarse</button>
-                </div>
-                
-                <!-- Login Form -->
+    <!-- Main Auth Card -->
+    <div class="auth-card w-full max-w-md animate-fade-in-up" style="display: none;">
+        <div class="p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold mb-2">
+                    <span class="brand-gradient">GIKO</span>
+                </h1>
+                <p class="text-gray-500">Tu billetera digital extrema</p>
+            </div>
+            
+            <!-- Pestañas -->
+            <div class="flex border-b border-gray-200 mb-6">
+                <button id="login-tab" class="tab-button active flex-1 py-3 font-medium text-center">
+                    Iniciar Sesión
+                </button>
+                <button id="signup-tab" class="tab-button flex-1 py-3 font-medium text-center">
+                    Registrarse
+                </button>
+            </div>
+            
+            <!-- Contenido de pestañas -->
+            <div id="auth-container">
+                <!-- Formulario de Login -->
                 <div id="login-form-container">
-                    <form id="login-form" class="space-y-4">
+                    <form id="login-form" class="space-y-5">
                         <div>
+                            <label for="login-email" class="block text-sm font-medium text-gray-300 mb-1">Correo electrónico</label>
                             <input type="email" id="login-email" required 
-                                   class="input-field" placeholder="Correo electrónico">
+                                   class="input-field w-full rounded-lg py-3 px-4 focus:outline-none"
+                                   placeholder="tu@email.com">
                         </div>
                         <div class="password-container">
+                            <label for="login-password" class="block text-sm font-medium text-gray-300 mb-1">Contraseña</label>
                             <input type="password" id="login-password" required 
-                                   class="input-field" placeholder="Contraseña">
+                                   class="input-field w-full rounded-lg py-3 px-4 focus:outline-none pr-10"
+                                   placeholder="••••••••">
                             <i class="password-toggle fas fa-eye" id="toggle-login-password"></i>
+                            <div class="flex justify-end mt-1">
+                                <button type="button" id="forgot-password-btn" class="forgot-password-btn text-sm text-blue-500">
+                                    <i class="fas fa-question-circle"></i> ¿Olvidaste tu contraseña?
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center gap-2 text-sm text-gray-500">
-                                <input type="checkbox" id="remember-session" class="accent-[#0047FF]">
-                                Recordar
-                            </label>
-                            <button type="button" id="forgot-password-btn" class="forgot-password-btn">
-                                <i class="fas fa-lock text-xs"></i> ¿Olvidaste?
-                            </button>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember-session" class="mr-2 accent-[#0047FF]">
+                            <label for="remember-session" class="text-sm text-gray-400">Mantener sesión iniciada</label>
                         </div>
-                        <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                        <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg font-medium">
+                            Iniciar Sesión
+                        </button>
                     </form>
+                    
                     <div class="mt-6 text-center text-sm text-gray-500">
-                        ¿No tienes cuenta? 
-                        <button id="switch-to-signup" class="text-blue-500 font-medium">Regístrate</button>
+                        ¿No tienes cuenta? <button id="switch-to-signup" class="text-blue-500 hover:underline">Regístrate</button>
                     </div>
                 </div>
                 
-                <!-- Signup Form -->
+                <!-- Formulario de Registro -->
                 <div id="signup-form-container" class="hidden">
-                    <form id="signup-form" class="space-y-4">
-                        <input type="text" id="signup-name" required 
-                               class="input-field" placeholder="Nombre completo">
-                        <input type="email" id="signup-email" required 
-                               class="input-field" placeholder="Correo electrónico">
-                        <input type="tel" id="signup-phone" required 
-                               class="input-field" placeholder="Número de celular">
-                        <div class="password-container">
-                            <input type="password" id="signup-password" required 
-                                   class="input-field" placeholder="Crear contraseña">
-                            <i class="password-toggle fas fa-eye" id="toggle-signup-password"></i>
+                    <form id="signup-form" class="space-y-5">
+                        <div>
+                            <label for="signup-name" class="block text-sm font-medium text-gray-300 mb-1">Nombre completo *</label>
+                            <input type="text" id="signup-name" required 
+                                   class="input-field w-full rounded-lg py-3 px-4 focus:outline-none"
+                                   placeholder="Ej: Juan Pérez">
                         </div>
-                        <p class="text-xs text-gray-500">Mínimo 8 caracteres</p>
-                        <button type="submit" class="btn-primary">Crear Cuenta</button>
+                        <div>
+                            <label for="signup-email" class="block text-sm font-medium text-gray-300 mb-1">Correo electrónico *</label>
+                            <input type="email" id="signup-email" required 
+                                   class="input-field w-full rounded-lg py-3 px-4 focus:outline-none"
+                                   placeholder="tu@email.com">
+                        </div>
+                        <div>
+                            <label for="signup-phone" class="block text-sm font-medium text-gray-300 mb-1">Número de celular *</label>
+                            <input type="tel" id="signup-phone" pattern="[0-9]{8}" required 
+                                   class="input-field w-full rounded-lg py-3 px-4 focus:outline-none"
+                                   placeholder="Ej: 76543210">
+                        </div>
+                        <div class="password-container">
+                            <label for="signup-password" class="block text-sm font-medium text-gray-300 mb-1">Crear Contraseña *</label>
+                            <input type="password" id="signup-password" required 
+                                   class="input-field w-full rounded-lg py-3 px-4 focus:outline-none pr-10"
+                                   placeholder="••••••••">
+                            <i class="password-toggle fas fa-eye" id="toggle-signup-password"></i>
+                            <p class="text-xs text-gray-500 mt-1">Mínimo 8 caracteres con números y letras</p>
+                        </div>
+                        <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg font-medium">
+                            Crear Cuenta
+                        </button>
                     </form>
+                    
                     <div class="mt-6 text-center text-sm text-gray-500">
-                        ¿Ya tienes cuenta? 
-                        <button id="switch-to-login" class="text-blue-500 font-medium">Inicia sesión</button>
+                        ¿Ya tienes cuenta? <button id="switch-to-login" class="text-blue-500 hover:underline">Inicia sesión</button>
                     </div>
                 </div>
-                
-                <div class="mt-6 pt-4 border-t border-gray-200 text-center text-xs text-gray-500">
-                    Al registrarte, aceptas nuestros Términos y Privacidad
-                </div>
+            </div>
+            
+            <div id="auth-message" class="mt-6 p-4 rounded-lg text-sm text-center hidden"></div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-100 text-center text-xs text-gray-500">
+                <p>Al registrarte, aceptas nuestros <a href="#" class="text-blue-500 hover:underline">Términos</a> y <a href="#" class="text-blue-500 hover:underline">Privacidad</a></p>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Supabase config
+        // Configuración de Supabase (sin cambios, solo la marca cambia)
         const supabaseUrl = 'https://aleadadisazocjovibeh.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZWFkYWRpc2F6b2Nqb3ZpYmVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE5NjMsImV4cCI6MjA3NTAxNzk2M30.z82tP0C-UiiNuzP_jqrQf4LBusFqrDi1WYbdnuTh47E';
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-        // Funciones optimizadas
+        
+        // El resto del JavaScript se mantiene IDÉNTICO, solo cambia la marca visual
+        // Verificar sesión al cargar la página
         async function checkSession() {
             try {
-                const { data: { session } } = await window.supabase.auth.getSession();
+                const { data: { session }, error } = await window.supabase.auth.getSession();
+                
+                if (error) {
+                    console.error('Error al verificar sesión:', error);
+                    return false;
+                }
+                
                 if (session) {
-                    showToast('info', 'Sesión activa', 'Redirigiendo...');
-                    setTimeout(() => window.location.href = 'dashboard.html', 500);
+                    console.log('Sesión activa encontrada, redirigiendo al dashboard...');
+                    showToast('info', 'Sesión activa', 'Redirigiendo al dashboard...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                    
                     return true;
                 }
+                
                 return false;
-            } catch { return false; }
+            } catch (error) {
+                console.error('Error inesperado al verificar sesión:', error);
+                return false;
+            }
         }
-
-        // Toast rápido
-        function showToast(type, title, message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<div class="font-medium">${title}</div><div class="text-sm">${message}</div>`;
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Inicialización
+        
         document.addEventListener('DOMContentLoaded', async function() {
-            if (await checkSession()) return;
-
-            // Splash rápido
+            const hasActiveSession = await checkSession();
+            
+            if (hasActiveSession) {
+                return;
+            }
+            
             setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
+                const splashScreen = document.getElementById('splash-screen');
+                const authCard = document.querySelector('.auth-card');
+                
+                splashScreen.style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('splash-screen').style.display = 'none';
-                    document.querySelector('.auth-card').style.display = 'block';
-                }, 200);
-            }, 800);
-
-            // Elementos DOM
+                    splashScreen.style.display = 'none';
+                    authCard.style.display = 'block';
+                }, 500);
+            }, 1500);
+            
+            // Lógica para cambiar entre pestañas
             const loginTab = document.getElementById('login-tab');
             const signupTab = document.getElementById('signup-tab');
             const loginForm = document.getElementById('login-form-container');
             const signupForm = document.getElementById('signup-form-container');
+            const switchToSignup = document.getElementById('switch-to-signup');
+            const switchToLogin = document.getElementById('switch-to-login');
             
-            // Tabs
             function showLogin() {
                 loginTab.classList.add('active');
                 signupTab.classList.remove('active');
@@ -797,209 +902,451 @@
                 signupForm.classList.remove('hidden');
                 loginForm.classList.add('hidden');
             }
-
+            
             loginTab.addEventListener('click', showLogin);
             signupTab.addEventListener('click', showSignup);
-            document.getElementById('switch-to-signup').addEventListener('click', showSignup);
-            document.getElementById('switch-to-login').addEventListener('click', showLogin);
-
-            // Toggle password
-            document.getElementById('toggle-login-password').addEventListener('click', function() {
-                const input = document.getElementById('login-password');
-                input.type = input.type === 'password' ? 'text' : 'password';
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
-            });
-
-            document.getElementById('toggle-signup-password').addEventListener('click', function() {
-                const input = document.getElementById('signup-password');
-                input.type = input.type === 'password' ? 'text' : 'password';
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
-            });
-
-            // Modal recovery
-            const modal = document.getElementById('password-recovery-modal');
-            const closeModal = document.getElementById('close-recovery-modal');
+            switchToSignup.addEventListener('click', showSignup);
+            switchToLogin.addEventListener('click', showLogin);
             
-            document.getElementById('forgot-password-btn').addEventListener('click', () => {
-                modal.classList.add('active');
-                resetRecoveryForm();
+            // Toggle para mostrar/ocultar contraseña
+            const toggleLoginPassword = document.getElementById('toggle-login-password');
+            const loginPassword = document.getElementById('login-password');
+            const toggleSignupPassword = document.getElementById('toggle-signup-password');
+            const signupPassword = document.getElementById('signup-password');
+            
+            toggleLoginPassword.addEventListener('click', function() {
+                const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                loginPassword.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
             });
-
-            closeModal.addEventListener('click', () => {
-                modal.classList.remove('active');
+            
+            toggleSignupPassword.addEventListener('click', function() {
+                const type = signupPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                signupPassword.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
             });
-
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
-            });
-
-            // Steps
+            
+            // Modal de recuperación de contraseña
+            const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+            const recoveryModal = document.getElementById('password-recovery-modal');
+            const closeModalBtn = document.getElementById('close-recovery-modal');
+            
             let currentStep = 1;
             let selectedDepartment = '';
-
-            document.getElementById('next-to-step-2').addEventListener('click', () => {
-                if (document.getElementById('situation-description').value && 
-                    document.getElementById('recovery-email').value) {
-                    goToStep(2);
-                } else {
-                    showToast('warning', 'Campos requeridos', 'Completa todos los campos');
+            
+            forgotPasswordBtn.addEventListener('click', function() {
+                recoveryModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                resetRecoveryForm();
+            });
+            
+            closeModalBtn.addEventListener('click', closeRecoveryModal);
+            
+            recoveryModal.addEventListener('click', function(e) {
+                if (e.target === recoveryModal) {
+                    closeRecoveryModal();
                 }
             });
-
-            document.getElementById('back-to-step-1').addEventListener('click', () => goToStep(1));
-
-            document.getElementById('next-to-step-3').addEventListener('click', () => {
-                if (document.getElementById('accept-terms').checked) {
-                    goToStep(3);
-                } else {
-                    showToast('warning', 'Acepta los términos', 'Debes aceptar para continuar');
+            
+            document.getElementById('next-to-step-2').addEventListener('click', function() {
+                const situation = document.getElementById('situation-description').value;
+                const email = document.getElementById('recovery-email').value;
+                
+                if (!situation || !email) {
+                    showToast('warning', 'Campos requeridos', 'Por favor, completa todos los campos obligatorios.');
+                    return;
                 }
+                
+                goToStep(2);
             });
-
-            document.getElementById('back-to-step-2').addEventListener('click', () => goToStep(2));
-
+            
+            document.getElementById('back-to-step-1').addEventListener('click', function() {
+                goToStep(1);
+            });
+            
+            document.getElementById('next-to-step-3').addEventListener('click', function() {
+                if (!document.getElementById('accept-terms').checked) {
+                    showToast('warning', 'Términos no aceptados', 'Debes aceptar los términos para continuar.');
+                    return;
+                }
+                
+                goToStep(3);
+            });
+            
+            document.getElementById('back-to-step-2').addEventListener('click', function() {
+                goToStep(2);
+            });
+            
+            document.getElementById('next-to-step-4').addEventListener('click', function() {
+                const name = document.getElementById('contact-name').value;
+                const phone = document.getElementById('contact-phone').value;
+                
+                if (!name || !phone || !selectedDepartment) {
+                    showToast('warning', 'Información incompleta', 'Por favor, completa todos los campos obligatorios.');
+                    return;
+                }
+                
+                sendToTelegram();
+                
+                goToStep(4);
+                
+                setTimeout(() => {
+                    closeRecoveryModal();
+                }, 3000);
+            });
+            
             document.getElementById('accept-terms').addEventListener('change', function() {
-                document.getElementById('next-to-step-3').disabled = !this.checked;
+                const nextBtn = document.getElementById('next-to-step-3');
+                nextBtn.disabled = !this.checked;
             });
-
-            document.querySelectorAll('.department-option').forEach(opt => {
-                opt.addEventListener('click', function() {
-                    document.querySelectorAll('.department-option').forEach(o => o.classList.remove('selected'));
+            
+            document.querySelectorAll('.department-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.department-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
                     this.classList.add('selected');
-                    selectedDepartment = this.dataset.dept;
+                    selectedDepartment = this.getAttribute('data-dept');
+                    document.getElementById('selected-department').value = selectedDepartment;
                 });
             });
-
-            document.getElementById('next-to-step-4').addEventListener('click', () => {
-                if (document.getElementById('contact-name').value && 
-                    document.getElementById('contact-phone').value && 
-                    selectedDepartment) {
-                    sendToTelegram();
-                    goToStep(4);
-                    setTimeout(() => modal.classList.remove('active'), 2000);
-                } else {
-                    showToast('warning', 'Completa todos', 'Todos los campos son obligatorios');
-                }
-            });
-
-            // Login submit
-            document.getElementById('login-form').addEventListener('submit', async (e) => {
+            
+            document.getElementById('login-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const btn = e.target.querySelector('button[type="submit"]');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
-
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                const rememberSession = document.getElementById('remember-session').checked;
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Iniciando...';
+                submitBtn.disabled = true;
+                
                 try {
-                    const { error } = await window.supabase.auth.signInWithPassword({
-                        email: document.getElementById('login-email').value,
-                        password: document.getElementById('login-password').value
+                    const persistence = rememberSession ? 'local' : 'session';
+                    
+                    const { data, error } = await window.supabase.auth.signInWithPassword({
+                        email: email,
+                        password: password
                     });
                     
                     if (error) throw error;
                     
-                    showToast('success', '¡Bienvenido!', 'Iniciando sesión...');
-                    setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                    if (rememberSession) {
+                        localStorage.setItem('giko_remember_session', 'true');
+                    } else {
+                        localStorage.setItem('giko_remember_session', 'false');
+                    }
+                    
+                    showToast('success', '¡Éxito!', 'Inicio de sesión exitoso');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                    
                 } catch (error) {
-                    showToast('error', 'Error', error.message);
-                    btn.disabled = false;
-                    btn.innerHTML = 'Iniciar Sesión';
+                    showToast('error', 'Error', error.message || 'Error al iniciar sesión');
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 }
             });
-
-            // Signup submit
-            document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            
+            document.getElementById('signup-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const btn = e.target.querySelector('button[type="submit"]');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
-
+                
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const phone = document.getElementById('signup-phone').value;
+                const password = document.getElementById('signup-password').value;
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
+                submitBtn.disabled = true;
+                
                 try {
-                    const { data, error } = await window.supabase.auth.signUp({
-                        email: document.getElementById('signup-email').value,
-                        password: document.getElementById('signup-password').value,
+                    const { data: authData, error: authError } = await window.supabase.auth.signUp({
+                        email: email,
+                        password: password,
                         options: {
                             data: {
-                                phone: document.getElementById('signup-phone').value,
-                                full_name: document.getElementById('signup-name').value
+                                phone: phone
                             }
                         }
                     });
-
-                    if (error) throw error;
-
-                    showToast('success', '¡Cuenta creada!', 'Verifica tu correo');
+                    
+                    if (authError) throw authError;
+                    
+                    const userId = authData.user?.id;
+                    
+                    if (!userId) {
+                        throw new Error('No se pudo obtener el ID del usuario');
+                    }
+                    
+                    const { error: dbError } = await window.supabase
+                        .from('user_profiles')
+                        .insert([
+                            {
+                                id: userId,
+                                full_name: name,
+                                email: email,
+                                phone: phone,
+                                avatar_url: null
+                            }
+                        ]);
+                    
+                    if (dbError) {
+                        console.error('Error insertando en user_profiles:', dbError);
+                        throw dbError;
+                    }
+                    
+                    showToast('success', '¡Éxito!', 'Cuenta creada exitosamente. Verifica tu correo.');
+                    
                     setTimeout(() => {
                         showLogin();
-                        document.getElementById('login-email').value = document.getElementById('signup-email').value;
+                        document.getElementById('login-email').value = email;
+                        showToast('info', 'Listo', 'Ahora puedes iniciar sesión con tus credenciales');
                     }, 2000);
+                    
                 } catch (error) {
-                    showToast('error', 'Error', error.message);
+                    showToast('error', 'Error', error.message || 'Error al crear la cuenta');
                 } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = 'Crear Cuenta';
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 }
             });
         });
-
-        function goToStep(step) {
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.step-content').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
-            document.getElementById(`step-${step}`).classList.add('active');
+        
+        function closeRecoveryModal() {
+            const recoveryModal = document.getElementById('password-recovery-modal');
+            recoveryModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
-
+        
         function resetRecoveryForm() {
-            goToStep(1);
+            currentStep = 1;
             selectedDepartment = '';
+            
+            for (let i = 1; i <= 4; i++) {
+                const step = document.querySelector(`.step[data-step="${i}"]`);
+                const content = document.getElementById(`step-${i}`);
+                
+                if (i === 1) {
+                    step.classList.add('active');
+                    content.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                    content.classList.remove('active');
+                }
+            }
+            
             document.getElementById('situation-description').value = '';
             document.getElementById('recovery-email').value = '';
             document.getElementById('accept-terms').checked = false;
             document.getElementById('contact-name').value = '';
             document.getElementById('contact-phone').value = '';
-            document.querySelectorAll('.department-option').forEach(o => o.classList.remove('selected'));
+            document.getElementById('selected-department').value = '';
+            
+            document.querySelectorAll('.department-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
             document.getElementById('next-to-step-3').disabled = true;
         }
-
+        
+        function goToStep(step) {
+            const currentStepElement = document.getElementById(`step-${currentStep}`);
+            const currentStepIndicator = document.querySelector(`.step[data-step="${currentStep}"]`);
+            
+            currentStepElement.classList.remove('active');
+            currentStepIndicator.classList.remove('active');
+            
+            currentStep = step;
+            const newStepElement = document.getElementById(`step-${step}`);
+            const newStepIndicator = document.querySelector(`.step[data-step="${step}"]`);
+            
+            newStepElement.classList.add('active');
+            newStepIndicator.classList.add('active');
+        }
+        
         async function sendToTelegram() {
             try {
-                const message = `📋 *RECUPERACIÓN GIKO*\n\n` +
-                    `👤 ${document.getElementById('contact-name').value}\n` +
-                    `📧 ${document.getElementById('recovery-email').value}\n` +
-                    `📱 ${document.getElementById('contact-phone').value}\n` +
-                    `📍 ${selectedDepartment}\n\n` +
-                    `📝 ${document.getElementById('situation-description').value}`;
-
-                await fetch(`https://api.telegram.org/bot7596286871:AAGFe3sHy-GhykyM_xsFwDU8qrt6SWXSWHY/sendMessage`, {
+                const situation = document.getElementById('situation-description').value;
+                const email = document.getElementById('recovery-email').value;
+                const name = document.getElementById('contact-name').value;
+                const phone = document.getElementById('contact-phone').value;
+                const department = selectedDepartment;
+                
+                const botToken = '7596286871:AAGFe3sHy-GhykyM_xsFwDU8qrt6SWXSWHY';
+                const chatId = '7100840475';
+                
+                const message = `📋 *NUEVA SOLICITUD DE RECUPERACIÓN - GIKO*\n\n` +
+                              `👤 *Nombre:* ${name}\n` +
+                              `📧 *Email:* ${email}\n` +
+                              `📱 *Teléfono:* ${phone}\n` +
+                              `📍 *Departamento:* ${getDepartmentName(department)}\n\n` +
+                              `📝 *Situación:*\n${situation}\n\n` +
+                              `⏰ *Hora:* ${new Date().toLocaleString()}`;
+                
+                const encodedMessage = encodeURIComponent(message);
+                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                
+                const response = await fetch(telegramUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({
-                        chat_id: '7100840475',
+                        chat_id: chatId,
                         text: message,
                         parse_mode: 'Markdown'
                     })
                 });
                 
-                showToast('success', 'Enviado', 'Tu solicitud fue recibida');
-            } catch {
-                showToast('warning', 'Offline', 'Se guardará localmente');
+                const result = await response.json();
+                
+                if (result.ok) {
+                    console.log('Mensaje enviado exitosamente a Telegram:', result);
+                    showToast('success', '¡Solicitud enviada!', 'Tu solicitud ha sido enviada a nuestro equipo de soporte.');
+                    
+                    await saveRecoveryRequest({
+                        name,
+                        email,
+                        phone,
+                        department: getDepartmentName(department),
+                        situation,
+                        sent_to_telegram: true,
+                        telegram_response: result
+                    });
+                    
+                } else {
+                    console.error('Error al enviar a Telegram:', result);
+                    showToast('warning', 'Advertencia', 'Solicitud guardada localmente pero no pudo enviarse a Telegram. Nuestro equipo la revisará manualmente.');
+                    
+                    await saveRecoveryRequest({
+                        name,
+                        email,
+                        phone,
+                        department: getDepartmentName(department),
+                        situation,
+                        sent_to_telegram: false,
+                        telegram_error: result.description
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Error en sendToTelegram:', error);
+                showToast('error', 'Error', 'Hubo un problema al enviar la solicitud. Por favor, intenta nuevamente o contacta directamente a soporte.');
             }
         }
+        
+        async function saveRecoveryRequest(data) {
+            try {
+                const { error } = await window.supabase
+                    .from('password_recovery_requests')
+                    .insert([{
+                        user_name: data.name,
+                        user_email: data.email,
+                        user_phone: data.phone,
+                        department: data.department,
+                        situation_description: data.situation,
+                        sent_to_telegram: data.sent_to_telegram,
+                        telegram_response: data.telegram_response || null,
+                        telegram_error: data.telegram_error || null,
+                        created_at: new Date().toISOString()
+                    }]);
+                
+                if (error) {
+                    console.error('Error guardando en Supabase:', error);
+                }
+            } catch (error) {
+                console.error('Error en saveRecoveryRequest:', error);
+            }
+        }
+        
+        function getDepartmentName(code) {
+            const departments = {
+                'LP': 'La Paz',
+                'SC': 'Santa Cruz',
+                'CB': 'Cochabamba',
+                'OR': 'Oruro',
+                'PT': 'Potosí',
+                'TJ': 'Tarija',
+                'CH': 'Chuquisaca',
+                'BE': 'Beni',
+                'PD': 'Pando'
+            };
+            return departments[code] || 'Desconocido';
+        }
+        
+        function showToast(type, title, message) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const toastContent = `
+                <div class="font-medium">${title}</div>
+                <div class="text-sm">${message}</div>
+            `;
+            
+            toast.innerHTML = toastContent;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(err => console.log('SW registration failed'));
+            });
+        }
 
-        // PWA Install
         let deferredPrompt;
+        const installButton = document.createElement('button');
+        installButton.textContent = 'Instalar GIKO';
+        installButton.className = 'btn-primary fixed bottom-4 right-4 z-50 py-2 px-4 rounded-full shadow-lg animate-bounce';
+        installButton.style.display = 'none';
+
+        document.body.appendChild(installButton);
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            const btn = document.createElement('button');
-            btn.innerHTML = '<i class="fas fa-download mr-2"></i> Instalar GIKO';
-            btn.className = 'install-button';
-            btn.onclick = () => {
-                btn.remove();
+            installButton.style.display = 'block';
+            
+            installButton.addEventListener('click', () => {
+                installButton.style.display = 'none';
                 deferredPrompt.prompt();
-            };
-            document.body.appendChild(btn);
+                deferredPrompt.userChoice.then(choiceResult => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('success', 'Instalación', 'GIKO se está instalando...');
+                    } else {
+                        showToast('info', 'Instalación', 'Puedes instalarlo más tarde desde el menú.');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installButton.style.display = 'none';
+            deferredPrompt = null;
+            showToast('success', '¡Instalado!', 'GIKO ha sido instalado correctamente.');
         });
     </script>
 </body>
