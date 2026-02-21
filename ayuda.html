@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soporte - TokTok Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#7c3aed">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .bank-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            box-shadow: 0 0 40px rgba(124, 58, 237, 0.1);
+        }
+        
+        .bank-header {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+        
+        .bank-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7c3aed;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .back-arrow {
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            color: white;
+            font-size: 22px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.15);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .support-section {
+            padding: 30px 25px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+            border-radius: 2px;
+            margin: 8px auto;
+        }
+        
+        .bank-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .bank-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.12);
+            border: 2px solid #f3f4f6;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .bank-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+        }
+        
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(124, 58, 237, 0.2);
+            border-color: #e9d5ff;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .icon-support {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .icon-dev {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .card-title-area {
+            flex: 1;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .card-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .card-number {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border: 1px solid #ddd6fe;
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #7c3aed;
+            text-align: center;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .bank-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+        }
+        
+        .btn-call {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+        }
+        
+        .bank-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bank-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-icon {
+            font-size: 18px;
+        }
+        
+        .bank-footer {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+            font-size: 13px;
+            border-top: 1px solid #f3f4f6;
+            background: #fafafa;
+        }
+        
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bank-container">
+        <!-- Header Bancario -->
+        <div class="bank-header">
+            <a href="dashboard.html" class="back-arrow">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            
+            <div class="bank-logo">
+                <div class="logo-icon">TT</div>
+                <div class="logo-text">TokTok</div>
+            </div>
+            
+            <div class="header-subtitle">Soporte 24/7</div>
+        </div>
+        
+        <!-- Contenido Principal -->
+        <div class="support-section">
+            <h2 class="section-title">Contactar Soporte</h2>
+            
+            <div class="bank-cards">
+                <!-- Tarjeta Atención al Cliente -->
+                <div class="bank-card">
+                    <div class="card-header">
+                        <div class="card-icon icon-support">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="card-title-area">
+                            <div class="card-title">Atención al Cliente</div>
+                            <div class="card-subtitle">Soporte general y operaciones</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-number">+591 73246446</div>
+                    
+                    <div class="card-buttons">
+                        <button class="bank-btn btn-whatsapp" onclick="whatsappAtencion()">
+                            <i class="fab fa-whatsapp btn-icon"></i>
+                            WhatsApp
+                        </button>
+                        
+                        <button class="bank-btn btn-call" onclick="llamarAtencion()">
+                            <i class="fas fa-phone btn-icon"></i>
+                            Llamar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta CEO/Desarrollador -->
+                <div class="bank-card">
+                    <div class="card-header">
+                        <div class="card-icon icon-dev">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="card-title-area">
+                            <div class="card-title">CEO / Desarrollador</div>
+                            <div class="card-subtitle">Soporte técnico y desarrollo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-number">+591 62315600</div>
+                    
+                    <div class="card-buttons">
+                        <button class="bank-btn btn-whatsapp" onclick="whatsappDesarrollador()">
+                            <i class="fab fa-whatsapp btn-icon"></i>
+                            WhatsApp
+                        </button>
+                        
+                        <button class="bank-btn btn-call" onclick="llamarDesarrollador()">
+                            <i class="fas fa-phone btn-icon"></i>
+                            Llamar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+    </div>
+
+    <script>
+        // Atención al Cliente
+        function llamarAtencion() {
+            window.location.href = "tel:+59173246446";
+        }
+        
+        function whatsappAtencion() {
+            const numero = "59173246446";
+            const mensaje = "Hola, necesito ayuda con TokTok - Atención al Cliente";
+            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+        
+        // CEO/Desarrollador
+        function llamarDesarrollador() {
+            window.location.href = "tel:+59162315600";
+        }
+        
+        function whatsappDesarrollador() {
+            const numero = "59162315600";
+            const mensaje = "Hola, necesito soporte técnico con TokTok - CEO/Desarrollador";
+            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+        
+        // Efectos interactivos
+        document.querySelectorAll('.bank-btn').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.opacity = '0.9';
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            btn.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Efecto de carga
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.bank-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
