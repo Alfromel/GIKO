@@ -829,12 +829,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Configuración de Supabase (sin cambios, solo la marca cambia)
+        // Configuración de Supabase
         const supabaseUrl = 'https://aleadadisazocjovibeh.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZWFkYWRpc2F6b2Nqb3ZpYmVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE5NjMsImV4cCI6MjA3NTAxNzk2M30.z82tP0C-UiiNuzP_jqrQf4LBusFqrDi1WYbdnuTh47E';
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
         
-        // El resto del JavaScript se mantiene IDÉNTICO, solo cambia la marca visual
         // Verificar sesión al cargar la página
         async function checkSession() {
             try {
@@ -859,6 +858,68 @@
                 return false;
             } catch (error) {
                 console.error('Error inesperado al verificar sesión:', error);
+                return false;
+            }
+        }
+
+        // Función para validar si el nombre ya existe
+        async function checkNameExists(name) {
+            try {
+                const { data, error } = await window.supabase
+                    .from('user_profiles')
+                    .select('full_name')
+                    .eq('full_name', name)
+                    .maybeSingle();
+                
+                if (error) throw error;
+                return !!data;
+            } catch (error) {
+                console.error('Error verificando nombre:', error);
+                return false;
+            }
+        }
+
+        // Función para validar si el email ya existe
+        async function checkEmailExists(email) {
+            try {
+                // Verificar en auth.users
+                const { data: authData, error: authError } = await window.supabase.auth.admin.listUsers();
+                
+                if (authError) {
+                    console.error('Error verificando email en auth:', authError);
+                    
+                    // Fallback: verificar en user_profiles
+                    const { data: profileData, error: profileError } = await window.supabase
+                        .from('user_profiles')
+                        .select('email')
+                        .eq('email', email)
+                        .maybeSingle();
+                    
+                    if (profileError) throw profileError;
+                    return !!profileData;
+                }
+                
+                const userExists = authData.users.some(user => user.email === email);
+                return userExists;
+            } catch (error) {
+                console.error('Error verificando email:', error);
+                return false;
+            }
+        }
+
+        // Función para validar si el teléfono ya existe
+        async function checkPhoneExists(phone) {
+            try {
+                const { data, error } = await window.supabase
+                    .from('user_profiles')
+                    .select('phone')
+                    .eq('phone', phone)
+                    .maybeSingle();
+                
+                if (error) throw error;
+                return !!data;
+            } catch (error) {
+                console.error('Error verificando teléfono:', error);
                 return false;
             }
         }
@@ -1027,8 +1088,6 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    const persistence = rememberSession ? 'local' : 'session';
-                    
                     const { data, error } = await window.supabase.auth.signInWithPassword({
                         email: email,
                         password: password
@@ -1058,23 +1117,56 @@
             document.getElementById('signup-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const name = document.getElementById('signup-name').value;
-                const email = document.getElementById('signup-email').value;
-                const phone = document.getElementById('signup-phone').value;
+                const name = document.getElementById('signup-name').value.trim();
+                const email = document.getElementById('signup-email').value.trim();
+                const phone = document.getElementById('signup-phone').value.trim();
                 const password = document.getElementById('signup-password').value;
                 
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Verificando...';
                 submitBtn.disabled = true;
                 
                 try {
+                    // VALIDACIONES MEJORADAS - Verificar si los datos ya existen
+                    
+                    // 1. Verificar si el nombre ya existe
+                    const nameExists = await checkNameExists(name);
+                    if (nameExists) {
+                        showToast('error', 'Error', 'El nombre ya está registrado. Por favor, usa otro nombre.');
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                    
+                    // 2. Verificar si el email ya existe
+                    const emailExists = await checkEmailExists(email);
+                    if (emailExists) {
+                        showToast('error', 'Error', 'El correo electrónico ya está registrado. Por favor, usa otro correo.');
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                    
+                    // 3. Verificar si el teléfono ya existe
+                    const phoneExists = await checkPhoneExists(phone);
+                    if (phoneExists) {
+                        showToast('error', 'Error', 'El número de teléfono ya está registrado. Por favor, usa otro número.');
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                    
+                    // Si todas las validaciones pasan, proceder con el registro
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
+                    
                     const { data: authData, error: authError } = await window.supabase.auth.signUp({
                         email: email,
                         password: password,
                         options: {
                             data: {
-                                phone: phone
+                                phone: phone,
+                                full_name: name
                             }
                         }
                     });
@@ -1109,10 +1201,12 @@
                     setTimeout(() => {
                         showLogin();
                         document.getElementById('login-email').value = email;
+                        document.getElementById('login-password').value = '';
                         showToast('info', 'Listo', 'Ahora puedes iniciar sesión con tus credenciales');
                     }, 2000);
                     
                 } catch (error) {
+                    console.error('Error en registro:', error);
                     showToast('error', 'Error', error.message || 'Error al crear la cuenta');
                 } finally {
                     submitBtn.textContent = originalText;
