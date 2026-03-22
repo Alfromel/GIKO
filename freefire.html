@@ -25,7 +25,7 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Estilos para los cards de paquetes - NUEVO DISEÑO CUADRADO */
+        /* Estilos para los cards de paquetes - NUEVO DISEÑO CUADRADO CON FONDO DE FREE FIRE */
         .package-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -34,7 +34,9 @@
         }
         
         .package-card {
-            background: white;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/a82253dcbf83fa6fe8313fbf993cb2d6.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 16px;
             padding: 12px 8px;
             display: flex;
@@ -48,31 +50,50 @@
             cursor: pointer;
             aspect-ratio: 1 / 1;
             width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .package-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+        
+        .package-card > * {
+            position: relative;
+            z-index: 2;
         }
         
         .package-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
         }
         
         .package-card.selected {
             border-color: var(--primary);
-            background: #ede9fe;
             transform: scale(0.98);
+            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.3);
         }
         
         .package-diamonds {
             font-size: 18px;
             font-weight: 700;
-            color: var(--primary);
+            color: white;
             margin-bottom: 4px;
             line-height: 1.2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         .package-price {
             font-size: 16px;
             font-weight: 600;
-            color: #059669;
+            color: #fbbf24;
             margin-bottom: 4px;
         }
         
@@ -89,13 +110,35 @@
         
         .package-details-small {
             font-size: 9px;
-            color: #6b7280;
+            color: #e2e8f0;
             line-height: 1.2;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
         }
         
         .package-card.special {
-            background: linear-gradient(145deg, #fff7ed, #ffedd5);
             border: 2px solid #f59e0b;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+        
+        /* Etiqueta de precio en la esquina */
+        .price-tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 20px;
+            z-index: 3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
+        
+        .price-tag::before {
+            content: 'Bs ';
+            font-size: 10px;
         }
         
         .game-card {
@@ -237,6 +280,13 @@
             .package-price {
                 font-size: 14px;
             }
+            
+            .price-tag {
+                top: 6px;
+                right: 6px;
+                font-size: 10px;
+                padding: 3px 6px;
+            }
         }
         
         /* Estilos para la factura */
@@ -365,77 +415,77 @@
                     <div class="mb-5">
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Selecciona tu paquete</label>
                         
-                        <!-- NUEVO DISEÑO EN CARDS CUADRADOS -->
+                        <!-- NUEVO DISEÑO EN CARDS CUADRADOS CON FONDO FREE FIRE Y ETIQUETA DE PRECIO EN ESQUINA -->
                         <div class="package-grid">
                             <!-- 110 Diamantes -->
                             <div class="package-card" data-diamonds="110" data-price="9.50">
+                                <div class="price-tag">9.50</div>
                                 <div class="package-diamonds">110</div>
-                                <div class="package-price">Bs 9.50</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 220 Diamantes -->
                             <div class="package-card" data-diamonds="220" data-price="22">
+                                <div class="price-tag">22</div>
                                 <div class="package-diamonds">220</div>
-                                <div class="package-price">Bs 22</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 341 Diamantes -->
                             <div class="package-card" data-diamonds="341" data-price="33">
+                                <div class="price-tag">33</div>
                                 <div class="package-diamonds">341</div>
-                                <div class="package-price">Bs 33</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 572 Diamantes -->
                             <div class="package-card" data-diamonds="572" data-price="47">
+                                <div class="price-tag">47</div>
                                 <div class="package-diamonds">572</div>
-                                <div class="package-price">Bs 47</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 913 Diamantes -->
                             <div class="package-card" data-diamonds="913" data-price="78">
+                                <div class="price-tag">78</div>
                                 <div class="package-diamonds">913</div>
-                                <div class="package-price">Bs 78</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 1166 Diamantes -->
                             <div class="package-card" data-diamonds="1166" data-price="85">
+                                <div class="price-tag">85</div>
                                 <div class="package-diamonds">1166</div>
-                                <div class="package-price">Bs 85</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 2398 Diamantes -->
                             <div class="package-card" data-diamonds="2398" data-price="171">
+                                <div class="price-tag">171</div>
                                 <div class="package-diamonds">2398</div>
-                                <div class="package-price">Bs 171</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- 6160 Diamantes -->
                             <div class="package-card" data-diamonds="6160" data-price="430">
+                                <div class="price-tag">430</div>
                                 <div class="package-diamonds">6160</div>
-                                <div class="package-price">Bs 430</div>
                                 <div class="package-details-small">Diamantes</div>
                             </div>
                             
                             <!-- Tarjeta Semanal - ESPECIAL -->
                             <div class="package-card special" data-diamonds="semanal" data-price="18">
+                                <div class="price-tag">18</div>
                                 <div class="package-badge">SEMANAL</div>
                                 <div class="package-diamonds">340</div>
-                                <div class="package-price">Bs 18</div>
                                 <div class="package-details-small">60 + 40×7 días</div>
                             </div>
                             
                             <!-- Tarjeta Mensual - ESPECIAL -->
                             <div class="package-card special" data-diamonds="mensual" data-price="88">
+                                <div class="price-tag">88</div>
                                 <div class="package-badge">MENSUAL</div>
                                 <div class="package-diamonds">1800</div>
-                                <div class="package-price">Bs 88</div>
                                 <div class="package-details-small">300 + 50×30 días</div>
                             </div>
                         </div>
