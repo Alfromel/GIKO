@@ -7,155 +7,289 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         :root {
-            --primary: #6d28d9;
-            --primary-dark: #5b21b6;
-            --secondary: #059669;
-            --secondary-dark: #047857;
-            --accent: #f59e0b;
-            --accent-dark: #d97706;
+            --navy: #0A1F44;
+            --navy-deep: #061530;
+            --navy-mid: #0F2A56;
+            --accent: #6d28d9;
+            --accent-soft: #EEE8FF;
+            --gold: #F5A524;
+            --gold-soft: #FFF6E7;
+            --ink: #0B1220;
+            --muted: #7C8598;
+            --hairline: #E7E9F0;
+            --bg: #F4F6FB;
         }
-        
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #1e293b;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', -apple-system, "SF Pro Text", system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
         }
-        
-        /* Estilos para los cards de paquetes - DISEÑO CUADRADO CON FONDO DE MOBILE LEGENDS */
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg);
+            position: relative;
+        }
+
+        .mobile-header {
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+            color: white;
+            padding: calc(env(safe-area-inset-top, 0px) + 18px) 20px 26px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 12px 30px rgba(6, 21, 48, 0.3);
+        }
+
+        .nav-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .back-arrow {
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.12);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-title {
+            font-size: 15px;
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        .nav-spacer { width: 34px; }
+
+        .header-game-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .game-badge {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--gold) 0%, #E08E0B 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .header-game-title {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+        }
+
+        .header-game-sub {
+            font-size: 13px;
+            opacity: 0.72;
+            margin-top: 1px;
+        }
+
+        .games-container {
+            padding: 20px 16px 30px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 22px;
+            box-shadow: 0 1px 2px rgba(10, 31, 68, 0.04), 0 10px 26px rgba(10, 31, 68, 0.07);
+            border: 1px solid var(--hairline);
+            padding: 20px;
+        }
+
+        .field-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1.5px solid var(--hairline);
+            border-radius: 14px;
+            font-size: 15px;
+            margin-bottom: 16px;
+            background: #F8F9FC;
+            transition: all 0.2s;
+            color: var(--ink);
+        }
+
+        .input-field::placeholder { color: #A6ADBB; }
+
+        .input-field:focus {
+            border-color: var(--accent);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.12);
+        }
+
+        .section-eyebrow {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 4px 0 10px;
+        }
+
         .package-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 8px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 9px;
+            margin-bottom: 20px;
         }
-        
+
         .package-card {
-            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/5d/5a/1e/5d5a1eb6-37c2-1c51-6155-c85a8151cb67/576c5251-5949-430c-bfa0-a344cbff46a0_ami-identity-36c846fe494cd9cb4e0cd036fa957d9d-2024-04-23T10-06-32.198Z_cropped.png/800x800vb.webp');
-            background-size: cover;
-            background-position: center;
-            border-radius: 16px;
-            padding: 12px 8px;
+            background: #F8F9FC;
+            border: 1.5px solid var(--hairline);
+            border-radius: 15px;
+            padding: 10px 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             cursor: pointer;
             aspect-ratio: 1 / 1;
-            width: 100%;
             position: relative;
-            overflow: hidden;
         }
-        
-        .package-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 1;
-        }
-        
-        .package-card > * {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .package-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-        }
-        
+
+        .package-card:active { transform: scale(0.96); }
+
         .package-card.selected {
-            border-color: var(--primary);
-            transform: scale(0.98);
-            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.3);
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
         }
-        
-        .package-diamonds {
-            font-size: 18px;
-            font-weight: 700;
-            color: white;
+
+        .package-card.selected .package-icon { color: var(--navy); }
+
+        .package-icon {
+            font-size: 15px;
+            color: var(--gold);
             margin-bottom: 4px;
-            line-height: 1.2;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
-        
+
+        .package-main {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.15;
+        }
+
+        .package-bonus {
+            font-size: 9.5px;
+            font-weight: 600;
+            color: #16A34A;
+            margin-top: 1px;
+            line-height: 1.1;
+        }
+
+        .package-label {
+            font-size: 9.5px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-top: 2px;
+            line-height: 1.15;
+            padding: 0 2px;
+        }
+
         .package-price {
-            font-size: 16px;
-            font-weight: 600;
-            color: #fbbf24;
-            margin-bottom: 4px;
-        }
-        
-        .package-badge {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 12px;
-            font-size: 9px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        
-        .package-details-small {
-            font-size: 9px;
-            color: #e2e8f0;
-            line-height: 1.2;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-        }
-        
-        .package-card.special {
-            border: 2px solid #f59e0b;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
-        }
-        
-        /* Etiqueta de precio en la esquina */
-        .price-tag {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 20px;
-            z-index: 3;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
-        }
-        
-        .price-tag::before {
-            content: 'Bs ';
-            font-size: 10px;
-        }
-        
-        .game-card {
-            transition: all 0.3s ease;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-top: 5px;
             background: white;
+            border-radius: 8px;
+            padding: 2px 6px;
         }
-        
+
+        .package-card.card-type {
+            background: var(--gold-soft);
+            border-color: #FBE3B8;
+        }
+
+        .package-card.card-type.selected {
+            border-color: var(--gold);
+            background: #FFF0D6;
+            box-shadow: 0 0 0 3px rgba(245, 165, 36, 0.2);
+        }
+
+        .package-card.card-type .package-icon { color: var(--gold); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy) 100%);
+            color: white;
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 15.5px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .btn-primary:active:not(:disabled) { transform: scale(0.98); }
+
+        .btn-primary:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footnote {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 12px;
+        }
+
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(6, 21, 48, 0.55);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -164,355 +298,256 @@
             visibility: hidden;
             transition: all 0.3s;
         }
-        
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
+
+        .modal.active { opacity: 1; visibility: visible; }
+
         .modal-content {
             background: white;
             width: 90%;
             max-width: 400px;
             border-radius: 24px;
-            padding: 24px;
-            transform: translateY(20px);
+            padding: 22px;
+            transform: translateY(16px);
             transition: all 0.3s;
             max-height: 90vh;
             overflow-y: auto;
         }
-        
-        .modal.active .modal-content {
-            transform: translateY(0);
+
+        .modal.active .modal-content { transform: translateY(0); }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--ink);
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .modal-btn:active { transform: scale(0.97); }
+
+        .modal-btn-secondary {
+            background: #F1F4F9;
+            color: var(--ink);
+        }
+
+        .modal-btn-primary {
+            background: var(--navy);
             color: white;
-            padding: 14px 20px;
-            border-radius: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
         }
-        
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3);
-        }
-        
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 16px;
-            margin-bottom: 16px;
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-        
-        .input-field:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-header {
-                position: sticky;
-                top: 0;
-                z-index: 40;
-                background: white;
-                padding: 16px 20px;
-                border-bottom: 1px solid #f1f5f9;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            }
-            
-            .mobile-header-title {
-                font-size: 20px;
-                font-weight: 700;
-                color: var(--primary);
-            }
-            
-            .games-container {
-                padding: 20px;
-            }
-            
-            .package-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .package-card {
-                padding: 10px 5px;
-            }
-            
-            .package-diamonds {
-                font-size: 16px;
-            }
-            
-            .package-price {
-                font-size: 14px;
-            }
-            
-            .price-tag {
-                top: 6px;
-                right: 6px;
-                font-size: 10px;
-                padding: 3px 6px;
-            }
-        }
-        
-        /* Estilos para la factura */
+
         .invoice-container {
             background: white;
             border-radius: 16px;
-            padding: 16px;
             max-width: 100%;
         }
-        
+
         .invoice-header {
             text-align: center;
             margin-bottom: 16px;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 2px solid var(--navy);
             padding-bottom: 12px;
         }
-        
+
         .invoice-logo {
             font-size: 20px;
-            font-weight: bold;
-            color: var(--primary);
+            font-weight: 800;
+            color: var(--navy);
             margin-bottom: 4px;
         }
-        
+
         .invoice-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 16px;
         }
-        
+
         .invoice-label {
             font-weight: 600;
-            color: #4b5563;
+            color: var(--muted);
             font-size: 11px;
         }
-        
+
         .invoice-value {
-            color: #1f2937;
+            color: var(--ink);
             font-size: 12px;
         }
-        
+
         .invoice-amount {
             text-align: center;
             font-size: 22px;
-            font-weight: bold;
+            font-weight: 800;
             margin: 16px 0;
             padding: 12px;
-            background: #f8fafc;
+            background: var(--accent-soft);
             border-radius: 12px;
             grid-column: 1 / -1;
+            color: var(--navy);
         }
-        
-        .positive-amount {
-            color: #059669;
-        }
-        
+
         .status-success {
-            background-color: #d1fae5;
-            color: #059669;
+            background-color: #DCFCE7;
+            color: #16A34A;
             padding: 2px 8px;
             border-radius: 20px;
             font-size: 10px;
-            font-weight: 600;
+            font-weight: 700;
         }
-        
-        .success-animation {
-            animation: successPulse 1.5s ease-in-out;
-        }
-        
+
+        .success-animation { animation: successPulse 1.5s ease-in-out; }
+
         @keyframes successPulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.01); }
             100% { transform: scale(1); }
         }
-        
-        /* Mejoras táctiles para móvil */
+
         @media (max-width: 768px) {
-            #invoice-modal .modal-content {
-                margin: 16px;
-                width: calc(100% - 32px);
-                border-radius: 20px;
+            .package-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 8px;
             }
-            
-            #download-invoice, #close-invoice {
-                padding: 16px !important;
-                font-size: 16px !important;
-                min-height: 54px;
-                border-radius: 14px !important;
-            }
-            
-            #download-invoice:active, #close-invoice:active {
-                transform: scale(0.97);
-                opacity: 0.8;
+
+            .package-card {
+                padding: 8px 4px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Versión Mobile -->
-    <div class="mobile-only">
+    <div class="app-container">
         <div class="mobile-header">
-            <div class="mobile-header-title">GIKO - Mobile Legends</div>
-            <a href="dashboard.html" class="text-purple-600 text-xl">
-                <i class="fas fa-arrow-left"></i>
-            </a>
+            <div class="nav-row">
+                <a href="dashboard.html" class="back-arrow">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <div class="nav-title">GIKO</div>
+                <div class="nav-spacer"></div>
+            </div>
+            <div class="header-game-row">
+                <div class="game-badge"><i class="fas fa-mobile-alt"></i></div>
+                <div>
+                    <div class="header-game-title">Mobile Legends</div>
+                    <div class="header-game-sub">Recarga diamantes al instante</div>
+                </div>
+            </div>
         </div>
-        
+
         <div class="games-container">
-            <!-- Formulario Mobile Legends -->
             <div id="mobilelegends-form" class="game-form">
-                <div class="game-card p-6 mb-4">
-                    <h3 class="font-bold text-xl text-gray-800 mb-2">Mobile Legends</h3>
-                    <p class="text-gray-500 text-sm mb-5">Recarga diamantes al instante</p>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">ID de Mobile Legends</label>
-                        <input type="text" id="ml-id" class="input-field" placeholder="Ej: 123456789">
-                    </div>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre en el juego</label>
-                        <input type="text" id="ml-name" class="input-field" placeholder="Tu nombre en Mobile Legends">
-                    </div>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Código de Región (4 dígitos)</label>
-                        <input type="text" id="ml-region" class="input-field" placeholder="Ej: 1234" maxlength="4">
-                    </div>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">Selecciona tu paquete</label>
-                        
-                        <!-- DISEÑO CUADRADO CON FONDO DE MOBILE LEGENDS Y ETIQUETA DE PRECIO EN ESQUINA - PRECIOS AUMENTADOS +4 BS -->
-                        <div class="package-grid">
-                            <div class="package-card" data-diamonds="50 Evento" data-price="11.6">
-                                <div class="price-tag">11.6</div>
-                                <div class="package-diamonds">50 Evento</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="150 Evento" data-price="27">
-                                <div class="price-tag">27</div>
-                                <div class="package-diamonds">150 Evento</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="250 Evento" data-price="41">
-                                <div class="price-tag">41</div>
-                                <div class="package-diamonds">250 Evento</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="500 Evento" data-price="80">
-                                <div class="price-tag">80</div>
-                                <div class="package-diamonds">500 Evento</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="10 + 1" data-price="5.7">
-                                <div class="price-tag">5.7</div>
-                                <div class="package-diamonds">10 + 1</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="20 + 2" data-price="7.4">
-                                <div class="price-tag">7.4</div>
-                                <div class="package-diamonds">20 + 2</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="78 + 8" data-price="16.07">
-                                <div class="price-tag">16.07</div>
-                                <div class="package-diamonds">78 + 8</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="156 + 16" data-price="27.95">
-                                <div class="price-tag">27.95</div>
-                                <div class="package-diamonds">156 + 16</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="234 + 23" data-price="39">
-                                <div class="price-tag">39</div>
-                                <div class="package-diamonds">234 + 23</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="625 + 81" data-price="98.5">
-                                <div class="price-tag">98.5</div>
-                                <div class="package-diamonds">625 + 81</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="1860 + 335" data-price="290">
-                                <div class="price-tag">290</div>
-                                <div class="package-diamonds">1860 + 335</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="3099 + 589" data-price="480">
-                                <div class="price-tag">480</div>
-                                <div class="package-diamonds">3099 + 589</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="4649 + 883" data-price="723">
-                                <div class="price-tag">723</div>
-                                <div class="package-diamonds">4649 + 883</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <div class="package-card" data-diamonds="7740 + 1548" data-price="1199">
-                                <div class="price-tag">1199</div>
-                                <div class="package-diamonds">7740 + 1548</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
+                <div class="form-card">
+                    <label class="field-label">ID de Mobile Legends</label>
+                    <input type="text" id="ml-id" class="input-field" placeholder="Ej: 123456789">
+
+                    <label class="field-label">Nombre en el juego</label>
+                    <input type="text" id="ml-name" class="input-field" placeholder="Tu nombre en Mobile Legends">
+
+                    <label class="field-label">Código de Región (4 dígitos)</label>
+                    <input type="text" id="ml-region" class="input-field" placeholder="Ej: 1234" maxlength="4">
+
+                    <div class="section-eyebrow">Diamantes</div>
+                    <div class="package-grid">
+                        <div class="package-card" data-diamonds="Diamantes 78+8" data-price="14.22">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">78 + 8</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">14.22 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 156+16" data-price="26.63">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">156 + 16</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">26.63 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 234+23" data-price="38.00">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">234 + 23</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">38.00 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 625+81" data-price="100.10">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">625 + 81</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">100.10 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 1860+335" data-price="299.60">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">1860 + 335</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">299.60 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 3099+589" data-price="498.60">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">3099 + 589</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">498.60 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 4649+883" data-price="751.60">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">4649 + 883</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">751.60 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-diamonds="Diamantes 7740+1548" data-price="1248.60">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">7740 + 1548</div>
+                            <div class="package-label">Diamantes</div>
+                            <div class="package-price">1248.60 Bs</div>
                         </div>
                     </div>
-                    
-                    <button id="ml-recharge-btn" class="w-full btn-primary" disabled>
+
+                    <div class="section-eyebrow">Pases y tarjetas</div>
+                    <div class="package-grid">
+                        <div class="package-card card-type" data-diamonds="P. Semanal Elite" data-price="9.60">
+                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-main">P. Semanal Elite</div>
+                            <div class="package-label">Pase / Tarjeta</div>
+                            <div class="package-price">9.60 Bs</div>
+                        </div>
+
+                        <div class="package-card card-type" data-diamonds="Pase Semanal" data-price="17.10">
+                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-main">Pase Semanal</div>
+                            <div class="package-label">Pase</div>
+                            <div class="package-price">17.10 Bs</div>
+                        </div>
+
+                        <div class="package-card card-type" data-diamonds="P. Mensual Epico" data-price="41.92">
+                            <div class="package-icon"><i class="fas fa-crown"></i></div>
+                            <div class="package-main">P. Mensual Épico</div>
+                            <div class="package-label">Pase</div>
+                            <div class="package-price">41.92 Bs</div>
+                        </div>
+
+                        <div class="package-card card-type" data-diamonds="Pase Crepusculo" data-price="84.60">
+                            <div class="package-icon"><i class="fas fa-crown"></i></div>
+                            <div class="package-main">Pase Crepúsculo</div>
+                            <div class="package-label">Pase</div>
+                            <div class="package-price">84.60 Bs</div>
+                        </div>
+                    </div>
+
+                    <button id="ml-recharge-btn" class="btn-primary" disabled>
                         Recargar diamantes
                     </button>
-                    
-                    <p class="text-xs text-gray-400 text-center mt-3">Recarga instantánea • 100% segura</p>
+
+                    <p class="footnote">Recarga instantánea • 100% segura</p>
                 </div>
             </div>
         </div>
