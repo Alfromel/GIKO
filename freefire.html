@@ -2,160 +2,305 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Recarga de Free Fire - GIKO</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0A1F44">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         :root {
-            --primary: #6d28d9;
-            --primary-dark: #5b21b6;
-            --secondary: #059669;
-            --secondary-dark: #047857;
-            --accent: #f59e0b;
-            --accent-dark: #d97706;
+            --navy: #0A1F44;
+            --navy-deep: #061530;
+            --navy-mid: #0F2A56;
+            --accent: #3B82F6;
+            --accent-soft: #EAF1FF;
+            --gold: #F5A524;
+            --gold-soft: #FFF6E7;
+            --ink: #0B1220;
+            --muted: #7C8598;
+            --hairline: #E7E9F0;
+            --bg: #F4F6FB;
         }
-        
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #1e293b;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', -apple-system, "SF Pro Text", system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
         }
-        
-        /* Estilos para los cards de paquetes - NUEVO DISEÑO CUADRADO CON FONDO DE FREE FIRE */
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg);
+            position: relative;
+        }
+
+        /* ---- Header navy estilo GIKO ---- */
+        .mobile-header {
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+            color: white;
+            padding: calc(env(safe-area-inset-top, 0px) + 18px) 20px 26px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 12px 30px rgba(6, 21, 48, 0.3);
+        }
+
+        .nav-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .back-arrow {
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.12);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-title {
+            font-size: 15px;
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        .nav-spacer { width: 34px; }
+
+        .header-game-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .game-badge {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--gold) 0%, #E08E0B 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .header-game-title {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+        }
+
+        .header-game-sub {
+            font-size: 13px;
+            opacity: 0.72;
+            margin-top: 1px;
+        }
+
+        /* ---- Contenido ---- */
+        .games-container {
+            padding: 20px 16px 30px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 22px;
+            box-shadow: 0 1px 2px rgba(10, 31, 68, 0.04), 0 10px 26px rgba(10, 31, 68, 0.07);
+            border: 1px solid var(--hairline);
+            padding: 20px;
+        }
+
+        .field-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1.5px solid var(--hairline);
+            border-radius: 14px;
+            font-size: 15px;
+            margin-bottom: 16px;
+            background: #F8F9FC;
+            transition: all 0.2s;
+            color: var(--ink);
+        }
+
+        .input-field::placeholder { color: #A6ADBB; }
+
+        .input-field:focus {
+            border-color: var(--accent);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        }
+
+        .section-eyebrow {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 4px 0 10px;
+        }
+
+        /* ---- Grid de paquetes: 3 columnas ---- */
         .package-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 9px;
+            margin-bottom: 20px;
         }
-        
+
         .package-card {
-            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/a82253dcbf83fa6fe8313fbf993cb2d6.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 16px;
-            padding: 12px 8px;
+            background: #F8F9FC;
+            border: 1.5px solid var(--hairline);
+            border-radius: 15px;
+            padding: 10px 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             cursor: pointer;
             aspect-ratio: 1 / 1;
-            width: 100%;
             position: relative;
-            overflow: hidden;
         }
-        
-        .package-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 1;
+
+        .package-card:active {
+            transform: scale(0.96);
         }
-        
-        .package-card > * {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .package-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-        }
-        
+
         .package-card.selected {
-            border-color: var(--primary);
-            transform: scale(0.98);
-            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.3);
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
-        
-        .package-diamonds {
-            font-size: 18px;
-            font-weight: 700;
-            color: white;
+
+        .package-card.selected .package-icon { color: var(--navy); }
+
+        .package-icon {
+            font-size: 15px;
+            color: var(--gold);
             margin-bottom: 4px;
-            line-height: 1.2;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
-        
+
+        .package-main {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.15;
+        }
+
+        .package-bonus {
+            font-size: 9.5px;
+            font-weight: 600;
+            color: #16A34A;
+            margin-top: 1px;
+            line-height: 1.1;
+        }
+
+        .package-label {
+            font-size: 9.5px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-top: 2px;
+            line-height: 1.15;
+            padding: 0 2px;
+        }
+
         .package-price {
-            font-size: 16px;
-            font-weight: 600;
-            color: #fbbf24;
-            margin-bottom: 4px;
-        }
-        
-        .package-badge {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 12px;
-            font-size: 9px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        
-        .package-details-small {
-            font-size: 9px;
-            color: #e2e8f0;
-            line-height: 1.2;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-        }
-        
-        .package-card.special {
-            border: 2px solid #f59e0b;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
-        }
-        
-        /* Etiqueta de precio en la esquina */
-        .price-tag {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 20px;
-            z-index: 3;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
-        }
-        
-        .price-tag::before {
-            content: 'Bs ';
-            font-size: 10px;
-        }
-        
-        .game-card {
-            transition: all 0.3s ease;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-top: 5px;
             background: white;
+            border-radius: 8px;
+            padding: 2px 6px;
         }
-        
+
+        .package-card.card-type {
+            background: var(--gold-soft);
+            border-color: #FBE3B8;
+        }
+
+        .package-card.card-type.selected {
+            border-color: var(--gold);
+            background: #FFF0D6;
+            box-shadow: 0 0 0 3px rgba(245, 165, 36, 0.2);
+        }
+
+        .package-card.card-type .package-icon { color: var(--gold); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy) 100%);
+            color: white;
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 15.5px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footnote {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* ---- Modales ---- */
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(6, 21, 48, 0.55);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -164,338 +309,219 @@
             visibility: hidden;
             transition: all 0.3s;
         }
-        
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
+
+        .modal.active { opacity: 1; visibility: visible; }
+
         .modal-content {
             background: white;
             width: 90%;
             max-width: 400px;
             border-radius: 24px;
-            padding: 24px;
-            transform: translateY(20px);
+            padding: 22px;
+            transform: translateY(16px);
             transition: all 0.3s;
             max-height: 90vh;
             overflow-y: auto;
         }
-        
-        .modal.active .modal-content {
-            transform: translateY(0);
+
+        .modal.active .modal-content { transform: translateY(0); }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--ink);
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .modal-btn:active { transform: scale(0.97); }
+
+        .modal-btn-secondary {
+            background: #F1F4F9;
+            color: var(--ink);
+        }
+
+        .modal-btn-primary {
+            background: var(--navy);
             color: white;
-            padding: 14px 20px;
-            border-radius: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
         }
-        
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3);
-        }
-        
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 16px;
-            margin-bottom: 16px;
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-        
-        .input-field:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-header {
-                position: sticky;
-                top: 0;
-                z-index: 40;
-                background: white;
-                padding: 16px 20px;
-                border-bottom: 1px solid #f1f5f9;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            }
-            
-            .mobile-header-title {
-                font-size: 20px;
-                font-weight: 700;
-                color: var(--primary);
-            }
-            
-            .games-container {
-                padding: 20px;
-            }
-            
-            .package-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .package-card {
-                padding: 10px 5px;
-            }
-            
-            .package-diamonds {
-                font-size: 16px;
-            }
-            
-            .package-price {
-                font-size: 14px;
-            }
-            
-            .price-tag {
-                top: 6px;
-                right: 6px;
-                font-size: 10px;
-                padding: 3px 6px;
-            }
-        }
-        
-        /* Estilos para la factura */
+
+        /* ---- Factura ---- */
         .invoice-container {
             background: white;
             border-radius: 16px;
-            padding: 16px;
             max-width: 100%;
         }
-        
+
         .invoice-header {
             text-align: center;
             margin-bottom: 16px;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 2px solid var(--navy);
             padding-bottom: 12px;
         }
-        
+
         .invoice-logo {
             font-size: 20px;
-            font-weight: bold;
-            color: var(--primary);
+            font-weight: 800;
+            color: var(--navy);
             margin-bottom: 4px;
         }
-        
+
         .invoice-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 16px;
         }
-        
+
         .invoice-label {
             font-weight: 600;
-            color: #4b5563;
+            color: var(--muted);
             font-size: 11px;
         }
-        
+
         .invoice-value {
-            color: #1f2937;
+            color: var(--ink);
             font-size: 12px;
         }
-        
+
         .invoice-amount {
             text-align: center;
             font-size: 22px;
-            font-weight: bold;
+            font-weight: 800;
             margin: 16px 0;
             padding: 12px;
-            background: #f8fafc;
+            background: var(--accent-soft);
             border-radius: 12px;
             grid-column: 1 / -1;
+            color: var(--navy);
         }
-        
-        .positive-amount {
-            color: #059669;
-        }
-        
+
         .status-success {
-            background-color: #d1fae5;
-            color: #059669;
+            background-color: #DCFCE7;
+            color: #16A34A;
             padding: 2px 8px;
             border-radius: 20px;
             font-size: 10px;
-            font-weight: 600;
+            font-weight: 700;
         }
-        
-        .success-animation {
-            animation: successPulse 1.5s ease-in-out;
-        }
-        
+
+        .success-animation { animation: successPulse 1.5s ease-in-out; }
+
         @keyframes successPulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.01); }
             100% { transform: scale(1); }
         }
-        
-        /* Mejoras táctiles para móvil */
-        @media (max-width: 768px) {
-            #invoice-modal .modal-content {
-                margin: 16px;
-                width: calc(100% - 32px);
-                border-radius: 20px;
-            }
-            
-            #download-invoice, #close-invoice {
-                padding: 16px !important;
-                font-size: 16px !important;
-                min-height: 54px;
-                border-radius: 14px !important;
-            }
-            
-            #download-invoice:active, #close-invoice:active {
-                transform: scale(0.97);
-                opacity: 0.8;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Versión Mobile -->
-    <div class="mobile-only">
+    <div class="app-container">
         <div class="mobile-header">
-            <div class="mobile-header-title">GIKO</div>
-            <a href="dashboard.html" class="text-purple-600 text-xl">
-                <i class="fas fa-arrow-left"></i>
-            </a>
+            <div class="nav-row">
+                <a href="dashboard.html" class="back-arrow">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <div class="nav-title">GIKO</div>
+                <div class="nav-spacer"></div>
+            </div>
+            <div class="header-game-row">
+                <div class="game-badge"><i class="fas fa-fire"></i></div>
+                <div>
+                    <div class="header-game-title">Free Fire</div>
+                    <div class="header-game-sub">Recarga diamantes al instante</div>
+                </div>
+            </div>
         </div>
-        
+
         <div class="games-container">
-            <!-- Formulario Free Fire -->
             <div id="freefire-form" class="game-form">
-                <div class="game-card p-6 mb-4">
-                    <h3 class="font-bold text-xl text-gray-800 mb-2">Free Fire</h3>
-                    <p class="text-gray-500 text-sm mb-5">Recarga diamantes al instante</p>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">ID de Free Fire</label>
-                        <input type="text" id="freefire-id" class="input-field" placeholder="Ej: 123456789">
-                    </div>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre en el juego</label>
-                        <input type="text" id="freefire-name" class="input-field" placeholder="Tu nombre en Free Fire">
-                    </div>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">Selecciona tu paquete</label>
-                        
-                        <!-- NUEVO DISEÑO EN CARDS CUADRADOS CON FONDO FREE FIRE Y ETIQUETA DE PRECIO EN ESQUINA -->
-                        <div class="package-grid">
-                            <!-- 110 Diamantes -->
-                            <div class="package-card" data-diamonds="110" data-price="9.50">
-                                <div class="price-tag">9.50</div>
-                                <div class="package-diamonds">110</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 220 Diamantes -->
-                            <div class="package-card" data-diamonds="220" data-price="22">
-                                <div class="price-tag">22</div>
-                                <div class="package-diamonds">220</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 341 Diamantes -->
-                            <div class="package-card" data-diamonds="341" data-price="33">
-                                <div class="price-tag">33</div>
-                                <div class="package-diamonds">341</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 572 Diamantes -->
-                            <div class="package-card" data-diamonds="572" data-price="47">
-                                <div class="price-tag">47</div>
-                                <div class="package-diamonds">572</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 913 Diamantes -->
-                            <div class="package-card" data-diamonds="913" data-price="78">
-                                <div class="price-tag">78</div>
-                                <div class="package-diamonds">913</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 1166 Diamantes -->
-                            <div class="package-card" data-diamonds="1166" data-price="85">
-                                <div class="price-tag">85</div>
-                                <div class="package-diamonds">1166</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 2398 Diamantes -->
-                            <div class="package-card" data-diamonds="2398" data-price="171">
-                                <div class="price-tag">171</div>
-                                <div class="package-diamonds">2398</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- 6160 Diamantes -->
-                            <div class="package-card" data-diamonds="6160" data-price="430">
-                                <div class="price-tag">430</div>
-                                <div class="package-diamonds">6160</div>
-                                <div class="package-details-small">Diamantes</div>
-                            </div>
-                            
-                            <!-- Tarjeta Semanal - ESPECIAL -->
-                            <div class="package-card special" data-diamonds="semanal" data-price="18">
-                                <div class="price-tag">18</div>
-                                <div class="package-badge">SEMANAL</div>
-                                <div class="package-diamonds">340</div>
-                                <div class="package-details-small">60 + 40×7 días</div>
-                            </div>
-                            
-                            <!-- Tarjeta Mensual - ESPECIAL -->
-                            <div class="package-card special" data-diamonds="mensual" data-price="88">
-                                <div class="price-tag">88</div>
-                                <div class="package-badge">MENSUAL</div>
-                                <div class="package-diamonds">1800</div>
-                                <div class="package-details-small">300 + 50×30 días</div>
-                            </div>
+                <div class="form-card">
+                    <label class="field-label">ID de Free Fire</label>
+                    <input type="text" id="freefire-id" class="input-field" placeholder="Ej: 123456789">
+
+                    <label class="field-label">Nombre en el juego</label>
+                    <input type="text" id="freefire-name" class="input-field" placeholder="Tu nombre en Free Fire">
+
+                    <div class="section-eyebrow">Diamantes</div>
+                    <div class="package-grid">
+                        <div class="package-card" data-id="d100" data-price="10.10">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">110</div>
+                            <div class="package-price">10.10 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-id="d310" data-price="27.70">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">341</div>
+                            <div class="package-price">27.70 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-id="d520" data-price="41.60">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">572</div>
+                            <div class="package-price">41.60 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-id="d1060" data-price="75.90">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">1166</div>
+                            <div class="package-price">75.90 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-id="d2180" data-price="149.25">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">2398</div>
+                            <div class="package-price">149.25 Bs</div>
+                        </div>
+
+                        <div class="package-card" data-id="d5600" data-price="376.60">
+                            <div class="package-icon"><i class="fas fa-gem"></i></div>
+                            <div class="package-main">6160</div>
+                            <div class="package-price">376.60 Bs</div>
                         </div>
                     </div>
-                    
-                    <button id="freefire-recharge-btn" class="w-full btn-primary" disabled>
+
+                    <div class="section-eyebrow">Tarjetas y pases</div>
+                    <div class="package-grid">
+                        <div class="package-card card-type" data-id="card_semanal_basica" data-price="5.00">
+                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-label">Semanal Básica</div>
+                            <div class="package-price">5.00 Bs</div>
+                        </div>
+
+                        <div class="package-card card-type" data-id="card_semanal" data-price="16.60">
+                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-label">Tarjeta Semanal</div>
+                            <div class="package-price">16.60 Bs</div>
+                        </div>
+
+                        <div class="package-card card-type" data-id="card_mensual" data-price="78.20">
+                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-label">Tarjeta Mensual</div>
+                            <div class="package-price">78.20 Bs</div>
+                        </div>
+
+                        <div class="package-card card-type" data-id="card_booyah" data-price="22.60">
+                            <div class="package-icon"><i class="fas fa-crown"></i></div>
+                            <div class="package-label">Pase Booyah</div>
+                            <div class="package-price">22.60 Bs</div>
+                        </div>
+                    </div>
+
+                    <button id="freefire-recharge-btn" class="btn-primary" disabled>
                         Recargar diamantes
                     </button>
-                    
-                    <p class="text-xs text-gray-400 text-center mt-3">Recarga instantánea • 100% segura</p>
+
+                    <p class="footnote">Recarga instantánea • 100% segura</p>
                 </div>
             </div>
         </div>
@@ -504,24 +530,24 @@
     <!-- Modal de confirmación -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Confirmar recarga</h3>
-                <button id="close-confirmation-modal" class="text-gray-400 hover:text-gray-500 text-xl">
+            <div class="flex justify-between items-center mb-4" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h3 class="modal-title">Confirmar recarga</h3>
+                <button id="close-confirmation-modal" style="background:#F1F4F9;width:32px;height:32px;border-radius:50%;border:none;color:#7C8598;font-size:14px;">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            
-            <div class="mb-6">
-                <p id="confirmation-text" class="text-gray-600 leading-relaxed"></p>
+
+            <div style="margin-bottom:22px;">
+                <p id="confirmation-text" style="color:#4B5065;line-height:1.6;font-size:14.5px;"></p>
             </div>
-            
-            <div class="flex space-x-3">
-                <button id="cancel-recharge" class="flex-1 py-3 px-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-semibold">
+
+            <div style="display:flex;gap:10px;">
+                <button id="cancel-recharge" class="modal-btn modal-btn-secondary">
                     Cancelar
                 </button>
-                <button id="confirm-recharge" class="flex-1 py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition-colors font-semibold flex items-center justify-center">
+                <button id="confirm-recharge" class="modal-btn modal-btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;">
                     <span id="confirm-recharge-text">Confirmar</span>
-                    <div id="confirm-recharge-spinner" class="loading-spinner ml-2 hidden"></div>
+                    <div id="confirm-recharge-spinner" class="loading-spinner hidden" style="display:none;"></div>
                 </button>
             </div>
         </div>
@@ -530,18 +556,18 @@
     <!-- Modal de resultado -->
     <div id="result-modal" class="modal">
         <div class="modal-content">
-            <div class="flex justify-center mb-4">
-                <div id="result-icon" class="w-20 h-20 rounded-full flex items-center justify-center text-4xl">
-                    <i class="fas fa-check-circle text-green-500"></i>
+            <div style="display:flex;justify-content:center;margin-bottom:16px;">
+                <div id="result-icon" style="width:76px;height:76px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;font-size:34px;">
+                    <i class="fas fa-check-circle" style="color:#16A34A;"></i>
                 </div>
             </div>
-            
-            <div class="text-center mb-6">
-                <h3 id="result-title" class="text-2xl font-bold text-gray-800 mb-2">¡Recarga exitosa!</h3>
-                <p id="result-message" class="text-gray-600">Los diamantes se han recargado correctamente.</p>
+
+            <div style="text-align:center;margin-bottom:22px;">
+                <h3 id="result-title" style="font-size:20px;font-weight:800;color:#0B1220;margin-bottom:6px;">¡Recarga exitosa!</h3>
+                <p id="result-message" style="color:#7C8598;font-size:14.5px;">Los diamantes se han recargado correctamente.</p>
             </div>
-            
-            <button id="close-result-modal" class="w-full py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition-colors font-semibold">
+
+            <button id="close-result-modal" class="modal-btn modal-btn-primary" style="width:100%;">
                 Aceptar
             </button>
         </div>
@@ -550,28 +576,26 @@
     <!-- Factura flotante -->
     <div id="invoice-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
         <div class="modal-overlay absolute inset-0"></div>
-        <div class="modal-content w-full max-w-md mx-4">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="flex justify-between items-center p-4 border-b border-gray-200">
-                    <div class="text-lg font-bold text-gray-800">Comprobante GIKO</div>
-                    <button id="close-invoice-modal" class="text-gray-400 hover:text-gray-500 text-xl">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div id="invoice-content" class="p-4 max-h-[60vh] overflow-y-auto">
-                    <!-- Contenido generado dinámicamente -->
-                </div>
-                
-                <div class="p-4 border-t border-gray-200 bg-gray-50">
-                    <button id="download-invoice" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center transition-colors mb-2">
-                        <i class="fas fa-download mr-2"></i>
-                        <span>Descargar Comprobante</span>
-                    </button>
-                    <button id="close-invoice" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-4 rounded-xl font-semibold transition-colors">
-                        Continuar
-                    </button>
-                </div>
+        <div class="modal-content w-full max-w-md mx-4" style="padding:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #E7E9F0;">
+                <div style="font-size:16px;font-weight:800;color:#0B1220;">Comprobante GIKO</div>
+                <button id="close-invoice-modal" style="background:#F1F4F9;width:32px;height:32px;border-radius:50%;border:none;color:#7C8598;font-size:14px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="invoice-content" style="padding:16px;max-height:60vh;overflow-y:auto;">
+                <!-- Contenido generado dinámicamente -->
+            </div>
+
+            <div style="padding:16px;border-top:1px solid #E7E9F0;background:#FAFBFD;">
+                <button id="download-invoice" class="modal-btn modal-btn-primary" style="width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+                    <i class="fas fa-download"></i>
+                    <span>Descargar Comprobante</span>
+                </button>
+                <button id="close-invoice" class="modal-btn modal-btn-secondary" style="width:100%;">
+                    Continuar
+                </button>
             </div>
         </div>
     </div>
@@ -583,7 +607,21 @@
         const supabaseUrl = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
-        
+
+        // Catálogo de paquetes
+        const PACKAGE_INFO = {
+            'd100':   { label: '110 Diamantes (100 + 10)', diamonds: 110,  price: 10.10 },
+            'd310':   { label: '341 Diamantes (310 + 31)', diamonds: 341,  price: 27.70 },
+            'd520':   { label: '572 Diamantes (520 + 52)', diamonds: 572,  price: 41.60 },
+            'd1060':  { label: '1166 Diamantes (1060 + 106)', diamonds: 1166, price: 75.90 },
+            'd2180':  { label: '2398 Diamantes (2180 + 218)', diamonds: 2398, price: 149.25 },
+            'd5600':  { label: '6160 Diamantes (5600 + 560)', diamonds: 6160, price: 376.60 },
+            'card_semanal_basica': { label: 'Semanal Básica', diamonds: null, price: 5.00 },
+            'card_semanal':        { label: 'Tarjeta Semanal', diamonds: null, price: 16.60 },
+            'card_mensual':        { label: 'Tarjeta Mensual', diamonds: null, price: 78.20 },
+            'card_booyah':         { label: 'Pase Booyah', diamonds: null, price: 22.60 }
+        };
+
         // Variables globales
         let currentUser = null;
         let userProfile = null;
@@ -591,29 +629,27 @@
         let selectedPackage = null;
         let currentGame = 'freefire';
         let currentInvoiceData = null;
-        
+
         // CONFIGURACIÓN DEL BOT DE TELEGRAM
         const TELEGRAM_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
         const TELEGRAM_CHAT_ID = '-5186782909';
-        
+
         // Funciones de utilidad
         const formatCurrency = (amount) => {
             return 'Bs ' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         };
-        
+
         const showToast = (message, type = 'success') => {
             const toast = document.createElement('div');
-            toast.className = `fixed top-4 right-4 px-4 py-2 rounded-md shadow-lg z-50 ${
-                type === 'success' ? 'bg-green-600' : 'bg-red-600'
-            } text-white font-medium`;
+            toast.style.cssText = `position:fixed;top:16px;right:16px;padding:12px 18px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.15);z-index:999;color:white;font-weight:600;font-size:14px;background:${type === 'success' ? '#16A34A' : '#DC2626'};`;
             toast.textContent = message;
             document.body.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.remove();
             }, 3000);
         };
-        
+
         // Función para enviar mensaje a Telegram
         const sendTelegramMessage = async (message) => {
             try {
@@ -628,7 +664,7 @@
                         parse_mode: 'HTML'
                     })
                 });
-                
+
                 const data = await response.json();
                 return data.ok;
             } catch (error) {
@@ -636,162 +672,148 @@
                 return false;
             }
         };
-        
+
         // Funciones para manejar modales
         const openModal = (modalId) => {
             const modal = document.getElementById(modalId);
             modal.classList.add('active');
         };
-        
+
         const closeModal = (modalId) => {
             const modal = document.getElementById(modalId);
             modal.classList.remove('active');
         };
-        
+
         function openInvoiceModal() {
             const modal = document.getElementById('invoice-modal');
             modal.classList.add('active');
             modal.classList.remove('opacity-0', 'invisible');
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeInvoiceModal() {
             const modal = document.getElementById('invoice-modal');
             modal.classList.remove('active');
             modal.classList.add('opacity-0', 'invisible');
             document.body.style.overflow = '';
         }
-        
+
         function showTransactionInvoice(transaction, transactionType = 'general') {
             if (!transaction) return;
-            
-            const isPositive = transaction.type === 'deposit';
-            const amountClass = isPositive ? 'positive-amount' : 'positive-amount';
-            const amountSign = '';
-            
+
             const invoiceId = 'INV-' + (transaction.id ? transaction.id.substring(0, 8).toUpperCase() : 'TEMP') + '-' + Date.now().toString().slice(-6);
-            
+
             const typeNames = {
                 'deposit': 'Ingreso',
-                'withdrawal': 'Retiro', 
+                'withdrawal': 'Retiro',
                 'transfer': 'Transferencia',
                 'recharge': 'Recarga Móvil',
                 'game_recharge': 'Recarga de Juego'
             };
             const transactionTypeName = typeNames[transaction.type] || transaction.type;
-            
+
             let invoiceTitle = 'COMPROBANTE DE TRANSACCIÓN';
             if (transactionType === 'game_recharge') {
                 invoiceTitle = 'COMPROBANTE DE RECARGA';
             }
-            
-            let displayDiamonds = transaction.diamonds;
-            
-            if (transaction.metadata && transaction.metadata.diamonds) {
-                const metaDiamonds = transaction.metadata.diamonds;
-                if (metaDiamonds === 'semanal') {
-                    displayDiamonds = '340 (Paquete Semanal)';
-                } else if (metaDiamonds === 'mensual') {
-                    displayDiamonds = '1800 (Paquete Mensual)';
-                } else {
-                    displayDiamonds = metaDiamonds + ' Diamantes';
-                }
-            }
-            
+
+            const pkgInfo = PACKAGE_INFO[transaction.package_id] || null;
+            const displayPackage = pkgInfo ? pkgInfo.label : (transaction.diamonds ? transaction.diamonds + ' Diamantes' : '');
+
             const invoiceHTML = `
             <div class="invoice-container success-animation">
                 <div class="invoice-header">
                     <div class="invoice-logo">GIKO</div>
-                    <div class="text-sm font-semibold">${invoiceTitle}</div>
-                    <div class="text-xs text-green-600 mt-1">
-                        <i class="fas fa-check-circle mr-1"></i>Completado
+                    <div style="font-size:13px;font-weight:600;">${invoiceTitle}</div>
+                    <div style="font-size:12px;color:#16A34A;margin-top:4px;">
+                        <i class="fas fa-check-circle" style="margin-right:4px;"></i>Completado
                     </div>
                 </div>
-                
+
                 <div class="invoice-details">
                     <div>
                         <div class="invoice-label">Fecha:</div>
                         <div class="invoice-value">${new Date().toLocaleString('es-ES')}</div>
                     </div>
-                    
+
                     <div>
                         <div class="invoice-label">Tipo:</div>
                         <div class="invoice-value">${transactionTypeName}</div>
                     </div>
-                    
+
                     <div>
                         <div class="invoice-label">Estado:</div>
                         <div><span class="status-success">Completado</span></div>
                     </div>
-                    
+
                     <div>
                         <div class="invoice-label">ID:</div>
-                        <div class="invoice-value text-xs">${transaction.id || invoiceId}</div>
+                        <div class="invoice-value" style="font-size:10px;">${transaction.id || invoiceId}</div>
                     </div>
-                    
+
                     ${transaction.game ? `
                     <div>
                         <div class="invoice-label">Juego:</div>
                         <div class="invoice-value">${transaction.game}</div>
                     </div>
                     ` : ''}
-                    
+
                     ${transaction.game_id ? `
                     <div>
                         <div class="invoice-label">ID Juego:</div>
                         <div class="invoice-value">${transaction.game_id}</div>
                     </div>
                     ` : ''}
-                    
+
                     ${transaction.player_name ? `
                     <div>
                         <div class="invoice-label">Jugador:</div>
                         <div class="invoice-value">${transaction.player_name}</div>
                     </div>
                     ` : ''}
-                    
-                    ${displayDiamonds ? `
+
+                    ${displayPackage ? `
                     <div>
-                        <div class="invoice-label">Diamantes:</div>
-                        <div class="invoice-value">${displayDiamonds}</div>
+                        <div class="invoice-label">Paquete:</div>
+                        <div class="invoice-value">${displayPackage}</div>
                     </div>
                     ` : ''}
-                    
-                    <div class="invoice-amount ${amountClass}">
+
+                    <div class="invoice-amount">
                         ${formatCurrency(transaction.amount)}
                     </div>
-                    
-                    <div class="invoice-footer text-center col-span-2 text-xs text-gray-400 mt-2">
+
+                    <div style="text-align:center;grid-column:1/-1;font-size:11px;color:#A6ADBB;margin-top:2px;">
                         Comprobante digital - GIKO Wallet
                     </div>
                 </div>
             </div>
             `;
-            
+
             document.getElementById('invoice-content').innerHTML = invoiceHTML;
-            
+
             setTimeout(() => {
                 openInvoiceModal();
             }, 400);
-            
+
             currentInvoiceData = {
                 html: invoiceHTML,
                 id: invoiceId,
                 transaction: transaction
             };
         }
-        
+
         function downloadInvoiceAsImage() {
             if (!currentInvoiceData) {
                 showToast('No hay datos de factura', 'error');
                 return;
             }
-            
+
             const downloadBtn = document.getElementById('download-invoice');
             const originalText = downloadBtn.innerHTML;
-            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Generando...</span>';
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Generando...</span>';
             downloadBtn.disabled = true;
-            
+
             if (typeof html2canvas === 'undefined') {
                 const script = document.createElement('script');
                 script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
@@ -801,14 +823,14 @@
             } else {
                 generateInvoiceImage();
             }
-            
+
             function generateInvoiceImage() {
                 const invoiceElement = document.getElementById('invoice-content');
                 if (!invoiceElement) {
                     fallbackDownload();
                     return;
                 }
-                
+
                 html2canvas(invoiceElement, {
                     scale: 2,
                     backgroundColor: '#ffffff'
@@ -818,7 +840,7 @@
                     link.download = `giko-${currentInvoiceData.id}.png`;
                     link.href = image;
                     link.click();
-                    
+
                     downloadBtn.innerHTML = originalText;
                     downloadBtn.disabled = false;
                     showToast('Comprobante descargado');
@@ -826,7 +848,7 @@
                     fallbackDownload();
                 });
             }
-            
+
             function fallbackDownload() {
                 const invoiceText = `
                     GIKO COMPROBANTE
@@ -835,45 +857,45 @@
                     Fecha: ${new Date().toLocaleString('es-ES')}
                     Monto: ${formatCurrency(currentInvoiceData.transaction.amount)}
                 `;
-                
+
                 const blob = new Blob([invoiceText], { type: 'text/plain' });
                 const link = document.createElement('a');
                 link.download = `giko-${currentInvoiceData.id}.txt`;
                 link.href = URL.createObjectURL(blob);
                 link.click();
-                
+
                 downloadBtn.innerHTML = originalText;
                 downloadBtn.disabled = false;
             }
         }
-        
+
         const loadUserProfile = async (userId) => {
             const { data, error } = await supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('id', userId)
                 .single();
-                
+
             if (error && error.code !== 'PGRST116') {
                 console.error('Error loading profile:', error);
                 return null;
             }
-            
+
             return data;
         };
-        
+
         const calculateBalance = async (userId) => {
             const { data, error } = await supabase
                 .from('transactions')
                 .select('amount, type')
                 .eq('user_id', userId)
                 .eq('status', 'completed');
-                
+
             if (error) {
                 console.error('Error calculating balance:', error);
                 return 0;
             }
-            
+
             let balance = 0;
             data.forEach(transaction => {
                 if (transaction.type === 'deposit') {
@@ -882,10 +904,10 @@
                     balance -= transaction.amount;
                 }
             });
-            
+
             return balance;
         };
-        
+
         const createTransaction = async (userId, amount, type, description = '', metadata = {}) => {
             const { data, error } = await supabase
                 .from('transactions')
@@ -901,26 +923,19 @@
                 ])
                 .select()
                 .single();
-                
+
             if (error) {
                 console.error('Error creating transaction:', error);
                 return null;
             }
-            
+
             return data;
         };
-        
-        const createGameRecharge = async (userId, game, gameId, playerName, region, diamonds, amount, transactionId) => {
-            let diamondsValue;
-            
-            if (diamonds === 'semanal') {
-                diamondsValue = 340;
-            } else if (diamonds === 'mensual') {
-                diamondsValue = 1800;
-            } else {
-                diamondsValue = parseInt(diamonds) || 0;
-            }
-            
+
+        const createGameRecharge = async (userId, game, gameId, playerName, region, packageId, amount, transactionId) => {
+            const pkgInfo = PACKAGE_INFO[packageId];
+            const diamondsValue = pkgInfo && pkgInfo.diamonds ? pkgInfo.diamonds : 0;
+
             const { data, error } = await supabase
                 .from('game_recharges')
                 .insert([
@@ -937,70 +952,70 @@
                 ])
                 .select()
                 .single();
-                
+
             if (error) {
                 console.error('Error creating game recharge:', error);
                 return null;
             }
-            
+
             return data;
         };
-        
+
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session }, error } = await supabase.auth.getSession();
-            
+
             if (!session) {
                 window.location.href = 'index.html';
                 return;
             }
-            
+
             currentUser = session.user;
             userProfile = await loadUserProfile(currentUser.id);
-            
+
             if (!userProfile) {
                 window.location.href = 'index.html';
                 return;
             }
-            
+
             currentBalance = await calculateBalance(currentUser.id);
-            
-            // Event listeners para los nuevos cards
+
+            // Event listeners para los cards de paquetes
             const packageCards = document.querySelectorAll('.package-card');
             packageCards.forEach(card => {
                 card.addEventListener('click', () => {
                     packageCards.forEach(p => p.classList.remove('selected'));
                     card.classList.add('selected');
-                    
+
                     selectedPackage = {
-                        diamonds: card.dataset.diamonds,
+                        id: card.dataset.id,
                         price: parseFloat(card.dataset.price)
                     };
-                    
+
                     updateRechargeButton();
                 });
             });
-            
+
             document.getElementById('freefire-recharge-btn').addEventListener('click', () => {
                 initiateRecharge('freefire');
             });
-            
+
             document.getElementById('close-confirmation-modal').addEventListener('click', () => {
                 closeModal('confirmation-modal');
             });
-            
+
             document.getElementById('cancel-recharge').addEventListener('click', () => {
                 closeModal('confirmation-modal');
             });
-            
+
             document.getElementById('confirm-recharge').addEventListener('click', () => {
                 processRecharge();
             });
-            
+
             document.getElementById('close-result-modal').addEventListener('click', () => {
                 closeModal('result-modal');
                 window.location.reload();
             });
-            
+
             const closeInvoiceButtons = document.querySelectorAll('#close-invoice-modal, #close-invoice');
             closeInvoiceButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -1008,7 +1023,7 @@
                     closeInvoiceModal();
                 });
             });
-            
+
             const downloadInvoiceBtn = document.getElementById('download-invoice');
             if (downloadInvoiceBtn) {
                 downloadInvoiceBtn.addEventListener('click', (e) => {
@@ -1016,7 +1031,7 @@
                     downloadInvoiceAsImage();
                 });
             }
-            
+
             const inputFields = document.querySelectorAll('input, select');
             inputFields.forEach(field => {
                 field.addEventListener('input', () => {
@@ -1024,15 +1039,15 @@
                 });
             });
         });
-        
+
         function updateRechargeButton() {
             let isValid = false;
             const rechargeBtn = document.getElementById('freefire-recharge-btn');
-            
+
             const id = document.getElementById('freefire-id').value;
             const name = document.getElementById('freefire-name').value;
             isValid = id && name && selectedPackage;
-            
+
             if (isValid && selectedPackage && selectedPackage.price > currentBalance) {
                 rechargeBtn.disabled = true;
                 rechargeBtn.innerHTML = 'Saldo insuficiente';
@@ -1041,147 +1056,121 @@
                 rechargeBtn.innerHTML = 'Recargar diamantes';
             }
         }
-        
+
         function initiateRecharge(game) {
             const gameId = document.getElementById('freefire-id').value;
             const playerName = document.getElementById('freefire-name').value;
-            
-            let packageDetails = '';
-            if (selectedPackage.diamonds === 'semanal') {
-                packageDetails = `
-                    <strong>Paquete Semanal - 340 Diamantes</strong><br>
-                    <span class="text-sm">60 instant + 40 diarios × 7 días</span><br><br>
-                `;
-            } else if (selectedPackage.diamonds === 'mensual') {
-                packageDetails = `
-                    <strong>Paquete Mensual - 1800 Diamantes</strong><br>
-                    <span class="text-sm">300 instant + 50 diarios × 30 días</span><br><br>
-                `;
-            } else {
-                packageDetails = `<strong>${selectedPackage.diamonds} Diamantes</strong><br><br>`;
-            }
-            
+
+            const pkgInfo = PACKAGE_INFO[selectedPackage.id];
+            const packageDetails = `<strong>${pkgInfo.label}</strong><br><br>`;
+
             document.getElementById('confirmation-text').innerHTML = `
                 ¿Confirmar recarga?<br><br>
                 ${packageDetails}
                 ID: <strong>${gameId}</strong><br>
                 Nombre: <strong>${playerName}</strong><br>
-                <span class="text-lg font-bold text-purple-600 mt-2 block">${formatCurrency(selectedPackage.price)}</span>
+                <span style="font-size:18px;font-weight:800;color:#0A1F44;margin-top:8px;display:block;">${formatCurrency(selectedPackage.price)}</span>
             `;
-            
+
             openModal('confirmation-modal');
         }
-        
+
         async function processRecharge() {
             const confirmBtn = document.getElementById('confirm-recharge');
             const confirmText = document.getElementById('confirm-recharge-text');
             const confirmSpinner = document.getElementById('confirm-recharge-spinner');
-            
+
             confirmBtn.disabled = true;
             confirmText.textContent = 'Procesando...';
-            confirmSpinner.classList.remove('hidden');
-            
+            confirmSpinner.style.display = 'block';
+
             try {
                 const gameId = document.getElementById('freefire-id').value;
                 const playerName = document.getElementById('freefire-name').value;
-                
-                let telegramDiamonds = '';
-                if (selectedPackage.diamonds === 'semanal') {
-                    telegramDiamonds = '340 Diamantes (Semanal: 60 + 40×7)';
-                } else if (selectedPackage.diamonds === 'mensual') {
-                    telegramDiamonds = '1800 Diamantes (Mensual: 300 + 50×30)';
-                } else {
-                    telegramDiamonds = `${selectedPackage.diamonds} Diamantes`;
-                }
-                
+
+                const pkgInfo = PACKAGE_INFO[selectedPackage.id];
+
                 const telegramMessage = `
 <b>🔔 NUEVA RECARGA - GIKO</b>
 
 🎮 <b>Juego:</b> Free Fire
-💎 <b>Paquete:</b> ${telegramDiamonds}
+💎 <b>Paquete:</b> ${pkgInfo.label}
 💰 <b>Monto:</b> Bs ${selectedPackage.price}
 🆔 <b>ID:</b> ${gameId}
 👤 <b>Jugador:</b> ${playerName}
 👤 <b>Usuario:</b> ${userProfile?.full_name || currentUser.email}
 ⏱ <b>Fecha:</b> ${new Date().toLocaleString()}
                 `;
-                
+
                 const telegramSent = await sendTelegramMessage(telegramMessage);
-                
+
                 if (!telegramSent) {
                     showToast('Error de conexión con Telegram', 'error');
                     confirmBtn.disabled = false;
                     confirmText.textContent = 'Confirmar';
-                    confirmSpinner.classList.add('hidden');
+                    confirmSpinner.style.display = 'none';
                     return;
                 }
-                
+
                 const transaction = await createTransaction(
                     currentUser.id,
                     selectedPackage.price,
                     'withdrawal',
-                    `Recarga de Free Fire - ${selectedPackage.diamonds === 'semanal' ? '340' : selectedPackage.diamonds === 'mensual' ? '1800' : selectedPackage.diamonds} diamantes`,
-                    { 
+                    `Recarga de Free Fire - ${pkgInfo.label}`,
+                    {
                         game: currentGame,
                         game_id: gameId,
                         player_name: playerName,
-                        diamonds: selectedPackage.diamonds
+                        package_id: selectedPackage.id
                     }
                 );
-                
+
                 if (!transaction) throw new Error('Error en transacción');
-                
+
                 const gameRecharge = await createGameRecharge(
                     currentUser.id,
                     currentGame,
                     gameId,
                     playerName,
                     null,
-                    selectedPackage.diamonds,
+                    selectedPackage.id,
                     selectedPackage.price,
                     transaction.id
                 );
-                
+
                 if (!gameRecharge) throw new Error('Error en registro de recarga');
-                
+
                 const resultTitle = document.getElementById('result-title');
                 const resultMessage = document.getElementById('result-message');
-                
+
                 resultTitle.textContent = '¡Recarga exitosa!';
-                
-                if (selectedPackage.diamonds === 'semanal') {
-                    resultMessage.textContent = 'Paquete Semanal activado: 60 diamantes instantáneos + 40 diarios por 7 días.';
-                } else if (selectedPackage.diamonds === 'mensual') {
-                    resultMessage.textContent = 'Paquete Mensual activado: 300 diamantes instantáneos + 50 diarios por 30 días.';
-                } else {
-                    resultMessage.textContent = `${selectedPackage.diamonds} diamantes recargados correctamente.`;
-                }
-                
+                resultMessage.textContent = `${pkgInfo.label} activado correctamente.`;
+
                 closeModal('confirmation-modal');
                 openModal('result-modal');
-                
+
                 const invoiceTransaction = {
                     ...transaction,
                     game: currentGame,
                     game_id: gameId,
                     player_name: playerName,
-                    diamonds: selectedPackage.diamonds
+                    package_id: selectedPackage.id
                 };
                 showTransactionInvoice(invoiceTransaction, 'game_recharge');
-                
+
             } catch (error) {
                 console.error('Error:', error);
-                
+
                 document.getElementById('result-title').textContent = 'Error';
                 document.getElementById('result-message').textContent = 'No se pudo completar la recarga.';
-                document.getElementById('result-icon').innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
-                
+                document.getElementById('result-icon').innerHTML = '<i class="fas fa-times-circle" style="color:#DC2626;"></i>';
+
                 closeModal('confirmation-modal');
                 openModal('result-modal');
             } finally {
                 confirmBtn.disabled = false;
                 confirmText.textContent = 'Confirmar';
-                confirmSpinner.classList.add('hidden');
+                confirmSpinner.style.display = 'none';
             }
         }
     </script>
