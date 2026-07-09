@@ -1490,6 +1490,10 @@
                             <i class="fas fa-wallet"></i>
                         </div>
                     </div>
+                    <button id="mobile-recharge-balance-btn" class="mt-4 w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center">
+                        <i class="fas fa-plus-circle mr-2"></i>
+                        Recargar saldo
+                    </button>
                 </div>
                 
                 <!-- Acciones rápidas -->
@@ -1727,6 +1731,55 @@
                     Guardar cambios
                 </button>
                 <button id="mobile-cancel-profile-edit" class="mobile-btn mobile-btn-secondary">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Modal para recarga de saldo (mobile) -->
+        <div id="mobile-recharge-balance-modal" class="mobile-modal">
+            <div class="mobile-modal-content">
+                <div class="mobile-modal-header">
+                    <div class="mobile-modal-title">Recargar saldo</div>
+                    <button id="mobile-close-recharge-balance-modal" class="mobile-modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="mobile-creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
+                    <input type="text" id="mobile-creator-code" class="mobile-input creator-code-input" placeholder="Ingrese el código de referido">
+                    <p class="text-xs mt-1" style="color: var(--text-secondary);">Si tienes un código de creador, ingrésalo aquí</p>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="mobile-recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
+                    <input type="number" id="mobile-recharge-amount-input" class="mobile-input" placeholder="Ej: 100" min="1">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
+                    <div class="qr-code-container">
+                        <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago">
+                    </div>
+                    <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
+                    <input type="file" id="mobile-recharge-receipt" accept="image/*" class="hidden">
+                    <label for="mobile-recharge-receipt" class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Seleccionar imagen
+                        <div id="mobile-recharge-file-name" class="file-name"></div>
+                    </label>
+                </div>
+                
+                <button id="mobile-confirm-recharge-balance" class="mobile-btn mobile-btn-primary flex items-center justify-center">
+                    <span id="mobile-confirm-recharge-balance-text">Enviar solicitud</span>
+                    <div id="mobile-confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
+                </button>
+                <button id="mobile-cancel-recharge-balance" class="mobile-btn mobile-btn-secondary">
                     Cancelar
                 </button>
             </div>
@@ -2030,6 +2083,60 @@
                         </button>
                         <button id="save-profile" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium" style="background: var(--primary);">
                             Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal para recarga de saldo (desktop) -->
+        <div id="recharge-balance-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
+            <div class="modal-overlay absolute inset-0"></div>
+            <div class="modal-content w-full max-w-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Recargar saldo</h3>
+                    <button id="close-recharge-balance-modal" style="color: var(--text-secondary);">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
+                        <input type="text" id="creator-code" class="input-field w-full creator-code-input-desktop" placeholder="Ingrese el código de referido">
+                        <p class="text-xs mt-1" style="color: var(--text-secondary);">Si tienes un código de creador, ingrésalo aquí</p>
+                    </div>
+                    
+                    <div>
+                        <label for="recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
+                        <input type="number" id="recharge-amount-input" class="input-field w-full" placeholder="Ej: 100" min="1">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
+                        <div class="qr-code-container-desktop">
+                            <img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago">
+                        </div>
+                        <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
+                        <input type="file" id="recharge-receipt" accept="image/*" class="hidden">
+                        <label for="recharge-receipt" class="file-input-label-desktop">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            Seleccionar imagen
+                            <div id="recharge-file-name" class="file-name-desktop"></div>
+                        </label>
+                    </div>
+                    
+                    <div class="pt-4 flex justify-end space-x-3">
+                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
+                            Cancelar
+                        </button>
+                        <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium flex items-center justify-center min-w-32" style="background: var(--primary);">
+                            <span id="confirm-recharge-balance-text">Enviar solicitud</span>
+                            <div id="confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
                         </button>
                     </div>
                 </div>
@@ -3386,6 +3493,137 @@
                         }
                     } else {
                         showToast('Error al actualizar el perfil', 'error');
+                    }
+                });
+            });
+            
+            const rechargeBalanceButtons = document.querySelectorAll('#recharge-balance-btn, #mobile-recharge-balance-btn');
+            rechargeBalanceButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const creatorCodeInputs = document.querySelectorAll('#creator-code, #mobile-creator-code');
+                    const amountInputs = document.querySelectorAll('#recharge-amount-input, #mobile-recharge-amount-input');
+                    const receiptInputs = document.querySelectorAll('#recharge-receipt, #mobile-recharge-receipt');
+                    const fileNameElements = document.querySelectorAll('#recharge-file-name, #mobile-recharge-file-name');
+                    
+                    creatorCodeInputs.forEach(input => {
+                        if (input) input.value = '';
+                    });
+                    
+                    amountInputs.forEach(input => {
+                        if (input) input.value = '';
+                    });
+                    
+                    receiptInputs.forEach(input => {
+                        if (input) input.value = '';
+                    });
+                    
+                    fileNameElements.forEach(el => {
+                        if (el) el.textContent = '';
+                    });
+                    
+                    if (btn.id === 'mobile-recharge-balance-btn') {
+                        openMobileModal('mobile-recharge-balance-modal');
+                    } else {
+                        openModal('recharge-balance-modal');
+                    }
+                });
+            });
+            
+            const closeRechargeBalanceButtons = document.querySelectorAll('#close-recharge-balance-modal, #mobile-close-recharge-balance-modal, #cancel-recharge-balance, #mobile-cancel-recharge-balance');
+            closeRechargeBalanceButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.id.includes('mobile')) {
+                        closeMobileModal('mobile-recharge-balance-modal');
+                    } else {
+                        closeModal('recharge-balance-modal');
+                    }
+                });
+            });
+            
+            const receiptInputs = document.querySelectorAll('#recharge-receipt, #mobile-recharge-receipt');
+            receiptInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const fileNameElement = this.id === 'mobile-recharge-receipt' 
+                        ? document.getElementById('mobile-recharge-file-name')
+                        : document.getElementById('recharge-file-name');
+                    
+                    if (this.files && this.files[0]) {
+                        fileNameElement.textContent = this.files[0].name;
+                    } else {
+                        fileNameElement.textContent = '';
+                    }
+                });
+            });
+            
+            const confirmRechargeBalanceButtons = document.querySelectorAll('#confirm-recharge-balance, #mobile-confirm-recharge-balance');
+            confirmRechargeBalanceButtons.forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const isMobile = btn.id === 'mobile-confirm-recharge-balance';
+                    
+                    const creatorCode = document.getElementById(isMobile ? 'mobile-creator-code' : 'creator-code').value;
+                    const amount = document.getElementById(isMobile ? 'mobile-recharge-amount-input' : 'recharge-amount-input').value;
+                    const receiptInput = document.getElementById(isMobile ? 'mobile-recharge-receipt' : 'recharge-receipt');
+                    const receiptFile = receiptInput.files[0];
+                    
+                    const name = userProfile?.full_name || '';
+                    const phone = userProfile?.phone || '';
+                    
+                    if (!name) {
+                        showToast('No hay nombre configurado en tu perfil', 'error');
+                        return;
+                    }
+                    
+                    if (!phone || phone.length < 7) {
+                        showToast('No hay número de teléfono configurado en tu perfil', 'error');
+                        return;
+                    }
+                    
+                    if (!amount || parseFloat(amount) <= 0) {
+                        showToast('Ingresa un monto válido', 'error');
+                        return;
+                    }
+                    
+                    if (!receiptFile) {
+                        showToast('Selecciona un comprobante de pago', 'error');
+                        return;
+                    }
+                    
+                    const confirmText = document.getElementById(isMobile ? 'mobile-confirm-recharge-balance-text' : 'confirm-recharge-balance-text');
+                    const confirmSpinner = document.getElementById(isMobile ? 'mobile-confirm-recharge-balance-spinner' : 'confirm-recharge-balance-spinner');
+                    
+                    btn.disabled = true;
+                    if (confirmText) confirmText.textContent = 'Enviando...';
+                    if (confirmSpinner) confirmSpinner.classList.remove('hidden');
+                    
+                    try {
+                        const rechargeData = {
+                            name,
+                            phone,
+                            amount,
+                            email: currentUser.email,
+                            creatorCode: creatorCode || ''
+                        };
+                        
+                        const success = await sendRechargeRequest(rechargeData, receiptFile);
+                        
+                        if (success) {
+                            showToast('Solicitud de recarga enviada. Revisaremos tu comprobante pronto.');
+                            
+                            if (isMobile) {
+                                closeMobileModal('mobile-recharge-balance-modal');
+                            } else {
+                                closeModal('recharge-balance-modal');
+                            }
+                        } else {
+                            throw new Error('Error al enviar la solicitud');
+                        }
+                    } catch (error) {
+                        console.error('Error en el proceso de recarga de saldo:', error);
+                        showToast('Error al enviar la solicitud', 'error');
+                    } finally {
+                        btn.disabled = false;
+                        if (confirmText) confirmText.textContent = 'Enviar solicitud';
+                        if (confirmSpinner) confirmSpinner.classList.add('hidden');
                     }
                 });
             });
