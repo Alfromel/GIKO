@@ -1490,32 +1490,23 @@
                             <i class="fas fa-wallet"></i>
                         </div>
                     </div>
-                    <button id="mobile-recharge-balance-btn" class="mt-4 w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center">
-                        <i class="fas fa-plus-circle mr-2"></i>
-                        Recargar saldo
-                    </button>
                 </div>
                 
                 <!-- Acciones rápidas -->
                 <div class="mobile-section-title">Acciones rápidas</div>
-                <div class="grid grid-cols-4 gap-3 mx-4 mb-4">
+                <div class="grid grid-cols-3 gap-3 mx-4 mb-4">
                     <button id="mobile-send-money-btn" class="mobile-action-btn">
                         <i class="fas fa-paper-plane" style="background: #022f7c;"></i>
                         <span>Enviar</span>
                     </button>
-                    <a href="tienda.html" class="mobile-action-btn">
+                    <button class="mobile-action-btn" style="opacity: 0.6; cursor: not-allowed;" onclick="return false;">
                         <i class="fas fa-store" style="background: #ea580c;"></i>
-                        <span>Tienda</span>
-                    </a>
+                        <span>Tienda <small style="display: block; font-size: 10px; color: var(--text-secondary);">Próximamente</small></span>
+                    </button>
                     <a href="juegos.html" class="mobile-action-btn">
                         <i class="fas fa-gamepad" style="background: #000000;"></i>
                         <span>Juegos</span>
                     </a>
-
-<a href="#" class="mobile-action-btn" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; opacity: 0.6; cursor: not-allowed;" onclick="return false;">
-    <i class="fas fa-dice" style="font-size: 37px; width: 37px; height: 37px; background: #000000; color: white; display: flex; align-items: center; justify-content: center; border-radius: 25%; margin-bottom: 6px;"></i>
-    <span>Bets <small style="display: block; font-size: 10px; color: var(--text-secondary);">Próximamente</small></span>
-</a>
                 </div>
                 
                 <!-- Últimas transacciones -->
@@ -1536,7 +1527,6 @@
             <div id="mobile-transactions-view" class="hidden">
                 <div class="mobile-tabs">
                     <div class="mobile-tab active" data-tab="transactions">Transacciones</div>
-                    <div class="mobile-tab" data-tab="recharges">Recargas</div>
                 </div>
                 
                 <div id="mobile-transactions-tab" class="tab-content">
@@ -1551,25 +1541,6 @@
                             </select>
                         </div>
                         <div id="mobile-transactions-full-list">
-                            <div class="mobile-transaction-item">
-                                <div class="w-full text-center py-8">
-                                    <i class="fas fa-spinner fa-spin" style="color: var(--text-secondary);"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="mobile-recharges-tab" class="tab-content hidden">
-                    <div class="mobile-card mt-2">
-                        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                            <div class="text-sm font-medium">Historial de recargas</div>
-                            <button id="mobile-new-recharge-btn" class="text-sm font-medium flex items-center" style="color: var(--primary);">
-                                <i class="fas fa-plus mr-1"></i>
-                                <span>Nueva</span>
-                            </button>
-                        </div>
-                        <div id="mobile-recharges-full-list">
                             <div class="mobile-transaction-item">
                                 <div class="w-full text-center py-8">
                                     <i class="fas fa-spinner fa-spin" style="color: var(--text-secondary);"></i>
@@ -1761,59 +1732,6 @@
             </div>
         </div>
         
-        <!-- Modal para recargas SIMPLIFICADO (solo recarga normal para todas las operadoras) -->
-        <div id="mobile-recharge-modal" class="mobile-modal">
-            <div class="mobile-modal-content">
-                <div class="mobile-modal-header">
-                    <div class="mobile-modal-title">Recarga móvil</div>
-                    <button id="mobile-close-recharge-modal" class="mobile-modal-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Operadora</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button data-operator="entel" class="mobile-operator-btn">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Logo-entel.png" class="h-6 mr-2">
-                            Entel
-                        </button>
-                        <button data-operator="tigo" class="mobile-operator-btn">
-                            <img src="https://www.newslinereport.com/online/nota_tigo-llegan-a-un-millon-de-hogares-en-bolivia.jpg" class="h-6 mr-2">
-                            Tigo
-                        </button>
-                        <button data-operator="viva" class="mobile-operator-btn">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDjM0IP2cxcg231iXsqKa-q2eJH5uTbaQ0xA&s" class="h-6 mr-2">
-                            Viva
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="mobile-phone-number" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Número de teléfono</label>
-                    <input type="tel" id="mobile-phone-number" class="mobile-input" placeholder="Ej: 77712345">
-                </div>
-                
-                <div class="mb-4">
-                    <label for="mobile-recharge-amount" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto (Bs)</label>
-                    <input type="number" id="mobile-recharge-amount" class="mobile-input" placeholder="Ej: 10, 20, 50" min="1" step="0.01">
-                </div>
-                
-                <div class="text-sm mb-4" style="color: var(--text-secondary);">
-                    <i class="fas fa-info-circle mr-1"></i>
-                    <span>Recarga normal - El monto ingresado se acreditará como saldo</span>
-                </div>
-                
-                <button id="mobile-confirm-recharge" class="mobile-btn mobile-btn-primary flex items-center justify-center">
-                    <span id="mobile-confirm-recharge-text">Confirmar recarga</span>
-                    <div id="mobile-confirm-recharge-spinner" class="loading-spinner ml-2 hidden"></div>
-                </button>
-                <button id="mobile-cancel-recharge" class="mobile-btn mobile-btn-secondary">
-                    Cancelar
-                </button>
-            </div>
-        </div>
-        
         <!-- Modal para enviar dinero (mobile) -->
         <div id="mobile-send-money-modal" class="mobile-modal">
             <div class="mobile-modal-content">
@@ -1848,58 +1766,6 @@
             </div>
         </div>
         
-        <!-- Modal para recarga de saldo (mobile) - SOLO CÓDIGO DE CREADOR Y MONTO (SIN CAMPOS DE NOMBRE Y TELÉFONO) -->
-        <div id="mobile-recharge-balance-modal" class="mobile-modal">
-            <div class="mobile-modal-content">
-                <div class="mobile-modal-header">
-                    <div class="mobile-modal-title">Recargar saldo</div>
-                    <button id="mobile-close-recharge-balance-modal" class="mobile-modal-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <!-- NOTA: Los campos de nombre y teléfono han sido eliminados porque se toman del perfil -->
-                
-                <!-- CÓDIGO DEL CREADOR (OPCIONAL) -->
-                <div class="mb-4">
-                    <label for="mobile-creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
-                    <input type="text" id="mobile-creator-code" class="mobile-input creator-code-input" placeholder="Ingrese el código de referido">
-                    <p class="text-xs mt-1" style="color: var(--text-secondary);">Si tienes un código de creador, ingrésalo aquí</p>
-                </div>
-                
-                <!-- MONTO A RECARGAR -->
-                <div class="mb-4">
-                    <label for="mobile-recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
-                    <input type="number" id="mobile-recharge-amount-input" class="mobile-input" placeholder="Ej: 100" min="1">
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
-                    <div class="qr-code-container">
-                        <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago">
-                    </div>
-                    <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
-                    <input type="file" id="mobile-recharge-receipt" accept="image/*" class="hidden">
-                    <label for="mobile-recharge-receipt" class="file-input-label">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        Seleccionar imagen
-                        <div id="mobile-recharge-file-name" class="file-name"></div>
-                    </label>
-                </div>
-                
-                <button id="mobile-confirm-recharge-balance" class="mobile-btn mobile-btn-primary flex items-center justify-center">
-                    <span id="mobile-confirm-recharge-balance-text">Enviar solicitud</span>
-                    <div id="mobile-confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
-                </button>
-                <button id="mobile-cancel-recharge-balance" class="mobile-btn mobile-btn-secondary">
-                    Cancelar
-                </button>
-            </div>
-        </div>
     </div>
         <!-- Factura flotante para transacciones -->
     <div id="invoice-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
@@ -2017,10 +1883,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <button id="recharge-balance-btn" class="mt-4 w-full py-3 px-4 rounded-lg text-white font-medium flex items-center justify-center transition-colors">
-                                <i class="fas fa-plus-circle mr-2"></i>
-                                Recargar saldo
-                            </button>
+
                         </div>
                     </div>
                     
@@ -2036,19 +1899,6 @@
                                 <div class="text-left">
                                     <p class="text-sm font-medium">Enviar dinero</p>
                                     <p class="text-xs text-white text-opacity-80">Transferencias rápidas</p>
-                                </div>
-                            </div>
-                            <i class="fas fa-chevron-right text-white text-opacity-70"></i>
-                        </button>
-                        
-                        <button id="recharge-btn" class="action-card btn-secondary w-full p-5 flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-4">
-                                <div class="action-icon bg-white bg-opacity-20">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-sm font-medium">Recarga móvil</p>
-                                    <p class="text-xs text-white text-opacity-80">Entel, Tigo, Viva</p>
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right text-white text-opacity-70"></i>
@@ -2103,15 +1953,10 @@
                                 <button id="transactions-tab" class="tab-active py-5 px-1 text-center font-medium text-sm whitespace-nowrap">
                                     Transacciones
                                 </button>
-                                <button id="recharges-tab" class="py-5 px-1 text-center font-medium text-sm whitespace-nowrap" style="color: var(--text-secondary);">
-                                    Recargas
-                                </button>
                             </nav>
                         </div>
                         
-                        <!-- Contenido de pestañas -->
                         <div class="p-6">
-                            <!-- Transacciones -->
                             <div id="transactions-content" class="tab-content">
                                 <div class="flex justify-between items-center mb-6">
                                     <h3 class="text-lg font-semibold">Historial de transacciones</h3>
@@ -2136,44 +1981,10 @@
                                             </tr>
                                         </thead>
                                         <tbody id="transactions-list" class="divide-y" style="border-color: var(--border-color);">
-                                            <!-- Las transacciones se cargarán aquí dinámicamente -->
                                             <tr>
                                                 <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
                                                     <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
                                                     <p>Cargando transacciones...</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            
-                            <!-- Recargas -->
-                            <div id="recharges-content" class="tab-content hidden">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-lg font-semibold">Historial de recargas</h3>
-                                    <button id="new-recharge-btn" class="text-white py-2.5 px-4 rounded-lg text-sm flex items-center space-x-2 transition-colors font-medium" style="background: var(--primary);">
-                                        <i class="fas fa-plus"></i>
-                                        <span>Nueva recarga</span>
-                                    </button>
-                                </div>
-                                
-                                <div class="overflow-x-auto scrollbar-hide">
-                                    <table class="min-w-full divide-y" style="border-color: var(--border-color);">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Operadora</th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Número</th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
-                                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Monto</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="recharges-list" class="divide-y" style="border-color: var(--border-color);">
-                                            <!-- Las recargas se cargarán aquí dinámicamente -->
-                                            <tr>
-                                                <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
-                                                    <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
-                                                    <p>Cargando recargas...</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -2225,64 +2036,6 @@
             </div>
         </div>
         
-        <!-- Modal para recargas SIMPLIFICADO (solo recarga normal para todas las operadoras) -->
-        <div id="recharge-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
-            <div class="modal-overlay absolute inset-0"></div>
-            <div class="modal-content w-full max-w-md p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">Recarga móvil</h3>
-                    <button id="close-recharge-modal" style="color: var(--text-secondary);">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Operadora</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button data-operator="entel" class="operator-btn">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Logo-entel.png" class="h-6 mr-2">
-                                Entel
-                            </button>
-                            <button data-operator="tigo" class="operator-btn">
-                                <img src="https://dplnews.com/wp-content/uploads/2020/06/dplnews_tigo_mc090620.jpg" class="h-6 mr-2">
-                                Tigo
-                            </button>
-                            <button data-operator="viva" class="operator-btn">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDjM0IP2cxcg231iXsqKa-q2eJH5uTbaQ0xA&s" class="h-6 mr-2">
-                                Viva
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label for="phone-number" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Número de teléfono</label>
-                        <input type="tel" id="phone-number" class="input-field w-full" placeholder="Ej: 77712345">
-                    </div>
-                    
-                    <div>
-                        <label for="recharge-amount" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto (Bs)</label>
-                        <input type="number" id="recharge-amount" class="input-field w-full" placeholder="Ej: 10, 20, 50" min="1" step="0.01">
-                    </div>
-                    
-                    <div class="text-sm mb-4" style="color: var(--text-secondary);">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        <span>Recarga normal - El monto ingresado se acreditará como saldo</span>
-                    </div>
-                    
-                    <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-recharge" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
-                            Cancelar
-                        </button>
-                        <button id="confirm-recharge" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium flex items-center justify-center min-w-32" style="background: var(--primary);">
-                            <span id="confirm-recharge-text">Confirmar</span>
-                            <div id="confirm-recharge-spinner" class="loading-spinner ml-2 hidden"></div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <!-- Modal para enviar dinero -->
         <div id="send-money-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
             <div class="modal-overlay absolute inset-0"></div>
@@ -2322,63 +2075,6 @@
             </div>
         </div>
         
-        <!-- Modal para recarga de saldo (desktop) - SOLO CÓDIGO DE CREADOR Y MONTO (SIN CAMPOS DE NOMBRE Y TELÉFONO) -->
-        <div id="recharge-balance-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
-            <div class="modal-overlay absolute inset-0"></div>
-            <div class="modal-content w-full max-w-md p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">Recargar saldo</h3>
-                    <button id="close-recharge-balance-modal" style="color: var(--text-secondary);">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="space-y-4">
-                    <!-- NOTA: Los campos de nombre y teléfono han sido eliminados porque se toman del perfil -->
-                    
-                    <!-- CÓDIGO DEL CREADOR (OPCIONAL) -->
-                    <div>
-                        <label for="creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
-                        <input type="text" id="creator-code" class="input-field w-full creator-code-input-desktop" placeholder="Ingrese el código de referido">
-                        <p class="text-xs mt-1" style="color: var(--text-secondary);">Si tienes un código de creador, ingrésalo aquí</p>
-                    </div>
-                    
-                    <!-- MONTO A RECARGAR -->
-                    <div>
-                        <label for="recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
-                        <input type="number" id="recharge-amount-input" class="input-field w-full" placeholder="Ej: 100" min="1">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
-                        <div class="qr-code-container-desktop">
-                            <img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago">
-                        </div>
-                        <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
-                        <input type="file" id="recharge-receipt" accept="image/*" class="hidden">
-                        <label for="recharge-receipt" class="file-input-label-desktop">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            Seleccionar imagen
-                            <div id="recharge-file-name" class="file-name-desktop"></div>
-                        </label>
-                    </div>
-                    
-                    <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
-                            Cancelar
-                        </button>
-                        <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium flex items-center justify-center min-w-32" style="background: var(--primary);">
-                            <span id="confirm-recharge-balance-text">Enviar solicitud</span>
-                            <div id="confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Factura flotante para transacciones -->
@@ -2409,66 +2105,6 @@
             </div>
         </div>
     </div>
-
-    <!-- ==================== BOTÓN Y MODAL DE LA RULETA (PROBABILIDADES AJUSTADAS) ==================== -->
-    <button id="roulette-fab" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-full shadow-2xl flex items-center justify-center text-white text-2xl md:text-3xl animate-bounce hover:scale-110 transition-transform" style="box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);">
-        <i class="fas fa-cog fa-spin" style="--fa-animation-duration: 3s;"></i>
-        <span class="sr-only">Ruleta de Premios</span>
-    </button>
-
-    <!-- Modal de la Ruleta -->
-    <div id="roulette-modal" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300" style="background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);">
-        <div class="bg-gradient-to-br from-gray-900 to-blue-900 rounded-3xl w-11/12 max-w-md p-5 shadow-2xl border border-blue-400 relative">
-            <!-- Botón cerrar -->
-            <button id="close-roulette-modal" class="absolute top-2 right-2 text-gray-300 hover:text-white text-xl z-10">
-                <i class="fas fa-times"></i>
-            </button>
-
-            <div class="text-center mb-4">
-                <h2 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-blue-300">✨ Ruleta Giko ✨</h2>
-                <p class="text-xs text-blue-200">Ingresa código o compra giro por 1 Bs</p>
-            </div>
-
-            <!-- La ruleta (simulada con CSS) -->
-            <div class="relative w-48 h-48 mx-auto mb-5">
-                <div id="wheel" class="absolute inset-0 rounded-full border-8 border-yellow-400 shadow-[0_0_30px_#fbbf24] transition-transform duration-3000 ease-out" style="transform: rotate(0deg); background: conic-gradient(#f87171 0deg 36deg, #fbbf24 36deg 72deg, #4ade80 72deg 108deg, #60a5fa 108deg 144deg, #c084fc 144deg 180deg, #f472b6 180deg 216deg, #fb923c 216deg 252deg, #a78bfa 252deg 288deg, #facc15 288deg 324deg, #6ee7b7 324deg 360deg);">
-                    <!-- Marcadores de texto fijos (premios) -->
-                    <div class="absolute inset-0 flex items-center justify-center text-white font-black text-sm drop-shadow-lg">GIKO</div>
-                </div>
-                <!-- Marcador fijo (flecha) -->
-                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-3 text-4xl filter drop-shadow-2xl" style="color: #fde047;">▼</div>
-            </div>
-
-            <!-- Lista de premios (actualizada: 0 Bs en lugar de 0.50) -->
-            <div class="grid grid-cols-5 gap-1 text-center text-white text-xs font-semibold mb-4 bg-black/30 p-2 rounded-xl">
-                <div class="bg-red-400/50 p-1 rounded">0</div>
-                <div class="bg-yellow-400/50 p-1 rounded">1</div>
-                <div class="bg-green-400/50 p-1 rounded">2</div>
-                <div class="bg-blue-400/50 p-1 rounded">5</div>
-                <div class="bg-purple-400/50 p-1 rounded">8</div>
-                <div class="bg-pink-400/50 p-1 rounded">0</div>
-                <div class="bg-orange-400/50 p-1 rounded">1</div>
-                <div class="bg-indigo-400/50 p-1 rounded">2</div>
-                <div class="bg-amber-400/50 p-1 rounded">5</div>
-                <div class="bg-emerald-400/50 p-1 rounded">8</div>
-            </div>
-
-            <!-- Input de código -->
-            <input type="text" id="roulette-code" placeholder="Ej: GIKO-8A3F" class="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center uppercase" maxlength="12">
-
-            <!-- Botones de acción -->
-            <div class="flex gap-2 mt-4">
-                <button id="spin-roulette-btn" class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-2 rounded-xl shadow-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 text-sm">
-                    <i class="fas fa-spinner"></i> CÓDIGO
-                </button>
-                <button id="buy-spin-btn" class="flex-1 bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold py-3 px-2 rounded-xl shadow-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 text-sm">
-                    <i class="fas fa-shopping-cart"></i> COMPRAR 1 BS
-                </button>
-            </div>
-            <p id="roulette-message" class="text-center text-sm text-yellow-300 mt-2 min-h-[20px]"></p>
-        </div>
-    </div>
-    <!-- ==================== FIN RULETA PROBABILIDADES AJUSTADAS ==================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -3322,12 +2958,12 @@
             const transactions = await loadTransactions(currentUser.id, activeFilter);
             renderTransactions(transactions);
             
-            const recharges = await loadRecharges(currentUser.id);
-            renderRecharges(recharges);
-            
             // Actualizar contadores en el perfil
             document.getElementById('mobile-transactions-count').textContent = transactions.length;
-            document.getElementById('mobile-recharges-count').textContent = recharges.length;
+            const mobileRechargesCount = document.getElementById('mobile-recharges-count');
+            if (mobileRechargesCount) {
+                mobileRechargesCount.textContent = '0';
+            }
             
             if (document.getElementById('mobile-user-name')) {
                 document.getElementById('mobile-user-name').textContent = userProfile?.full_name || currentUser.email.split('@')[0];
@@ -3385,111 +3021,6 @@
             }
         };
         
-        // Sobrescribir la función de confirmar recarga normal (simplificada)
-        const originalConfirmRecharge = async function(btn) {
-            const isMobile = btn.id === 'mobile-confirm-recharge';
-            
-            const phoneNumber = document.getElementById(isMobile ? 'mobile-phone-number' : 'phone-number').value;
-            const amount = parseFloat(document.getElementById(isMobile ? 'mobile-recharge-amount' : 'recharge-amount').value);
-            
-            if (!selectedOperator) {
-                showToast('Selecciona una operadora', 'error');
-                return false;
-            }
-            
-            if (!phoneNumber || phoneNumber.length < 7) {
-                showToast('Ingresa un número de teléfono válido', 'error');
-                return false;
-            }
-            
-            if (!amount || amount <= 0) {
-                showToast('Ingresa un monto válido', 'error');
-                return false;
-            }
-            
-            if (amount > currentBalance) {
-                showToast('Saldo insuficiente', 'error');
-                return false;
-            }
-            
-            const confirmText = document.getElementById(isMobile ? 'mobile-confirm-recharge-text' : 'confirm-recharge-text');
-            const confirmSpinner = document.getElementById(isMobile ? 'mobile-confirm-recharge-spinner' : 'confirm-recharge-spinner');
-            
-            btn.disabled = true;
-            if (confirmText) confirmText.textContent = 'Procesando...';
-            if (confirmSpinner) confirmSpinner.classList.remove('hidden');
-            
-            try {
-                const transaction = await createTransaction(
-                    currentUser.id,
-                    amount,
-                    'withdrawal',
-                    `Recarga ${selectedOperator} a ${phoneNumber}`,
-                    { service: 'recharge', operator: selectedOperator, phone: phoneNumber }
-                );
-                
-                if (!transaction) {
-                    throw new Error('Error al crear la transacción');
-                }
-                
-                const recharge = await createRecharge(
-                    currentUser.id,
-                    phoneNumber,
-                    selectedOperator,
-                    amount,
-                    transaction.id
-                );
-                
-                if (!recharge) {
-                    throw new Error('Error al registrar la recarga');
-                }
-                
-                const telegramMessage = `
-<b>Nueva recarga solicitada</b>
-                    
-📱 <b>Operadora:</b> ${selectedOperator.toUpperCase()}
-📞 <b>Número:</b> ${phoneNumber}
-💰 <b>Monto:</b> ${amount} Bs
-👤 <b>Usuario:</b> ${userProfile?.full_name || currentUser.email}
-🆔 <b>ID Transacción:</b> ${transaction.id}
-⏱ <b>Fecha:</b> ${new Date().toLocaleString()}
-                `;
-                
-                const telegramSent = await sendTelegramMessage(telegramMessage, selectedOperator);
-                
-                if (!telegramSent) {
-                    console.warn('No se pudo enviar la notificación a Telegram');
-                }
-                
-                showToast(`Recarga de ${amount} Bs a ${phoneNumber} exitosa`);
-                
-                const invoiceTransaction = {
-                    ...transaction,
-                    operator: selectedOperator,
-                    phone_number: phoneNumber,
-                    description: `Recarga ${selectedOperator} a ${phoneNumber}`
-                };
-                showTransactionInvoice(invoiceTransaction, 'recharge');
-                
-                if (isMobile) {
-                    closeMobileModal('mobile-recharge-modal');
-                } else {
-                    closeModal('recharge-modal');
-                }
-                
-                updateUI();
-                return true;
-            } catch (error) {
-                console.error('Error en el proceso de recarga:', error);
-                showToast('Error al procesar la recarga', 'error');
-                return false;
-            } finally {
-                btn.disabled = false;
-                if (confirmText) confirmText.textContent = isMobile ? 'Confirmar recarga' : 'Confirmar';
-                if (confirmSpinner) confirmSpinner.classList.add('hidden');
-            }
-        };
-
         // Sobrescribir la función de confirmar envío de dinero para mostrar factura
         const originalConfirmSend = async function(btn) {
             const isMobile = btn.id === 'mobile-confirm-send';
@@ -3859,64 +3390,6 @@
                 });
             });
             
-            const rechargeButtons = document.querySelectorAll('#recharge-btn, #mobile-recharge-btn, #new-recharge-btn, #mobile-new-recharge-btn');
-            rechargeButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const phoneNumberElements = document.querySelectorAll('#phone-number, #mobile-phone-number');
-                    const rechargeAmountElements = document.querySelectorAll('#recharge-amount, #mobile-recharge-amount');
-                    
-                    phoneNumberElements.forEach(el => {
-                        if (el) el.value = '';
-                    });
-                    
-                    rechargeAmountElements.forEach(el => {
-                        if (el) el.value = '';
-                    });
-                    
-                    selectedOperator = null;
-                    const operatorButtons = document.querySelectorAll('.operator-btn, .mobile-operator-btn');
-                    operatorButtons.forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
-                    
-                    if (btn.id.includes('mobile')) {
-                        openMobileModal('mobile-recharge-modal');
-                    } else {
-                        openModal('recharge-modal');
-                    }
-                });
-            });
-            
-            const closeRechargeButtons = document.querySelectorAll('#close-recharge-modal, #mobile-close-recharge-modal, #cancel-recharge, #mobile-cancel-recharge');
-            closeRechargeButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (btn.id.includes('mobile')) {
-                        closeMobileModal('mobile-recharge-modal');
-                    } else {
-                        closeModal('recharge-modal');
-                    }
-                });
-            });
-            
-            const operatorButtons = document.querySelectorAll('[data-operator]');
-            operatorButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectedOperator = btn.dataset.operator;
-                    const allButtons = document.querySelectorAll(`.operator-btn, .mobile-operator-btn`);
-                    allButtons.forEach(b => {
-                        b.classList.remove('selected');
-                    });
-                    btn.classList.add('selected');
-                });
-            });
-            
-            const confirmRechargeButtons = document.querySelectorAll('#confirm-recharge, #mobile-confirm-recharge');
-            confirmRechargeButtons.forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    await originalConfirmRecharge(this);
-                });
-            });
-            
             const sendMoneyButtons = document.querySelectorAll('#send-money-btn, #mobile-send-money-btn');
             sendMoneyButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -3962,138 +3435,6 @@
                 });
             });
             
-            const rechargeBalanceButtons = document.querySelectorAll('#recharge-balance-btn, #mobile-recharge-balance-btn');
-            rechargeBalanceButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const creatorCodeInputs = document.querySelectorAll('#creator-code, #mobile-creator-code');
-                    const amountInputs = document.querySelectorAll('#recharge-amount-input, #mobile-recharge-amount-input');
-                    const receiptInputs = document.querySelectorAll('#recharge-receipt, #mobile-recharge-receipt');
-                    const fileNameElements = document.querySelectorAll('#recharge-file-name, #mobile-recharge-file-name');
-                    
-                    creatorCodeInputs.forEach(input => {
-                        if (input) input.value = '';
-                    });
-                    
-                    amountInputs.forEach(input => {
-                        if (input) input.value = '';
-                    });
-                    
-                    receiptInputs.forEach(input => {
-                        if (input) input.value = '';
-                    });
-                    
-                    fileNameElements.forEach(el => {
-                        if (el) el.textContent = '';
-                    });
-                    
-                    if (btn.id === 'mobile-recharge-balance-btn') {
-                        openMobileModal('mobile-recharge-balance-modal');
-                    } else {
-                        openModal('recharge-balance-modal');
-                    }
-                });
-            });
-            
-            const closeRechargeBalanceButtons = document.querySelectorAll('#close-recharge-balance-modal, #mobile-close-recharge-balance-modal, #cancel-recharge-balance, #mobile-cancel-recharge-balance');
-            closeRechargeBalanceButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (btn.id.includes('mobile')) {
-                        closeMobileModal('mobile-recharge-balance-modal');
-                    } else {
-                        closeModal('recharge-balance-modal');
-                    }
-                });
-            });
-            
-            const receiptInputs = document.querySelectorAll('#recharge-receipt, #mobile-recharge-receipt');
-            receiptInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    const fileNameElement = this.id === 'mobile-recharge-receipt' 
-                        ? document.getElementById('mobile-recharge-file-name')
-                        : document.getElementById('recharge-file-name');
-                    
-                    if (this.files && this.files[0]) {
-                        fileNameElement.textContent = this.files[0].name;
-                    } else {
-                        fileNameElement.textContent = '';
-                    }
-                });
-            });
-            
-            const confirmRechargeBalanceButtons = document.querySelectorAll('#confirm-recharge-balance, #mobile-confirm-recharge-balance');
-            confirmRechargeBalanceButtons.forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const isMobile = btn.id === 'mobile-confirm-recharge-balance';
-                    
-                    const creatorCode = document.getElementById(isMobile ? 'mobile-creator-code' : 'creator-code').value;
-                    const amount = document.getElementById(isMobile ? 'mobile-recharge-amount-input' : 'recharge-amount-input').value;
-                    const receiptInput = document.getElementById(isMobile ? 'mobile-recharge-receipt' : 'recharge-receipt');
-                    const receiptFile = receiptInput.files[0];
-                    
-                    // Obtener nombre y teléfono del perfil (por defecto)
-                    const name = userProfile?.full_name || '';
-                    const phone = userProfile?.phone || '';
-                    
-                    if (!name) {
-                        showToast('No hay nombre configurado en tu perfil', 'error');
-                        return;
-                    }
-                    
-                    if (!phone || phone.length < 7) {
-                        showToast('No hay número de teléfono configurado en tu perfil', 'error');
-                        return;
-                    }
-                    
-                    if (!amount || parseFloat(amount) <= 0) {
-                        showToast('Ingresa un monto válido', 'error');
-                        return;
-                    }
-                    
-                    if (!receiptFile) {
-                        showToast('Selecciona un comprobante de pago', 'error');
-                        return;
-                    }
-                    
-                    const confirmText = document.getElementById(isMobile ? 'mobile-confirm-recharge-balance-text' : 'confirm-recharge-balance-text');
-                    const confirmSpinner = document.getElementById(isMobile ? 'mobile-confirm-recharge-balance-spinner' : 'confirm-recharge-balance-spinner');
-                    
-                    btn.disabled = true;
-                    if (confirmText) confirmText.textContent = 'Enviando...';
-                    if (confirmSpinner) confirmSpinner.classList.remove('hidden');
-                    
-                    try {
-                        const rechargeData = {
-                            name,
-                            phone,
-                            amount,
-                            email: currentUser.email,
-                            creatorCode: creatorCode || ''
-                        };
-                        
-                        const success = await sendRechargeRequest(rechargeData, receiptFile);
-                        
-                        if (success) {
-                            showToast('Solicitud de recarga enviada. Revisaremos tu comprobante pronto.');
-                            
-                            if (isMobile) {
-                                closeMobileModal('mobile-recharge-balance-modal');
-                            } else {
-                                closeModal('recharge-balance-modal');
-                            }
-                        } else {
-                            throw new Error('Error al enviar la solicitud');
-                        }
-                    } catch (error) {
-                        console.error('Error en el proceso de recarga de saldo:', error);
-                        showToast('Error al enviar la solicitud', 'error');
-                    } finally {
-                        btn.disabled = false;
-                        if (confirmText) confirmText.textContent = 'Enviar solicitud';
-                        if (confirmSpinner) confirmSpinner.classList.add('hidden');
-                    }
-                });
-            });
-            
             const closeInvoiceButtons = document.querySelectorAll('#close-invoice-modal, #close-invoice');
             closeInvoiceButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -4113,283 +3454,7 @@
             updateUI();
         });
 
-        // ==================== LÓGICA DE LA RULETA (PROBABILIDADES AJUSTADAS) ====================
-        // 10 códigos únicos con formato GIKO-XXXX (máximo 12 caracteres)
-        const VALID_CODES = new Set([
-            'GIKO-X8P9',
-            'GIKO-M3N2',
-            'GIKO-K7J4',
-            'GIKO-R5T6',
-            'GIKO-W2Z1',
-            'GIKO-Q9L0',
-            'GIKO-F4D5',
-            'GIKO-H6G7',
-            'GIKO-V8C3',
-            'GIKO-B1N9'
-        ]);
-
-        // Premios en el orden de la ruleta (10 segmentos) - ACTUALIZADO: 0 en lugar de 0.50
-        const PRIZES = [0, 1, 2, 5, 8, 0, 1, 2, 5, 8];
-
-        // Almacén local de códigos usados
-        let usedCodes = new Set();
-
-        try {
-            const stored = localStorage.getItem('giko_used_codes');
-            if (stored) {
-                usedCodes = new Set(JSON.parse(stored));
-            }
-        } catch (e) {
-            console.warn('Error cargando códigos usados', e);
-        }
-
-        function saveUsedCodes() {
-            try {
-                localStorage.setItem('giko_used_codes', JSON.stringify(Array.from(usedCodes)));
-            } catch (e) {
-                console.warn('Error guardando códigos usados', e);
-            }
-        }
-
-        const fab = document.getElementById('roulette-fab');
-        const modal = document.getElementById('roulette-modal');
-        const closeBtn = document.getElementById('close-roulette-modal');
-        const spinBtn = document.getElementById('spin-roulette-btn');
-        const buySpinBtn = document.getElementById('buy-spin-btn');
-        const codeInput = document.getElementById('roulette-code');
-        const wheel = document.getElementById('wheel');
-        const messageEl = document.getElementById('roulette-message');
-        let isSpinning = false;
-
-        // Abrir modal
-        fab.addEventListener('click', () => {
-            modal.classList.remove('opacity-0', 'invisible');
-            modal.classList.add('opacity-100', 'visible');
-            codeInput.value = '';
-            messageEl.textContent = '';
-            wheel.style.transform = 'rotate(0deg)';
-        });
-
-        // Cerrar modal
-        function closeModalRoulette() {
-            modal.classList.remove('opacity-100', 'visible');
-            modal.classList.add('opacity-0', 'invisible');
-        }
-        closeBtn.addEventListener('click', closeModalRoulette);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModalRoulette();
-        });
-
-        // Función para agregar premio al saldo y registrar transacción
-        async function addPrizeToBalance(prizeAmount) {
-            if (!currentUser) {
-                messageEl.textContent = '❌ Debes iniciar sesión primero';
-                return false;
-            }
-
-            try {
-                const transaction = await createTransaction(
-                    currentUser.id,
-                    prizeAmount,
-                    'deposit',
-                    `🎉 Premio de ruleta: Bs ${prizeAmount}`,
-                    { source: 'roulette' }
-                );
-
-                if (!transaction) {
-                    throw new Error('No se pudo crear la transacción');
-                }
-
-                const newBalance = (currentBalance || 0) + prizeAmount;
-                currentBalance = newBalance;
-
-                const balanceElements = document.querySelectorAll('#balance, #mobile-balance, #mobile-balance-small');
-                balanceElements.forEach(el => {
-                    if (el) el.textContent = formatCurrency(newBalance);
-                });
-
-                const transactions = await loadTransactions(currentUser.id);
-                renderTransactions(transactions);
-
-                messageEl.textContent = `✅ ¡Ganaste Bs ${prizeAmount}! Se añadió a tu saldo.`;
-                return true;
-            } catch (error) {
-                console.error('Error al agregar premio:', error);
-                messageEl.textContent = '❌ Error al acreditar el premio';
-                return false;
-            }
-        }
-
-        // Función para realizar el giro
-        async function performSpin(prizeIndex) {
-            const prize = PRIZES[prizeIndex];
-            const segmentAngle = 360 / PRIZES.length;
-            const spins = 5;
-            const finalRotation = 360 * spins + (360 - (prizeIndex * segmentAngle + segmentAngle / 2));
-
-            wheel.style.transform = `rotate(${finalRotation}deg)`;
-
-            return new Promise((resolve) => {
-                setTimeout(async () => {
-                    const success = await addPrizeToBalance(prize);
-                    resolve(success);
-                }, 3000);
-            });
-        }
-
-        // Función para obtener índice basado en probabilidades personalizadas
-        function getPrizeIndexWithProbability() {
-            const rand = Math.random() * 100; // 0 a 100
-            
-            // 5% para 8 Bs
-            if (rand < 5) {
-                // Buscar índices donde el premio es 8
-                const eightIndices = PRIZES.reduce((acc, prize, index) => {
-                    if (prize === 8) acc.push(index);
-                    return acc;
-                }, []);
-                return eightIndices[Math.floor(Math.random() * eightIndices.length)];
-            }
-            // 6% para 5 Bs
-            else if (rand < 11) { // 5 + 6 = 11
-                const fiveIndices = PRIZES.reduce((acc, prize, index) => {
-                    if (prize === 5) acc.push(index);
-                    return acc;
-                }, []);
-                return fiveIndices[Math.floor(Math.random() * fiveIndices.length)];
-            }
-            // 40% para 2 Bs
-            else if (rand < 51) { // 11 + 40 = 51
-                const twoIndices = PRIZES.reduce((acc, prize, index) => {
-                    if (prize === 2) acc.push(index);
-                    return acc;
-                }, []);
-                return twoIndices[Math.floor(Math.random() * twoIndices.length)];
-            }
-            // 49% para 1 Bs (ajustado para sumar 100%)
-            else {
-                const oneIndices = PRIZES.reduce((acc, prize, index) => {
-                    if (prize === 1) acc.push(index);
-                    return acc;
-                }, []);
-                return oneIndices[Math.floor(Math.random() * oneIndices.length)];
-            }
-        }
-
-        // Lógica del giro con código
-        spinBtn.addEventListener('click', async () => {
-            if (isSpinning) return;
-
-            const code = codeInput.value.trim().toUpperCase();
-
-            if (!code) {
-                messageEl.textContent = '⚠️ Ingresa un código';
-                return;
-            }
-
-            if (!VALID_CODES.has(code)) {
-                messageEl.textContent = '❌ Código inválido';
-                return;
-            }
-
-            if (usedCodes.has(code)) {
-                messageEl.textContent = '⛔ Este código ya fue usado';
-                return;
-            }
-
-            if (!currentUser) {
-                messageEl.textContent = '❌ No hay sesión activa';
-                return;
-            }
-
-            isSpinning = true;
-            spinBtn.disabled = true;
-            buySpinBtn.disabled = true;
-            messageEl.textContent = '🎡 Girando...';
-
-            const prizeIndex = getPrizeIndexWithProbability();
-            usedCodes.add(code);
-            saveUsedCodes();
-
-            const success = await performSpin(prizeIndex);
-
-            if (!success) {
-                usedCodes.delete(code);
-                saveUsedCodes();
-            }
-
-            spinBtn.disabled = false;
-            buySpinBtn.disabled = false;
-            isSpinning = false;
-        });
-
-        // Lógica del giro comprado por 1 Bs
-        buySpinBtn.addEventListener('click', async () => {
-            if (isSpinning) return;
-
-            if (!currentUser) {
-                messageEl.textContent = '❌ No hay sesión activa';
-                return;
-            }
-
-            if (currentBalance < 1) {
-                messageEl.textContent = '❌ Saldo insuficiente para comprar un giro (1 Bs)';
-                return;
-            }
-
-            isSpinning = true;
-            spinBtn.disabled = true;
-            buySpinBtn.disabled = true;
-            messageEl.textContent = '🎡 Comprando giro...';
-
-            // Crear transacción de compra del giro (retiro de 1 Bs)
-            const purchaseTransaction = await createTransaction(
-                currentUser.id,
-                1,
-                'withdrawal',
-                '🎰 Compra de giro en ruleta',
-                { source: 'roulette_purchase' }
-            );
-
-            if (!purchaseTransaction) {
-                messageEl.textContent = '❌ Error al procesar la compra';
-                spinBtn.disabled = false;
-                buySpinBtn.disabled = false;
-                isSpinning = false;
-                return;
-            }
-
-            // Actualizar balance local
-            currentBalance -= 1;
-            const balanceElements = document.querySelectorAll('#balance, #mobile-balance, #mobile-balance-small');
-            balanceElements.forEach(el => {
-                if (el) el.textContent = formatCurrency(currentBalance);
-            });
-
-            messageEl.textContent = '🎡 Girando...';
-
-            const prizeIndex = getPrizeIndexWithProbability();
-            const success = await performSpin(prizeIndex);
-
-            spinBtn.disabled = false;
-            buySpinBtn.disabled = false;
-            isSpinning = false;
-        });
-        // ==================== FIN LÓGICA DE LA RULETA PROBABILIDADES AJUSTADAS ====================
     </script>
-
-    <style>
-        #wheel {
-            transition: transform 3s cubic-bezier(0.25, 0.1, 0.15, 1);
-        }
-        .animate-bounce {
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-    </style>
 </body>
 </html>
 
