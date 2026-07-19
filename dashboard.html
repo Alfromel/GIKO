@@ -506,9 +506,14 @@
                 right: 0;
                 bottom: 0;
                 background-image: 
-                    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-                z-index: 1;
+                    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+                    url('https://www.telemadrid.es/2026/07/18/mundial-de-futbol-2026/_2908219174_56243896_1300x731.jpg');
+                background-size: cover, cover, cover;
+                background-position: center, center, center;
+                background-repeat: no-repeat;
+                z-index: 0;
+                filter: brightness(0.6) saturate(1.05);
             }
             
             .mobile-balance-card .mascot-overlay {
@@ -3691,9 +3696,4 @@
             
             updateUI();
         });
-
-    </script>
-</body>
-</html>
-
 
