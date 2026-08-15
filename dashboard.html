@@ -62,6 +62,86 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        .app-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 360px;
+            margin-left: auto;
+            padding: 12px 16px;
+            border-radius: 14px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
+            z-index: 5000;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+            opacity: 1;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .wallet-summary-card {
+            display: none;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(30, 41, 59, 0.04));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+        }
+
+        .wallet-summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .wallet-summary-row:last-child { border-bottom: none; }
+        .wallet-summary-row strong {
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 700;
+            text-align: right;
+            word-break: break-word;
+        }
+
         @media (max-width: 768px) {
             body {
                 background-color: var(--bg-secondary);
@@ -1234,10 +1314,6 @@
                     <label for="mobile-full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
                     <input type="text" id="mobile-full-name" class="mobile-input">
                 </div>
-                <div class="mb-4">
-                    <label for="mobile-full-phone" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Teléfono</label>
-                    <input type="tel" id="mobile-full-phone" class="mobile-input" placeholder="Ej: 77712345">
-                </div>
                 <button id="mobile-save-profile" class="mobile-btn mobile-btn-primary">Guardar cambios</button>
                 <button id="mobile-cancel-profile-edit" class="mobile-btn mobile-btn-secondary">Cancelar</button>
             </div>
@@ -1250,23 +1326,11 @@
                     <button id="mobile-close-recharge-balance-modal" class="mobile-modal-close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="mb-4">
-                    <label for="mobile-recharge-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
-                    <input type="text" id="mobile-recharge-name" class="mobile-input" placeholder="Tu nombre">
-                </div>
-                <div class="mb-4">
-                    <label for="mobile-recharge-phone" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Teléfono</label>
-                    <input type="tel" id="mobile-recharge-phone" class="mobile-input" placeholder="Ej: 77712345">
-                </div>
-                <div class="mb-4">
-                    <label for="mobile-creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
-                    <input type="text" id="mobile-creator-code" class="mobile-input creator-code-input" placeholder="Ingrese el código de referido">
-                </div>
-                <div class="mb-4">
                     <label for="mobile-recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
                     <input type="number" id="mobile-recharge-amount-input" class="mobile-input" placeholder="Ej: 100" min="1">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
+                    <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código QR</label>
                     <div class="qr-code-container"><img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago"></div>
                 </div>
                 <div class="mb-4">
@@ -1462,10 +1526,6 @@
                 <label for="full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
                 <input type="text" id="full-name" class="input-field w-full">
             </div>
-            <div class="mb-4">
-                <label for="full-phone" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Teléfono</label>
-                <input type="tel" id="full-phone" class="input-field w-full" placeholder="Ej: 77712345">
-            </div>
             <button id="save-profile" class="btn-primary w-full py-3 rounded-xl text-white font-medium">Guardar cambios</button>
         </div>
     </div>
@@ -1478,23 +1538,11 @@
                 <button id="close-recharge-balance-modal" style="color: var(--text-secondary);"><i class="fas fa-times"></i></button>
             </div>
             <div class="mb-4">
-                <label for="recharge-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
-                <input type="text" id="recharge-name" class="input-field w-full" placeholder="Tu nombre">
-            </div>
-            <div class="mb-4">
-                <label for="recharge-phone" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Teléfono</label>
-                <input type="tel" id="recharge-phone" class="input-field w-full" placeholder="Ej: 77712345">
-            </div>
-            <div class="mb-4">
-                <label for="creator-code" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código del Creador (Opcional)</label>
-                <input type="text" id="creator-code" class="input-field w-full creator-code-input-desktop" placeholder="Ingrese el código de referido">
-            </div>
-            <div class="mb-4">
                 <label for="recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
                 <input type="number" id="recharge-amount-input" class="input-field w-full" placeholder="Ej: 100" min="1">
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
+                <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Código QR</label>
                 <div class="qr-code-container-desktop"><img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago"></div>
             </div>
             <div class="mb-4">
@@ -1562,7 +1610,8 @@
 
         const showToast = (message, type = 'success') => {
             const toast = document.createElement('div');
-            toast.className = `fixed top-4 right-4 left-4 sm:left-auto px-4 py-3 rounded-xl shadow-lg z-[200] ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white font-medium text-sm`;
+            toast.className = 'app-toast';
+            toast.style.background = type === 'success' ? '#10b981' : '#ef4444';
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => { toast.style.transition = 'opacity 0.3s'; toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3200);
@@ -2042,8 +2091,6 @@
             const openProfileEdit = () => {
                 const nameEls = document.querySelectorAll('#full-name, #mobile-full-name');
                 nameEls.forEach(el => { if (el) el.value = userProfile?.full_name || ''; });
-                const phoneEls = document.querySelectorAll('#full-phone, #mobile-full-phone');
-                phoneEls.forEach(el => { if (el) el.value = userProfile?.phone || ''; });
                 setAvatarPreview(document.getElementById('avatar-preview'), localAvatarDataUrl);
                 setAvatarPreview(document.getElementById('mobile-avatar-preview'), localAvatarDataUrl);
             };
@@ -2092,7 +2139,6 @@
                 btn.addEventListener('click', async () => {
                     const isMobile = btn.id === 'mobile-save-profile';
                     const fullName = document.getElementById(isMobile ? 'mobile-full-name' : 'full-name').value.trim();
-                    const phone = document.getElementById(isMobile ? 'mobile-full-phone' : 'full-phone').value.trim();
                     if (!fullName) { showToast('Ingresa tu nombre completo', 'error'); return; }
 
                     const original = btn.innerHTML;
@@ -2105,7 +2151,7 @@
                         localAvatarDataUrl = pendingAvatar;
                     }
 
-                    const updated = await updateUserProfile(currentUser.id, { full_name: fullName, phone: phone || null });
+                    const updated = await updateUserProfile(currentUser.id, { full_name: fullName });
                     btn.disabled = false; btn.innerHTML = original;
 
                     if (updated) {
@@ -2124,13 +2170,9 @@
             rechargeBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    ['creator-code', 'mobile-creator-code', 'recharge-amount-input', 'mobile-recharge-amount-input'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+                    ['recharge-amount-input', 'mobile-recharge-amount-input'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
                     ['recharge-receipt', 'mobile-recharge-receipt'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
                     ['recharge-file-name', 'mobile-recharge-file-name'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = ''; });
-                    const nameVal = userProfile?.full_name || '';
-                    const phoneVal = userProfile?.phone || '';
-                    ['recharge-name', 'mobile-recharge-name'].forEach(id => { const el = document.getElementById(id); if (el) el.value = nameVal; });
-                    ['recharge-phone', 'mobile-recharge-phone'].forEach(id => { const el = document.getElementById(id); if (el) el.value = phoneVal; });
                     if (btn.id === 'mobile-recharge-balance-btn') { openMobileModal('mobile-recharge-balance-modal'); } else { openModal('recharge-balance-modal'); }
                 });
             });
@@ -2157,15 +2199,13 @@
             confirmRechargeBtns.forEach(btn => {
                 btn.addEventListener('click', async () => {
                     const isMobile = btn.id === 'mobile-confirm-recharge-balance';
-                    const creatorCode = document.getElementById(isMobile ? 'mobile-creator-code' : 'creator-code').value;
                     const amount = document.getElementById(isMobile ? 'mobile-recharge-amount-input' : 'recharge-amount-input').value;
                     const receiptInput = document.getElementById(isMobile ? 'mobile-recharge-receipt' : 'recharge-receipt');
                     const receiptFile = receiptInput.files[0];
-                    const name = document.getElementById(isMobile ? 'mobile-recharge-name' : 'recharge-name').value.trim();
-                    const phone = document.getElementById(isMobile ? 'mobile-recharge-phone' : 'recharge-phone').value.trim();
+                    const name = userProfile?.full_name || currentUser?.email?.split('@')[0] || 'Usuario';
+                    const phone = userProfile?.phone || currentUser?.user_metadata?.phone || 'No registrado';
+                    const creatorCode = new URLSearchParams(window.location.search).get('creator') || localStorage.getItem('giko_creator_code') || '';
 
-                    if (!name) { showToast('Ingresa tu nombre completo', 'error'); return; }
-                    if (!phone || phone.length < 7) { showToast('Ingresa un teléfono válido', 'error'); return; }
                     if (!amount || parseFloat(amount) <= 0) { showToast('Ingresa un monto válido', 'error'); return; }
                     if (!receiptFile) { showToast('Selecciona un comprobante de pago', 'error'); return; }
                     if (!receiptFile.type.startsWith('image/')) { showToast('El comprobante debe ser una imagen', 'error'); return; }
@@ -2178,7 +2218,7 @@
 
                     try {
                         await sendRechargeRequest({ name, phone, amount, email: currentUser.email, creatorCode }, receiptFile);
-                        showToast('Solicitud enviada. Te avisaremos cuando se acredite.');
+                        showToast('Solicitud enviada. En breve se acreditará el saldo.');
                         if (isMobile) { closeMobileModal('mobile-recharge-balance-modal'); } else { closeModal('recharge-balance-modal'); }
                     } catch (error) {
                         console.error('Error sending recharge:', error);
