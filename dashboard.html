@@ -1478,7 +1478,7 @@
         <div class="mobile-content" id="mobile-content">
             <!-- Vista de Inicio -->
             <div id="mobile-home-view">
-                <!-- Tarjeta de balance -->
+                <!-- Tarjeta de balance EXACTAMENTE IGUAL AL DISEÑO ORIGINAL DE TOKTOK -->
                 <div class="mobile-balance-card">
                     <div class="card-background"></div>
                     <div class="card-chip"></div>
@@ -1560,9 +1560,8 @@
                 </div>
             </div>
             
-            <!-- Vista de Perfil (MEJORADA) - TELÉFONO SOLO VISUALIZACIÓN -->
+            <!-- Vista de Perfil -->
             <div id="mobile-profile-view" class="hidden">
-                <!-- Tarjeta de perfil principal -->
                 <div class="bg-gradient-to-br from-blue-600 to-blue-800 mx-4 mt-4 rounded-2xl p-6 text-white shadow-lg">
                     <div class="flex items-center space-x-4">
                         <div id="mobile-user-avatar" class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-3xl font-bold text-white border-2 border-white/30 overflow-hidden shadow-xl">
@@ -1594,7 +1593,6 @@
                     </div>
                 </div>
                 
-                <!-- Tarjeta de información personal -->
                 <div class="mobile-card mt-4">
                     <div class="p-4 border-b border-gray-100 flex justify-between items-center">
                         <h3 class="font-semibold">Información personal</h3>
@@ -1646,7 +1644,6 @@
                     </div>
                 </div>
                 
-                <!-- Opciones de configuración -->
                 <div class="mobile-card mt-4">
                     <div class="divide-y" style="border-color: var(--border-color);">
                         <a href="seguridad.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
@@ -1679,7 +1676,6 @@
                     </div>
                 </div>
                 
-                <!-- Botón de cerrar sesión -->
                 <div class="mx-4 my-6">
                     <button id="mobile-logout-btn-profile" class="w-full py-3 px-4 rounded-xl font-medium flex items-center justify-center space-x-2 transition" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
                         <i class="fas fa-sign-out-alt"></i>
@@ -1705,7 +1701,7 @@
             </a>
         </div>
         
-        <!-- Modal para editar perfil (mobile) - SOLO EDITA NOMBRE, SIN CAMPO DE TELÉFONO -->
+        <!-- Modal para editar perfil (mobile) -->
         <div id="mobile-profile-modal" class="mobile-modal">
             <div class="mobile-modal-content">
                 <div class="mobile-modal-header">
@@ -1729,8 +1725,6 @@
                     <label for="mobile-full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
                     <input type="text" id="mobile-full-name" class="mobile-input">
                 </div>
-                
-                <!-- NOTA: El campo de teléfono ha sido eliminado porque es permanente -->
                 
                 <button id="mobile-save-profile" class="mobile-btn mobile-btn-primary">
                     Guardar cambios
@@ -1825,7 +1819,8 @@
         </div>
         
     </div>
-        <!-- Factura flotante para transacciones -->
+    
+    <!-- Factura flotante para transacciones -->
     <div id="invoice-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
         <div class="modal-overlay absolute inset-0"></div>
         <div class="modal-content w-full max-w-md mx-4">
@@ -1853,6 +1848,7 @@
             </div>
         </div>
     </div>
+    
     <!-- Versión Desktop -->
     <div class="desktop-only">
         <!-- Header -->
@@ -1882,7 +1878,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <!-- Columna izquierda - Perfil y acciones -->
                 <div class="lg:col-span-1 space-y-8">
-                    <!-- Tarjeta de perfil mejorada -->
+                    <!-- Tarjeta de perfil -->
                     <div class="card p-6">
                         <div class="flex flex-col items-center">
                             <div id="user-avatar" class="avatar mb-5">
@@ -1916,7 +1912,7 @@
                         </div>
                     </div>
                     
-                    <!-- Tarjeta de balance MEJORADA -->
+                    <!-- Tarjeta de balance EXACTAMENTE IGUAL AL DISEÑO ORIGINAL DE TOKTOK -->
                     <div class="balance-card p-6 relative overflow-hidden">
                         <!-- Fondo de patrón -->
                         <div class="card-background"></div>
@@ -1941,7 +1937,6 @@
                                     </svg>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     
@@ -1988,17 +1983,17 @@
                             <i class="fas fa-chevron-right text-white text-opacity-70"></i>
                         </a>
                         <a href="store.html" class="action-card w-full p-5 flex items-center justify-between text-white" style="background: #3b82f6;">
-    <div class="flex items-center space-x-4">
-        <div class="action-icon bg-white bg-opacity-20">
-            <img src="Imagenes/store.png" alt="GC Store" style="width: 24px; height: 24px; filter: brightness(0) invert(1);">
-        </div>
-        <div class="text-left">
-            <p class="text-sm font-medium">GC Store</p>
-            <p class="text-xs text-white text-opacity-80">Diviértete ahora</p>
-        </div>
-    </div>
-    <i class="fas fa-chevron-right text-white text-opacity-70"></i>
-</a>
+                            <div class="flex items-center space-x-4">
+                                <div class="action-icon bg-white bg-opacity-20">
+                                    <img src="Imagenes/store.png" alt="GC Store" style="width: 24px; height: 24px; filter: brightness(0) invert(1);">
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-sm font-medium">GC Store</p>
+                                    <p class="text-xs text-white text-opacity-80">Diviértete ahora</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right text-white text-opacity-70"></i>
+                        </a>
                     </div>
                 </div>
                 
@@ -2055,7 +2050,7 @@
             </div>
         </main>
         
-        <!-- Modal para editar perfil (desktop) - SOLO EDITA NOMBRE, SIN CAMPO DE TELÉFONO -->
+        <!-- Modal para editar perfil (desktop) -->
         <div id="profile-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
@@ -2079,8 +2074,6 @@
                         <label for="full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
                         <input type="text" id="full-name" class="input-field w-full">
                     </div>
-                    
-                    <!-- NOTA: El campo de teléfono ha sido eliminado porque es permanente -->
                     
                     <div class="pt-4 flex justify-end space-x-3">
                         <button id="cancel-profile-edit" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">
@@ -2187,35 +2180,6 @@
             </div>
         </div>
         
-    </div>
-
-    <!-- Factura flotante para transacciones -->
-    <div id="invoice-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
-        <div class="modal-overlay absolute inset-0"></div>
-        <div class="modal-content w-full max-w-md mx-4">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="flex justify-between items-center p-4 border-b border-gray-200">
-                    <div class="text-lg font-semibold" style="color: var(--text-primary);">Comprobante de Transacción</div>
-                    <button id="close-invoice-modal" class="hover:opacity-70" style="color: var(--text-secondary);">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div id="invoice-content" class="p-4 max-h-[60vh] overflow-y-auto">
-                    <!-- Contenido de la factura se generará dinámicamente -->
-                </div>
-                
-                <div class="p-4 border-t border-gray-200" style="background: var(--input-bg);">
-                    <button id="download-invoice" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition-colors mb-2 text-sm">
-                        <i class="fas fa-download mr-2"></i>
-                        <span>Descargar Comprobante</span>
-                    </button>
-                    <button id="close-invoice" class="w-full py-2 px-4 rounded-lg font-medium transition-colors text-sm" style="background: var(--border-color); color: var(--text-primary);">
-                        Continuar
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -3070,7 +3034,6 @@
             const transactions = await loadTransactions(currentUser.id, activeFilter);
             renderTransactions(transactions);
             
-            // Actualizar contadores en el perfil
             document.getElementById('mobile-transactions-count').textContent = transactions.length;
             const mobileRechargesCount = document.getElementById('mobile-recharges-count');
             if (mobileRechargesCount) {
@@ -3102,7 +3065,6 @@
                 }
             }
             
-            // Actualizar perfil desktop
             const desktopNameElements = document.querySelectorAll('#user-name, #profile-phone, #profile-created-at');
             if (document.getElementById('user-name')) {
                 document.getElementById('user-name').textContent = userProfile?.full_name || currentUser.email.split('@')[0];
@@ -3119,7 +3081,6 @@
                 });
             }
             
-            // Avatar desktop
             const desktopAvatar = document.getElementById('user-avatar');
             const desktopInitials = document.getElementById('user-initials');
             if (desktopAvatar) {
@@ -3133,7 +3094,6 @@
             }
         };
         
-        // Sobrescribir la función de confirmar envío de dinero para mostrar factura
         const originalConfirmSend = async function(btn) {
             const isMobile = btn.id === 'mobile-confirm-send';
             
@@ -3212,7 +3172,6 @@
             }
         };
 
-        // Función para cambiar tema
         const setTheme = (theme) => {
             if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -3236,7 +3195,6 @@
             setTheme(currentTheme === 'dark' ? 'light' : 'dark');
         };
 
-        // Event Listeners
         document.addEventListener('DOMContentLoaded', async () => {
             const setVh = () => {
                 const vh = window.innerHeight * 0.01;
@@ -3246,13 +3204,11 @@
             setVh();
             window.addEventListener('resize', setVh);
             
-            // Cargar tema guardado
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 setTheme('dark');
             }
             
-            // Theme toggle buttons
             document.getElementById('mobile-theme-toggle')?.addEventListener('click', toggleTheme);
             document.getElementById('desktop-theme-toggle')?.addEventListener('click', toggleTheme);
             
@@ -3696,9 +3652,6 @@
             
             updateUI();
         });
-
     </script>
 </body>
 </html>
-
-
