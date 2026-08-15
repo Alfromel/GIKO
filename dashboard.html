@@ -15,8 +15,13 @@
         :root {
             --primary: #2563eb;
             --primary-dark: #1e3a8a;
+            --secondary: #1e3a8a;
+            --secondary-dark: #172554;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
             --safe-area-inset-top: env(safe-area-inset-top);
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
+            
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
             --text-primary: #1e293b;
@@ -32,6 +37,12 @@
         
         [data-theme="dark"] {
             --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #3b82f6;
+            --secondary-dark: #2563eb;
+            --accent: #60a5fa;
+            --accent-dark: #3b82f6;
+            
             --bg-primary: #000000;
             --bg-secondary: #0a0a0a;
             --text-primary: #ffffff;
@@ -49,15 +60,20 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
+            padding-top: var(--safe-area-inset-top);
+            padding-bottom: var(--safe-area-inset-bottom);
             -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-
+        
         @media (max-width: 768px) {
             body {
                 background-color: var(--bg-secondary);
                 max-width: 100vw;
                 overflow-x: hidden;
             }
+            
+            main { padding-left: 0; padding-right: 0; }
             
             .mobile-app-container {
                 max-width: 100%;
@@ -87,6 +103,7 @@
                 border-top: 1px solid var(--border-color);
                 display: flex;
                 z-index: 50;
+                padding-bottom: var(--safe-area-inset-bottom);
             }
             
             .nav-item {
@@ -98,6 +115,7 @@
                 color: var(--text-secondary);
                 font-size: 10px;
                 text-decoration: none;
+                transition: all 0.2s;
             }
             
             .nav-item i { font-size: 20px; margin-bottom: 4px; }
@@ -113,18 +131,23 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                padding-top: calc(12px + var(--safe-area-inset-top));
             }
             
-            .mobile-header-title { font-size: 18px; font-weight: 600; }
+            .mobile-header-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+            
             .mobile-header-actions { display: flex; align-items: center; gap: 12px; }
             
             .theme-toggle {
-                background: none;
-                border: none;
-                color: var(--text-primary);
-                font-size: 1.2rem;
-                cursor: pointer;
+                background: none; border: none;
+                color: var(--text-primary); font-size: 1.2rem;
+                cursor: pointer; padding: 4px;
+                border-radius: 50%; width: 32px; height: 32px;
+                display: flex; align-items: center; justify-content: center;
+                transition: background-color 0.2s;
             }
+            
+            .theme-toggle:hover { background-color: var(--hover-bg); }
             
             .mobile-card {
                 background: var(--card-bg);
@@ -135,167 +158,125 @@
             }
             
             .mobile-section-title {
-                font-size: 16px;
-                font-weight: 600;
+                font-size: 16px; font-weight: 600;
+                color: var(--text-primary);
                 margin: 16px 16px 8px;
             }
             
             .mobile-action-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                padding: 12px;
-                border-radius: 12px;
-                background: var(--card-bg);
+                display: flex; align-items: center; justify-content: center;
+                flex-direction: column; padding: 12px;
+                border-radius: 12px; background: var(--card-bg);
                 box-shadow: 0 2px 8px var(--shadow-color);
+                transition: all 0.2s;
             }
             
             .mobile-action-btn i {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 18px;
-                margin-bottom: 8px;
-                color: white;
+                width: 40px; height: 40px; border-radius: 12px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 18px; margin-bottom: 8px; color: white;
             }
             
-            .mobile-action-btn span { font-size: 12px; font-weight: 500; }
+            .mobile-action-btn span { font-size: 12px; font-weight: 500; color: var(--text-primary); }
             
             .mobile-transaction-item {
-                display: flex;
-                align-items: center;
+                display: flex; align-items: center;
                 padding: 12px 16px;
                 border-bottom: 1px solid var(--border-color);
             }
             
             .mobile-transaction-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-right: 12px;
-                font-size: 18px;
+                width: 40px; height: 40px; border-radius: 12px;
+                display: flex; align-items: center; justify-content: center;
+                margin-right: 12px; font-size: 18px;
             }
             
             .mobile-transaction-details { flex: 1; }
-            .mobile-transaction-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+            .mobile-transaction-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
             .mobile-transaction-date { font-size: 12px; color: var(--text-secondary); }
             .mobile-transaction-amount { font-size: 14px; font-weight: 600; }
             
-            .mobile-tabs {
-                display: flex;
-                border-bottom: 1px solid var(--border-color);
-                margin: 0 16px;
-            }
+            .mobile-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin: 0 16px; }
             
             .mobile-tab {
-                flex: 1;
-                text-align: center;
-                padding: 12px 0;
-                font-size: 14px;
-                font-weight: 500;
-                color: var(--text-secondary);
-                position: relative;
+                flex: 1; text-align: center; padding: 12px 0;
+                font-size: 14px; font-weight: 500;
+                color: var(--text-secondary); position: relative;
             }
             
             .mobile-tab.active { color: var(--primary); }
             
+            .mobile-tab.active::after {
+                content: ''; position: absolute; bottom: -1px;
+                left: 50%; transform: translateX(-50%);
+                width: 40%; height: 2px;
+                background: var(--primary); border-radius: 2px;
+            }
+            
             .mobile-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
                 background: rgba(0, 0, 0, 0.7);
-                z-index: 100;
-                display: flex;
-                align-items: flex-end;
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s;
+                z-index: 100; display: flex; align-items: flex-end;
+                opacity: 0; visibility: hidden; transition: all 0.3s;
             }
             
             .mobile-modal.active { opacity: 1; visibility: visible; }
             
             .mobile-modal-content {
                 background: var(--card-bg);
-                width: 100%;
-                border-radius: 24px 24px 0 0;
-                padding: 24px;
-                transform: translateY(100%);
+                width: 100%; border-radius: 24px 24px 0 0;
+                padding: 24px; transform: translateY(100%);
                 transition: all 0.3s;
-                max-height: 90vh;
-                overflow-y: auto;
+                max-height: 90vh; overflow-y: auto;
             }
             
             .mobile-modal.active .mobile-modal-content { transform: translateY(0); }
             
             .mobile-modal-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 20px;
+                display: flex; justify-content: space-between;
+                align-items: center; margin-bottom: 20px;
             }
             
-            .mobile-modal-title { font-size: 18px; font-weight: 600; }
+            .mobile-modal-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
             .mobile-modal-close { color: var(--text-secondary); font-size: 20px; cursor: pointer; }
             
             .mobile-input {
-                width: 100%;
-                padding: 14px 16px;
+                width: 100%; padding: 14px 16px;
                 border: 1px solid var(--border-color);
-                border-radius: 12px;
-                font-size: 16px;
+                border-radius: 12px; font-size: 16px;
                 margin-bottom: 16px;
-                background: var(--input-bg);
-                color: var(--text-primary);
+                background: var(--input-bg); color: var(--text-primary);
             }
             
             .mobile-input:focus {
-                border-color: var(--primary);
-                outline: none;
+                border-color: var(--primary); outline: none;
                 background: var(--card-bg);
             }
             
+            .mobile-input::placeholder { color: var(--text-secondary); }
+            
             .mobile-btn {
-                width: 100%;
-                padding: 14px;
-                border-radius: 12px;
-                font-size: 16px;
-                font-weight: 500;
-                text-align: center;
-                margin-top: 8px;
-                cursor: pointer;
+                width: 100%; padding: 14px; border-radius: 12px;
+                font-size: 16px; font-weight: 500;
+                text-align: center; margin-top: 8px; cursor: pointer;
             }
             
             .mobile-btn-primary { background: var(--primary); color: white; }
+            .mobile-btn-primary:hover { background: var(--primary-dark); }
             .mobile-btn-secondary { background: var(--border-color); color: var(--text-primary); }
+            .mobile-btn-secondary:hover { background: var(--hover-bg); }
             
             .mobile-avatar {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
+                width: 80px; height: 80px; border-radius: 50%;
                 background: var(--primary);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 24px;
-                font-weight: 600;
-                color: white;
-                margin: 0 auto 16px;
-                position: relative;
-                overflow: hidden;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 24px; font-weight: 600; color: white;
+                margin: 0 auto 16px; position: relative; overflow: hidden;
             }
             
             .mobile-avatar img { width: 100%; height: 100%; object-fit: cover; }
             
-            /* TARJETA DE BALANCE TOKTOK CON IMAGEN DE FONDO CONFIGURABLE */
+            /* CARD DE BALANCE - DISEÑO TOKTOK EXACTO */
             .mobile-balance-card {
                 background: linear-gradient(155deg, #1e1147 0%, #2d1b69 40%, #3b2682 100%);
                 color: white;
@@ -312,111 +293,136 @@
                 justify-content: space-between;
             }
             
-            .mobile-balance-card .card-background-image {
+            .mobile-balance-card::before {
+                content: '';
                 position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                opacity: 0.5;
-                z-index: 0;
+                top: -40px; right: -40px;
+                width: 160px; height: 160px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
                 pointer-events: none;
             }
             
-            .mobile-balance-card .mascot-overlay {
+            .mobile-balance-card::after {
+                content: '';
                 position: absolute;
-                bottom: 10px;
-                right: 10px;
-                width: 80px;
-                height: 80px;
-                background-image: url('m.png');
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center;
-                opacity: 0.9;
-                z-index: 1;
+                bottom: -30px; left: -30px;
+                width: 120px; height: 120px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
                 pointer-events: none;
             }
             
             .mobile-card-top {
-                display: flex;
-                justify-content: space-between;
+                display: flex; justify-content: space-between;
                 align-items: flex-start;
-                position: relative;
-                z-index: 2;
+                position: relative; z-index: 1;
             }
             
-            .mobile-card-chip-area {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
+            .mobile-card-chip-area { display: flex; align-items: center; gap: 10px; }
             
             .mobile-card-chip-icon {
-                width: 38px;
-                height: 30px;
+                width: 38px; height: 30px;
                 background: linear-gradient(135deg, #fbbf24, #f59e0b);
                 border-radius: 5px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                display: flex; align-items: center; justify-content: center;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
             
             .mobile-card-chip-icon i { font-size: 14px; color: #1e1147; }
             .mobile-card-contactless { font-size: 18px; color: rgba(255,255,255,0.6); }
-            .mobile-card-brand { font-size: 18px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.9); font-style: italic; }
             
-            .mobile-card-middle { position: relative; z-index: 2; margin: 8px 0; }
-            .mobile-card-balance-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 2px; font-weight: 500; }
-            .mobile-card-balance-amount { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+            .mobile-card-brand {
+                font-size: 18px; font-weight: 700;
+                letter-spacing: 1px;
+                color: rgba(255,255,255,0.9);
+                font-style: italic;
+            }
             
-            .mobile-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
-            .mobile-card-user-name { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.5px; }
-            .mobile-card-expiry { font-size: 9px; color: rgba(255,255,255,0.5); text-align: right; line-height: 1.3; }
-            .mobile-card-expiry span { display: block; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+            .mobile-card-middle { position: relative; z-index: 1; margin: 8px 0; }
+            
+            .mobile-card-balance-label {
+                font-size: 10px; text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: rgba(255,255,255,0.6);
+                margin-bottom: 2px; font-weight: 500;
+            }
+            
+            .mobile-card-balance-amount {
+                font-size: 26px; font-weight: 700;
+                letter-spacing: -0.5px; color: #ffffff;
+                text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            }
+            
+            .mobile-card-bottom {
+                display: flex; justify-content: space-between;
+                align-items: flex-end;
+                position: relative; z-index: 1;
+            }
+            
+            .mobile-card-user-name {
+                font-size: 11px; font-weight: 600;
+                color: rgba(255,255,255,0.8);
+                text-transform: uppercase; letter-spacing: 0.5px;
+            }
+            
+            .mobile-card-expiry {
+                font-size: 9px; color: rgba(255,255,255,0.5);
+                text-align: right; line-height: 1.3;
+            }
+            
+            .mobile-card-expiry span {
+                display: block; font-size: 13px;
+                font-weight: 600; color: rgba(255,255,255,0.9);
+            }
             
             .mobile-card-recharge-btn {
-                width: 100%;
-                margin-top: 14px;
-                padding: 10px;
+                width: 100%; margin-top: 14px; padding: 10px;
                 border-radius: 10px;
                 background: rgba(255,255,255,0.1);
                 backdrop-filter: blur(4px);
                 border: 1px solid rgba(255,255,255,0.18);
-                color: white;
-                font-size: 13px;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                cursor: pointer;
-                position: relative;
-                z-index: 2;
+                color: white; font-size: 13px; font-weight: 600;
+                display: flex; align-items: center; justify-content: center;
+                gap: 6px; cursor: pointer;
+                transition: all 0.2s;
+                position: relative; z-index: 1;
+            }
+            
+            .mobile-card-recharge-btn:active {
+                background: rgba(255,255,255,0.2);
+                transform: scale(0.98);
             }
             
             .desktop-only { display: none !important; }
             
             .qr-code-container { display: flex; justify-content: center; margin: 20px 0; }
-            .qr-code { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; background: white; }
             
-            .file-input-label {
-                display: block;
-                width: 100%;
-                padding: 12px;
-                border: 1px dashed var(--border-color);
-                border-radius: 12px;
-                text-align: center;
-                cursor: pointer;
-                margin-bottom: 16px;
-                color: var(--text-primary);
+            .qr-code {
+                width: 200px; height: 200px;
+                border: 1px solid var(--border-color);
+                border-radius: 12px; padding: 10px; background: white;
             }
             
-            .file-name { font-size: 12px; color: var(--text-secondary); margin-top: 8px; word-break: break-all; }
+            .file-input-label {
+                display: block; width: 100%; padding: 12px;
+                border: 1px dashed var(--border-color);
+                border-radius: 12px; text-align: center;
+                cursor: pointer; margin-bottom: 16px;
+                transition: all 0.2s; color: var(--text-primary);
+            }
+            
+            .file-input-label:hover {
+                border-color: var(--primary);
+                background: var(--primary); color: white;
+            }
+            
+            .file-input-label i { margin-right: 8px; }
+            
+            .file-name {
+                font-size: 12px; color: var(--text-secondary);
+                margin-top: 8px; word-break: break-all;
+            }
         }
         
         @media (min-width: 769px) {
@@ -425,29 +431,29 @@
             .card {
                 border-radius: 20px;
                 box-shadow: 0 10px 25px -5px var(--shadow-color);
+                transition: all 0.3s;
                 border: 1px solid var(--border-color);
                 background: var(--card-bg);
             }
             
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 25px -5px var(--shadow-color);
+            }
+            
             .avatar {
-                width: 88px;
-                height: 88px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 2rem;
-                font-weight: 600;
-                color: white;
+                width: 88px; height: 88px; border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 2rem; font-weight: 600; color: white;
                 background-color: var(--primary);
                 border: 4px solid var(--card-bg);
-                position: relative;
-                overflow: hidden;
+                box-shadow: 0 8px 25px rgba(37, 99, 235, 0.1);
+                position: relative; overflow: hidden;
             }
             
             .avatar img { width: 100%; height: 100%; object-fit: cover; }
             
-            /* TARJETA DE BALANCE TOKTOK DESKTOP */
+            /* CARD DE BALANCE DESKTOP - DISEÑO TOKTOK */
             .balance-card {
                 background: linear-gradient(155deg, #1e1147 0%, #2d1b69 40%, #3b2682 100%);
                 color: white;
@@ -463,113 +469,123 @@
                 justify-content: space-between;
             }
             
-            .balance-card .card-background-image {
+            .balance-card::before {
+                content: '';
                 position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                opacity: 0.5;
-                z-index: 0;
+                top: -50px; right: -50px;
+                width: 200px; height: 200px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
                 pointer-events: none;
             }
             
-            .balance-card .mascot-overlay {
+            .balance-card::after {
+                content: '';
                 position: absolute;
-                bottom: 15px;
-                right: 15px;
-                width: 100px;
-                height: 100px;
-                background-image: url('m.png');
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center;
-                opacity: 0.9;
-                z-index: 1;
+                bottom: -40px; left: -40px;
+                width: 160px; height: 160px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
                 pointer-events: none;
             }
             
             .desktop-card-top {
-                display: flex;
-                justify-content: space-between;
+                display: flex; justify-content: space-between;
                 align-items: flex-start;
-                position: relative;
-                z-index: 2;
+                position: relative; z-index: 1;
             }
             
-            .desktop-card-chip-area {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
+            .desktop-card-chip-area { display: flex; align-items: center; gap: 12px; }
             
             .desktop-card-chip-icon {
-                width: 42px;
-                height: 34px;
+                width: 42px; height: 34px;
                 background: linear-gradient(135deg, #fbbf24, #f59e0b);
                 border-radius: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                display: flex; align-items: center; justify-content: center;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
             
             .desktop-card-chip-icon i { font-size: 16px; color: #1e1147; }
             .desktop-card-contactless { font-size: 22px; color: rgba(255,255,255,0.6); }
-            .desktop-card-brand { font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); font-style: italic; }
             
-            .desktop-card-middle { position: relative; z-index: 2; margin: 12px 0; }
-            .desktop-card-balance-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 2px; font-weight: 500; }
-            .desktop-card-balance-amount { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+            .desktop-card-brand {
+                font-size: 20px; font-weight: 700;
+                letter-spacing: 1.5px;
+                color: rgba(255,255,255,0.9);
+                font-style: italic;
+            }
             
-            .desktop-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
-            .desktop-card-user-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.5px; }
-            .desktop-card-expiry { font-size: 10px; color: rgba(255,255,255,0.5); text-align: right; line-height: 1.3; }
-            .desktop-card-expiry span { display: block; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); }
+            .desktop-card-middle { position: relative; z-index: 1; margin: 12px 0; }
+            
+            .desktop-card-balance-label {
+                font-size: 11px; text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: rgba(255,255,255,0.6);
+                margin-bottom: 2px; font-weight: 500;
+            }
+            
+            .desktop-card-balance-amount {
+                font-size: 30px; font-weight: 700;
+                letter-spacing: -0.5px; color: #ffffff;
+                text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            }
+            
+            .desktop-card-bottom {
+                display: flex; justify-content: space-between;
+                align-items: flex-end;
+                position: relative; z-index: 1;
+            }
+            
+            .desktop-card-user-name {
+                font-size: 13px; font-weight: 600;
+                color: rgba(255,255,255,0.8);
+                text-transform: uppercase; letter-spacing: 0.5px;
+            }
+            
+            .desktop-card-expiry {
+                font-size: 10px; color: rgba(255,255,255,0.5);
+                text-align: right; line-height: 1.3;
+            }
+            
+            .desktop-card-expiry span {
+                display: block; font-size: 14px;
+                font-weight: 600; color: rgba(255,255,255,0.9);
+            }
             
             .desktop-card-recharge-btn {
-                width: 100%;
-                margin-top: 16px;
-                padding: 11px;
+                width: 100%; margin-top: 16px; padding: 11px;
                 border-radius: 10px;
                 background: rgba(255,255,255,0.1);
                 backdrop-filter: blur(4px);
                 border: 1px solid rgba(255,255,255,0.18);
-                color: white;
-                font-size: 13px;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                cursor: pointer;
-                position: relative;
-                z-index: 2;
+                color: white; font-size: 13px; font-weight: 600;
+                display: flex; align-items: center; justify-content: center;
+                gap: 8px; cursor: pointer;
+                transition: all 0.2s;
+                position: relative; z-index: 1;
             }
             
-            .input-field {
-                border-radius: 12px;
-                border: 1px solid var(--border-color);
-                padding: 14px 16px;
-                background-color: var(--input-bg);
-                color: var(--text-primary);
+            .desktop-card-recharge-btn:hover { background: rgba(255,255,255,0.18); }
+            
+            .modal-overlay {
+                background-color: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
             }
             
-            .input-field:focus {
-                border-color: var(--primary);
-                outline: none;
+            .modal-content {
+                background: var(--card-bg);
+                border-radius: 24px;
+                box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+                transform: translateY(20px);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
             }
             
-            .modal-overlay { background-color: rgba(0, 0, 0, 0.7); }
-            .modal-content { background: var(--card-bg); border-radius: 24px; }
             .modal.active .modal-content { transform: translateY(0); opacity: 1; }
             
             .loading-spinner {
-                width: 24px;
-                height: 24px;
+                width: 24px; height: 24px;
                 border: 3px solid rgba(255, 255, 255, 0.3);
                 border-radius: 50%;
                 border-top-color: white;
@@ -578,32 +594,61 @@
             
             @keyframes spin { to { transform: rotate(360deg); } }
             
-            .qr-code-container-desktop { display: flex; justify-content: center; margin: 20px 0; }
-            .qr-code-desktop { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; background: white; }
-            
-            .file-input-label-desktop {
-                display: block;
-                width: 100%;
-                padding: 12px;
-                border: 1px dashed var(--border-color);
+            .input-field {
                 border-radius: 12px;
-                text-align: center;
-                cursor: pointer;
-                margin-bottom: 16px;
+                border: 1px solid var(--border-color);
+                padding: 14px 16px;
+                transition: all 0.2s;
+                background-color: var(--input-bg);
+                font-size: 0.95rem;
                 color: var(--text-primary);
             }
             
-            .file-name-desktop { font-size: 12px; color: var(--text-secondary); margin-top: 8px; word-break: break-all; }
+            .input-field:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+                outline: none;
+                background-color: var(--card-bg);
+            }
+            
+            .qr-code-container-desktop { display: flex; justify-content: center; margin: 20px 0; }
+            
+            .qr-code-desktop {
+                width: 200px; height: 200px;
+                border: 1px solid var(--border-color);
+                border-radius: 12px; padding: 10px; background: white;
+            }
+            
+            .file-input-label-desktop {
+                display: block; width: 100%; padding: 12px;
+                border: 1px dashed var(--border-color);
+                border-radius: 12px; text-align: center;
+                cursor: pointer; margin-bottom: 16px;
+                transition: all 0.2s; color: var(--text-primary);
+            }
+            
+            .file-input-label-desktop:hover {
+                border-color: var(--primary);
+                background: var(--primary); color: white;
+            }
+            
+            .file-name-desktop {
+                font-size: 12px; color: var(--text-secondary);
+                margin-top: 8px; word-break: break-all;
+            }
             
             .desktop-header-actions { display: flex; align-items: center; gap: 12px; }
             
             .theme-toggle-desktop {
-                background: none;
-                border: none;
-                color: var(--text-primary);
-                font-size: 1.2rem;
-                cursor: pointer;
+                background: none; border: none;
+                color: var(--text-primary); font-size: 1.2rem;
+                cursor: pointer; padding: 8px;
+                border-radius: 50%; width: 40px; height: 40px;
+                display: flex; align-items: center; justify-content: center;
+                transition: background-color 0.2s;
             }
+            
+            .theme-toggle-desktop:hover { background-color: var(--hover-bg); }
         }
         
         .positive-amount { color: #10b981; }
@@ -623,11 +668,8 @@
         
         <div class="mobile-content" id="mobile-content">
             <div id="mobile-home-view">
-                <!-- TARJETA DE BALANCE CON IMAGEN DE FONDO CONFIGURABLE -->
+                <!-- CARD DE BALANCE TOKTOK -->
                 <div class="mobile-balance-card">
-                    <div class="card-background-image" id="mobile-card-bg" style="background-image: url('https://comunidadescolar.com.bo/wp-content/uploads/2018/07/LaPazIllimani.jpg');"></div>
-                    <div class="mascot-overlay"></div>
-                    
                     <div class="mobile-card-top">
                         <div class="mobile-card-chip-area">
                             <div class="mobile-card-chip-icon"><i class="fas fa-microchip"></i></div>
@@ -696,7 +738,6 @@
                 </div>
             </div>
             
-            <!-- PERFIL ORIGINAL SIN MODIFICACIONES -->
             <div id="mobile-profile-view" class="hidden">
                 <div class="bg-gradient-to-br from-blue-600 to-blue-800 mx-4 mt-4 rounded-2xl p-6 text-white shadow-lg">
                     <div class="flex items-center space-x-4">
@@ -811,6 +852,29 @@
             <a href="#" class="nav-item" data-view="profile"><i class="fas fa-user"></i><span>Perfil</span></a>
         </div>
         
+        <!-- Modal perfil -->
+        <div id="mobile-profile-modal" class="mobile-modal">
+            <div class="mobile-modal-content">
+                <div class="mobile-modal-header">
+                    <div class="mobile-modal-title">Editar perfil</div>
+                    <button id="mobile-close-profile-modal" class="mobile-modal-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="flex justify-center mb-6">
+                    <div class="text-center">
+                        <div id="mobile-avatar-preview" class="mobile-avatar mx-auto mb-4"></div>
+                        <input type="file" id="mobile-avatar-input" accept="image/*" class="hidden">
+                        <button id="mobile-change-avatar-btn" class="text-sm font-medium" style="color: var(--primary);">Cambiar foto de perfil</button>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="mobile-full-name" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Nombre completo</label>
+                    <input type="text" id="mobile-full-name" class="mobile-input">
+                </div>
+                <button id="mobile-save-profile" class="mobile-btn mobile-btn-primary">Guardar cambios</button>
+                <button id="mobile-cancel-profile-edit" class="mobile-btn mobile-btn-secondary">Cancelar</button>
+            </div>
+        </div>
+        
         <!-- Modal recarga -->
         <div id="mobile-recharge-balance-modal" class="mobile-modal">
             <div class="mobile-modal-content">
@@ -825,8 +889,7 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
                     <div class="qr-code-container">
-                        <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <p class="hidden text-center text-gray-500">QR no disponible</p>
+                        <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago" onerror="this.style.display='none';">
                     </div>
                     <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
                 </div>
@@ -914,11 +977,8 @@
                         </div>
                     </div>
                     
-                    <!-- TARJETA DE BALANCE DESKTOP -->
+                    <!-- CARD DE BALANCE DESKTOP TOKTOK -->
                     <div class="balance-card">
-                        <div class="card-background-image" id="desktop-card-bg" style="background-image: url('https://comunidadescolar.com.bo/wp-content/uploads/2018/07/LaPazIllimani.jpg');"></div>
-                        <div class="mascot-overlay"></div>
-                        
                         <div class="desktop-card-top">
                             <div class="desktop-card-chip-area">
                                 <div class="desktop-card-chip-icon"><i class="fas fa-microchip"></i></div>
@@ -995,7 +1055,34 @@
             </div>
         </main>
         
-        <!-- Modal recarga desktop -->
+        <!-- Modales desktop -->
+        <div id="profile-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
+            <div class="modal-overlay absolute inset-0"></div>
+            <div class="modal-content w-full max-w-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Editar perfil</h3>
+                    <button id="close-profile-modal" style="color: var(--text-secondary);"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-center">
+                        <div class="avatar-upload">
+                            <div id="avatar-preview" class="avatar mb-4"></div>
+                            <input type="file" id="avatar-input" accept="image/*" class="hidden">
+                            <button class="text-sm font-medium" style="color: var(--primary);">Cambiar foto de perfil</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="full-name" class="block text-sm font-medium mb-1">Nombre completo</label>
+                        <input type="text" id="full-name" class="input-field w-full">
+                    </div>
+                    <div class="pt-4 flex justify-end space-x-3">
+                        <button id="cancel-profile-edit" class="px-4 py-2.5 rounded-lg" style="background: var(--border-color);">Cancelar</button>
+                        <button id="save-profile" class="px-4 py-2.5 rounded-lg text-white" style="background: var(--primary);">Guardar cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div id="recharge-balance-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
@@ -1005,17 +1092,17 @@
                 </div>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
+                        <label class="block text-sm font-medium mb-1">Monto a recargar (Bs)</label>
                         <input type="number" id="recharge-amount-input" class="input-field w-full" placeholder="Ej: 100" min="1">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
+                        <label class="block text-sm font-medium mb-1">Método de pago</label>
                         <div class="qr-code-container-desktop">
                             <img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago" onerror="this.style.display='none';">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
+                        <label class="block text-sm font-medium mb-1">Comprobante de pago</label>
                         <input type="file" id="recharge-receipt" accept="image/*" class="hidden">
                         <label for="recharge-receipt" class="file-input-label-desktop">
                             <i class="fas fa-cloud-upload-alt"></i> Seleccionar imagen
@@ -1023,7 +1110,7 @@
                         </label>
                     </div>
                     <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg" style="background: var(--border-color); color: var(--text-primary);">Cancelar</button>
+                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg" style="background: var(--border-color);">Cancelar</button>
                         <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg text-white flex items-center justify-center" style="background: var(--primary);">
                             <span id="confirm-recharge-balance-text">Enviar solicitud</span>
                             <div id="confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
@@ -1033,7 +1120,6 @@
             </div>
         </div>
         
-        <!-- Modal enviar dinero desktop -->
         <div id="send-money-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
             <div class="modal-overlay absolute inset-0"></div>
             <div class="modal-content w-full max-w-md p-6">
@@ -1060,7 +1146,6 @@
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
         
-        // Token del bot de Telegram para recargas
         const RECHARGE_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
         const RECHARGE_CHAT_ID = '-5292349166';
         
@@ -1086,51 +1171,35 @@
             setTimeout(() => { toast.remove(); }, 3000);
         };
 
-        // FUNCIÓN CORREGIDA PARA ENVIAR SOLICITUD DE RECARGA
         const sendRechargeRequest = async (data, receiptFile) => {
             try {
-                // 1. Enviar mensaje de texto primero
-                const textMessage = `🔔 NUEVA SOLICITUD DE RECARGA\n\n👤 Nombre: ${data.name}\n📞 Teléfono: ${data.phone}\n💰 Monto: ${data.amount} Bs\n📧 Email: ${data.email}\n🕐 Fecha: ${new Date().toLocaleString()}`;
-                
                 const messageResponse = await fetch(`https://api.telegram.org/bot${RECHARGE_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: RECHARGE_CHAT_ID,
-                        text: textMessage
+                        text: `🔔 NUEVA SOLICITUD DE RECARGA\n\n👤 Nombre: ${data.name}\n📞 Teléfono: ${data.phone}\n💰 Monto: ${data.amount} Bs\n📧 Email: ${data.email}\n🕐 Fecha: ${new Date().toLocaleString()}`
                     })
                 });
                 
                 const messageData = await messageResponse.json();
-                console.log('Respuesta del mensaje:', messageData);
+                if (!messageData.ok) throw new Error(messageData.description || 'Error al enviar mensaje');
                 
-                if (!messageData.ok) {
-                    throw new Error(`Error al enviar mensaje: ${messageData.description || 'Error desconocido'}`);
-                }
-                
-                // 2. Enviar la foto del comprobante si existe
                 if (receiptFile) {
                     const formData = new FormData();
                     formData.append('chat_id', RECHARGE_CHAT_ID);
                     formData.append('photo', receiptFile);
                     formData.append('caption', `Comprobante de ${data.name} - ${data.amount} Bs`);
                     
-                    const photoResponse = await fetch(`https://api.telegram.org/bot${RECHARGE_BOT_TOKEN}/sendPhoto`, {
+                    await fetch(`https://api.telegram.org/bot${RECHARGE_BOT_TOKEN}/sendPhoto`, {
                         method: 'POST',
                         body: formData
                     });
-                    
-                    const photoData = await photoResponse.json();
-                    console.log('Respuesta de la foto:', photoData);
-                    
-                    if (!photoData.ok) {
-                        console.warn('La foto no se pudo enviar, pero el mensaje sí se envió');
-                    }
                 }
                 
                 return true;
             } catch (error) {
-                console.error('Error en sendRechargeRequest:', error);
+                console.error('Error:', error);
                 throw error;
             }
         };
@@ -1158,13 +1227,29 @@
 
         const loadUserProfile = async (userId) => {
             const { data, error } = await supabase.from('user_profiles').select('*').eq('id', userId).single();
-            if (error && error.code !== 'PGRST116') { console.error('Error loading profile:', error); return null; }
+            if (error && error.code !== 'PGRST116') { console.error('Error:', error); return null; }
             return data;
+        };
+
+        const updateUserProfile = async (userId, updates) => {
+            const { data, error } = await supabase.from('user_profiles').update(updates).eq('id', userId).select().single();
+            if (error) { console.error('Error:', error); return null; }
+            return data;
+        };
+
+        const uploadAvatar = async (userId, file) => {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${userId}.${fileExt}`;
+            const filePath = `avatars/${fileName}`;
+            const { error } = await supabase.storage.from('avatars').upload(filePath, file, { cacheControl: '3600', upsert: true });
+            if (error) { console.error('Error:', error); return null; }
+            const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
+            return publicUrl;
         };
 
         const calculateBalance = async (userId) => {
             const { data, error } = await supabase.from('transactions').select('amount, type').eq('user_id', userId).eq('status', 'completed');
-            if (error) { console.error('Error calculating balance:', error); return 0; }
+            if (error) { console.error('Error:', error); return 0; }
             let balance = 0;
             data.forEach(transaction => {
                 if (transaction.type === 'deposit') balance += transaction.amount;
@@ -1177,7 +1262,13 @@
             let query = supabase.from('transactions').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(20);
             if (filter !== 'all') query = query.eq('type', filter);
             const { data, error } = await query;
-            if (error) { console.error('Error loading transactions:', error); return []; }
+            if (error) { console.error('Error:', error); return []; }
+            return data;
+        };
+
+        const createTransaction = async (userId, amount, type, description = '', metadata = {}) => {
+            const { data, error } = await supabase.from('transactions').insert([{ user_id: userId, amount, type, description, metadata, status: 'completed' }]).select().single();
+            if (error) { console.error('Error:', error); return null; }
             return data;
         };
 
@@ -1267,7 +1358,6 @@
             userProfile = await loadUserProfile(currentUser.id);
             if (!userProfile) { window.location.href = 'index.html'; return; }
             
-            // Llenar datos del perfil
             document.querySelectorAll('#user-name, #mobile-user-name').forEach(el => { if (el) el.textContent = userProfile?.full_name || currentUser.email.split('@')[0]; });
             document.querySelectorAll('#user-email, #mobile-user-email').forEach(el => { if (el) el.textContent = currentUser.email; });
             document.querySelectorAll('#profile-phone, #mobile-profile-phone').forEach(el => { if (el) el.textContent = userProfile?.phone || 'No especificado'; });
@@ -1288,7 +1378,6 @@
                 }
             });
             
-            // Navegación mobile
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1307,12 +1396,10 @@
                 });
             });
             
-            // Filtros
             document.querySelectorAll('#transactions-filter, #mobile-transactions-filter').forEach(filter => {
                 if (filter) filter.addEventListener('change', updateUI);
             });
             
-            // Logout
             document.querySelectorAll('#logout-btn, #mobile-logout-btn, #mobile-logout-btn-profile').forEach(btn => {
                 btn.addEventListener('click', async () => {
                     await supabase.auth.signOut();
@@ -1320,7 +1407,6 @@
                 });
             });
             
-            // Tema
             const setTheme = (theme) => {
                 if (theme === 'dark') {
                     document.documentElement.setAttribute('data-theme', 'dark');
@@ -1342,7 +1428,67 @@
             document.getElementById('mobile-theme-toggle')?.addEventListener('click', toggleTheme);
             document.getElementById('desktop-theme-toggle')?.addEventListener('click', toggleTheme);
             
-            // Recarga de saldo - ABRIR MODAL
+            // EDITAR PERFIL
+            document.querySelectorAll('#edit-profile-btn, #mobile-edit-profile-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#full-name, #mobile-full-name').forEach(el => { if (el) el.value = userProfile?.full_name || ''; });
+                    document.querySelectorAll('#avatar-preview, #mobile-avatar-preview').forEach(avatarPreview => {
+                        if (avatarPreview) {
+                            if (userProfile?.avatar_url) avatarPreview.innerHTML = `<img src="${userProfile.avatar_url}" alt="Avatar">`;
+                            else avatarPreview.textContent = getInitials(userProfile?.full_name || currentUser.email);
+                        }
+                    });
+                    if (btn.id === 'mobile-edit-profile-btn') openMobileModal('mobile-profile-modal');
+                    else openModal('profile-modal');
+                });
+            });
+            
+            document.querySelectorAll('#close-profile-modal, #mobile-close-profile-modal, #cancel-profile-edit, #mobile-cancel-profile-edit').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.id.includes('mobile')) closeMobileModal('mobile-profile-modal');
+                    else closeModal('profile-modal');
+                });
+            });
+            
+            document.querySelectorAll('#mobile-change-avatar-btn').forEach(btn => {
+                btn.addEventListener('click', () => document.getElementById('mobile-avatar-input').click());
+            });
+            
+            document.querySelectorAll('#avatar-input, #mobile-avatar-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const previewId = this.id === 'mobile-avatar-input' ? 'mobile-avatar-preview' : 'avatar-preview';
+                    const preview = document.getElementById(previewId);
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) { preview.innerHTML = `<img src="${e.target.result}" alt="Avatar">`; };
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('#save-profile, #mobile-save-profile').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const fullName = document.getElementById(btn.id === 'mobile-save-profile' ? 'mobile-full-name' : 'full-name').value;
+                    const updates = { full_name: fullName };
+                    const fileInput = document.getElementById(btn.id === 'mobile-save-profile' ? 'mobile-avatar-input' : 'avatar-input');
+                    if (fileInput.files.length > 0) {
+                        const publicUrl = await uploadAvatar(currentUser.id, fileInput.files[0]);
+                        if (publicUrl) updates.avatar_url = publicUrl;
+                    }
+                    const updatedProfile = await updateUserProfile(currentUser.id, updates);
+                    if (updatedProfile) {
+                        userProfile = updatedProfile;
+                        document.querySelectorAll('#user-name, #mobile-user-name, #mobile-profile-name').forEach(el => { if (el) el.textContent = userProfile.full_name; });
+                        showToast('Perfil actualizado correctamente');
+                        if (btn.id === 'mobile-save-profile') closeMobileModal('mobile-profile-modal');
+                        else closeModal('profile-modal');
+                    } else {
+                        showToast('Error al actualizar el perfil', 'error');
+                    }
+                });
+            });
+            
+            // RECARGA DE SALDO
             document.querySelectorAll('#recharge-balance-btn, #mobile-recharge-balance-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     ['recharge-amount-input', 'mobile-recharge-amount-input'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
@@ -1353,7 +1499,6 @@
                 });
             });
             
-            // CERRAR MODAL DE RECARGA
             document.querySelectorAll('#close-recharge-balance-modal, #mobile-close-recharge-balance-modal, #cancel-recharge-balance, #mobile-cancel-recharge-balance').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (btn.id.includes('mobile')) closeMobileModal('mobile-recharge-balance-modal');
@@ -1361,7 +1506,6 @@
                 });
             });
             
-            // MOSTRAR NOMBRE DE ARCHIVO
             document.querySelectorAll('#recharge-receipt, #mobile-recharge-receipt').forEach(input => {
                 input.addEventListener('change', function() {
                     const fileNameElement = this.id === 'mobile-recharge-receipt' ? document.getElementById('mobile-recharge-file-name') : document.getElementById('recharge-file-name');
@@ -1370,7 +1514,6 @@
                 });
             });
             
-            // ENVIAR SOLICITUD DE RECARGA - CORREGIDO
             document.querySelectorAll('#confirm-recharge-balance, #mobile-confirm-recharge-balance').forEach(btn => {
                 btn.addEventListener('click', async () => {
                     const isMobile = btn.id === 'mobile-confirm-recharge-balance';
@@ -1380,11 +1523,10 @@
                     const name = userProfile?.full_name || '';
                     const phone = userProfile?.phone || '';
                     
-                    // Validaciones
-                    if (!name) { showToast('No hay nombre configurado en tu perfil', 'error'); return; }
-                    if (!phone || phone.length < 7) { showToast('No hay número de teléfono configurado', 'error'); return; }
+                    if (!name) { showToast('No hay nombre configurado', 'error'); return; }
+                    if (!phone || phone.length < 7) { showToast('No hay teléfono configurado', 'error'); return; }
                     if (!amount || parseFloat(amount) <= 0) { showToast('Ingresa un monto válido', 'error'); return; }
-                    if (!receiptFile) { showToast('Selecciona un comprobante de pago', 'error'); return; }
+                    if (!receiptFile) { showToast('Selecciona un comprobante', 'error'); return; }
                     
                     const confirmText = document.getElementById(isMobile ? 'mobile-confirm-recharge-balance-text' : 'confirm-recharge-balance-text');
                     const confirmSpinner = document.getElementById(isMobile ? 'mobile-confirm-recharge-balance-spinner' : 'confirm-recharge-balance-spinner');
@@ -1394,23 +1536,15 @@
                     if (confirmSpinner) confirmSpinner.classList.remove('hidden');
                     
                     try {
-                        const rechargeData = { 
-                            name: name, 
-                            phone: phone, 
-                            amount: amount, 
-                            email: currentUser.email 
-                        };
-                        
+                        const rechargeData = { name, phone, amount, email: currentUser.email };
                         const success = await sendRechargeRequest(rechargeData, receiptFile);
-                        
                         if (success) {
                             showToast('✅ Solicitud enviada correctamente');
                             if (isMobile) closeMobileModal('mobile-recharge-balance-modal');
                             else closeModal('recharge-balance-modal');
                         }
                     } catch (error) {
-                        console.error('Error:', error);
-                        showToast('❌ Error al enviar: ' + error.message, 'error');
+                        showToast('❌ Error: ' + error.message, 'error');
                     } finally {
                         btn.disabled = false;
                         if (confirmText) confirmText.textContent = 'Enviar solicitud';
@@ -1419,7 +1553,7 @@
                 });
             });
             
-            // Enviar dinero
+            // ENVIAR DINERO
             document.querySelectorAll('#send-money-btn, #mobile-send-money-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (btn.id === 'mobile-send-money-btn') openMobileModal('mobile-send-money-modal');
@@ -1431,6 +1565,36 @@
                 btn.addEventListener('click', () => {
                     if (btn.id.includes('mobile')) closeMobileModal('mobile-send-money-modal');
                     else closeModal('send-money-modal');
+                });
+            });
+            
+            document.querySelectorAll('#confirm-send, #mobile-confirm-send').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const isMobile = btn.id === 'mobile-confirm-send';
+                    const recipientPhone = document.getElementById(isMobile ? 'mobile-recipient-phone' : 'recipient-phone').value;
+                    const amount = parseFloat(document.getElementById(isMobile ? 'mobile-send-amount' : 'send-amount').value);
+                    const description = document.getElementById(isMobile ? 'mobile-send-description' : 'send-description').value;
+                    
+                    if (!recipientPhone || recipientPhone.length < 7) { showToast('Número de teléfono inválido', 'error'); return; }
+                    if (!amount || amount <= 0) { showToast('Monto inválido', 'error'); return; }
+                    if (amount > currentBalance) { showToast('Saldo insuficiente', 'error'); return; }
+                    
+                    const { data: recipientUser, error: recipientError } = await supabase.from('user_profiles').select('id').eq('phone', recipientPhone).single();
+                    if (recipientError || !recipientUser) { showToast('El destinatario no está registrado', 'error'); return; }
+                    
+                    const sendTransaction = await createTransaction(currentUser.id, amount, 'transfer', description || `Transferencia a ${recipientPhone}`, { recipient: recipientPhone, type: 'send' });
+                    if (!sendTransaction) { showToast('Error al procesar la transferencia', 'error'); return; }
+                    
+                    const receiveTransaction = await createTransaction(recipientUser.id, amount, 'deposit', description || `Transferencia de ${currentUser.email}`, { sender: currentUser.email, type: 'receive' });
+                    
+                    if (receiveTransaction) {
+                        showToast(`Transferencia de ${amount} Bs enviada`);
+                        if (isMobile) closeMobileModal('mobile-send-money-modal');
+                        else closeModal('send-money-modal');
+                        updateUI();
+                    } else {
+                        showToast('Error al completar la transferencia', 'error');
+                    }
                 });
             });
             
