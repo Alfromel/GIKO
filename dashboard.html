@@ -49,8 +49,6 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            padding-top: var(--safe-area-inset-top);
-            padding-bottom: var(--safe-area-inset-bottom);
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -89,7 +87,6 @@
                 border-top: 1px solid var(--border-color);
                 display: flex;
                 z-index: 50;
-                padding-bottom: var(--safe-area-inset-bottom);
             }
             
             .nav-item {
@@ -116,11 +113,9 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding-top: calc(12px + var(--safe-area-inset-top));
             }
             
             .mobile-header-title { font-size: 18px; font-weight: 600; }
-            
             .mobile-header-actions { display: flex; align-items: center; gap: 12px; }
             
             .theme-toggle {
@@ -129,13 +124,6 @@
                 color: var(--text-primary);
                 font-size: 1.2rem;
                 cursor: pointer;
-                padding: 4px;
-                border-radius: 50%;
-                width: 32px;
-                height: 32px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
             }
             
             .mobile-card {
@@ -196,7 +184,6 @@
             }
             
             .mobile-transaction-details { flex: 1; }
-            
             .mobile-transaction-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
             .mobile-transaction-date { font-size: 12px; color: var(--text-secondary); }
             .mobile-transaction-amount { font-size: 14px; font-weight: 600; }
@@ -218,18 +205,6 @@
             }
             
             .mobile-tab.active { color: var(--primary); }
-            
-            .mobile-tab.active::after {
-                content: '';
-                position: absolute;
-                bottom: -1px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 40%;
-                height: 2px;
-                background: var(--primary);
-                border-radius: 2px;
-            }
             
             .mobile-modal {
                 position: fixed;
@@ -320,7 +295,7 @@
             
             .mobile-avatar img { width: 100%; height: 100%; object-fit: cover; }
             
-            /* TARJETA DE BALANCE EXACTA DE TOKTOK - MOBILE */
+            /* TARJETA DE BALANCE TOKTOK CON IMAGEN DE FONDO CONFIGURABLE */
             .mobile-balance-card {
                 background: linear-gradient(155deg, #1e1147 0%, #2d1b69 40%, #3b2682 100%);
                 color: white;
@@ -337,27 +312,32 @@
                 justify-content: space-between;
             }
             
-            .mobile-balance-card::before {
-                content: '';
+            .mobile-balance-card .card-background-image {
                 position: absolute;
-                top: -40px;
-                right: -40px;
-                width: 160px;
-                height: 160px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                opacity: 0.5;
+                z-index: 0;
                 pointer-events: none;
             }
             
-            .mobile-balance-card::after {
-                content: '';
+            .mobile-balance-card .mascot-overlay {
                 position: absolute;
-                bottom: -30px;
-                left: -30px;
-                width: 120px;
-                height: 120px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+                bottom: 10px;
+                right: 10px;
+                width: 80px;
+                height: 80px;
+                background-image: url('m.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                opacity: 0.9;
+                z-index: 1;
                 pointer-events: none;
             }
             
@@ -366,7 +346,7 @@
                 justify-content: space-between;
                 align-items: flex-start;
                 position: relative;
-                z-index: 1;
+                z-index: 2;
             }
             
             .mobile-card-chip-area {
@@ -386,76 +366,18 @@
                 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
             
-            .mobile-card-chip-icon i {
-                font-size: 14px;
-                color: #1e1147;
-            }
+            .mobile-card-chip-icon i { font-size: 14px; color: #1e1147; }
+            .mobile-card-contactless { font-size: 18px; color: rgba(255,255,255,0.6); }
+            .mobile-card-brand { font-size: 18px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.9); font-style: italic; }
             
-            .mobile-card-contactless {
-                font-size: 18px;
-                color: rgba(255,255,255,0.6);
-            }
+            .mobile-card-middle { position: relative; z-index: 2; margin: 8px 0; }
+            .mobile-card-balance-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 2px; font-weight: 500; }
+            .mobile-card-balance-amount { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
             
-            .mobile-card-brand {
-                font-size: 18px;
-                font-weight: 700;
-                letter-spacing: 1px;
-                color: rgba(255,255,255,0.9);
-                font-style: italic;
-            }
-            
-            .mobile-card-middle {
-                position: relative;
-                z-index: 1;
-                margin: 8px 0;
-            }
-            
-            .mobile-card-balance-label {
-                font-size: 10px;
-                text-transform: uppercase;
-                letter-spacing: 1.5px;
-                color: rgba(255,255,255,0.6);
-                margin-bottom: 2px;
-                font-weight: 500;
-            }
-            
-            .mobile-card-balance-amount {
-                font-size: 26px;
-                font-weight: 700;
-                letter-spacing: -0.5px;
-                color: #ffffff;
-                text-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            }
-            
-            .mobile-card-bottom {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-                position: relative;
-                z-index: 1;
-            }
-            
-            .mobile-card-user-name {
-                font-size: 11px;
-                font-weight: 600;
-                color: rgba(255,255,255,0.8);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            
-            .mobile-card-expiry {
-                font-size: 9px;
-                color: rgba(255,255,255,0.5);
-                text-align: right;
-                line-height: 1.3;
-            }
-            
-            .mobile-card-expiry span {
-                display: block;
-                font-size: 13px;
-                font-weight: 600;
-                color: rgba(255,255,255,0.9);
-            }
+            .mobile-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
+            .mobile-card-user-name { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.5px; }
+            .mobile-card-expiry { font-size: 9px; color: rgba(255,255,255,0.5); text-align: right; line-height: 1.3; }
+            .mobile-card-expiry span { display: block; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
             
             .mobile-card-recharge-btn {
                 width: 100%;
@@ -473,32 +395,14 @@
                 justify-content: center;
                 gap: 6px;
                 cursor: pointer;
-                transition: all 0.2s;
                 position: relative;
-                z-index: 1;
-            }
-            
-            .mobile-card-recharge-btn:active {
-                background: rgba(255,255,255,0.2);
-                transform: scale(0.98);
+                z-index: 2;
             }
             
             .desktop-only { display: none !important; }
             
-            .qr-code-container {
-                display: flex;
-                justify-content: center;
-                margin: 20px 0;
-            }
-            
-            .qr-code {
-                width: 200px;
-                height: 200px;
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                padding: 10px;
-                background: white;
-            }
+            .qr-code-container { display: flex; justify-content: center; margin: 20px 0; }
+            .qr-code { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; background: white; }
             
             .file-input-label {
                 display: block;
@@ -512,25 +416,7 @@
                 color: var(--text-primary);
             }
             
-            .file-input-label:hover {
-                border-color: var(--primary);
-                background: var(--primary);
-                color: white;
-            }
-            
-            .file-name {
-                font-size: 12px;
-                color: var(--text-secondary);
-                margin-top: 8px;
-                word-break: break-all;
-            }
-            
-            .creator-code-input {
-                background: #fff3cd;
-                border-color: #ffc107;
-                color: #856404;
-                font-weight: 500;
-            }
+            .file-name { font-size: 12px; color: var(--text-secondary); margin-top: 8px; word-break: break-all; }
         }
         
         @media (min-width: 769px) {
@@ -555,14 +441,13 @@
                 color: white;
                 background-color: var(--primary);
                 border: 4px solid var(--card-bg);
-                box-shadow: 0 8px 25px rgba(37, 99, 235, 0.1);
                 position: relative;
                 overflow: hidden;
             }
             
             .avatar img { width: 100%; height: 100%; object-fit: cover; }
             
-            /* TARJETA DE BALANCE EXACTA DE TOKTOK - DESKTOP */
+            /* TARJETA DE BALANCE TOKTOK DESKTOP */
             .balance-card {
                 background: linear-gradient(155deg, #1e1147 0%, #2d1b69 40%, #3b2682 100%);
                 color: white;
@@ -578,27 +463,32 @@
                 justify-content: space-between;
             }
             
-            .balance-card::before {
-                content: '';
+            .balance-card .card-background-image {
                 position: absolute;
-                top: -50px;
-                right: -50px;
-                width: 200px;
-                height: 200px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                opacity: 0.5;
+                z-index: 0;
                 pointer-events: none;
             }
             
-            .balance-card::after {
-                content: '';
+            .balance-card .mascot-overlay {
                 position: absolute;
-                bottom: -40px;
-                left: -40px;
-                width: 160px;
-                height: 160px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+                bottom: 15px;
+                right: 15px;
+                width: 100px;
+                height: 100px;
+                background-image: url('m.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                opacity: 0.9;
+                z-index: 1;
                 pointer-events: none;
             }
             
@@ -607,7 +497,7 @@
                 justify-content: space-between;
                 align-items: flex-start;
                 position: relative;
-                z-index: 1;
+                z-index: 2;
             }
             
             .desktop-card-chip-area {
@@ -627,76 +517,18 @@
                 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
             
-            .desktop-card-chip-icon i {
-                font-size: 16px;
-                color: #1e1147;
-            }
+            .desktop-card-chip-icon i { font-size: 16px; color: #1e1147; }
+            .desktop-card-contactless { font-size: 22px; color: rgba(255,255,255,0.6); }
+            .desktop-card-brand { font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); font-style: italic; }
             
-            .desktop-card-contactless {
-                font-size: 22px;
-                color: rgba(255,255,255,0.6);
-            }
+            .desktop-card-middle { position: relative; z-index: 2; margin: 12px 0; }
+            .desktop-card-balance-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 2px; font-weight: 500; }
+            .desktop-card-balance-amount { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
             
-            .desktop-card-brand {
-                font-size: 20px;
-                font-weight: 700;
-                letter-spacing: 1.5px;
-                color: rgba(255,255,255,0.9);
-                font-style: italic;
-            }
-            
-            .desktop-card-middle {
-                position: relative;
-                z-index: 1;
-                margin: 12px 0;
-            }
-            
-            .desktop-card-balance-label {
-                font-size: 11px;
-                text-transform: uppercase;
-                letter-spacing: 1.5px;
-                color: rgba(255,255,255,0.6);
-                margin-bottom: 2px;
-                font-weight: 500;
-            }
-            
-            .desktop-card-balance-amount {
-                font-size: 30px;
-                font-weight: 700;
-                letter-spacing: -0.5px;
-                color: #ffffff;
-                text-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            }
-            
-            .desktop-card-bottom {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-                position: relative;
-                z-index: 1;
-            }
-            
-            .desktop-card-user-name {
-                font-size: 13px;
-                font-weight: 600;
-                color: rgba(255,255,255,0.8);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            
-            .desktop-card-expiry {
-                font-size: 10px;
-                color: rgba(255,255,255,0.5);
-                text-align: right;
-                line-height: 1.3;
-            }
-            
-            .desktop-card-expiry span {
-                display: block;
-                font-size: 14px;
-                font-weight: 600;
-                color: rgba(255,255,255,0.9);
-            }
+            .desktop-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
+            .desktop-card-user-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.5px; }
+            .desktop-card-expiry { font-size: 10px; color: rgba(255,255,255,0.5); text-align: right; line-height: 1.3; }
+            .desktop-card-expiry span { display: block; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); }
             
             .desktop-card-recharge-btn {
                 width: 100%;
@@ -714,13 +546,8 @@
                 justify-content: center;
                 gap: 8px;
                 cursor: pointer;
-                transition: all 0.2s;
                 position: relative;
-                z-index: 1;
-            }
-            
-            .desktop-card-recharge-btn:hover {
-                background: rgba(255,255,255,0.18);
+                z-index: 2;
             }
             
             .input-field {
@@ -733,22 +560,11 @@
             
             .input-field:focus {
                 border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
                 outline: none;
-                background-color: var(--card-bg);
             }
             
-            .modal-overlay {
-                background-color: rgba(0, 0, 0, 0.7);
-                backdrop-filter: blur(10px);
-            }
-            
-            .modal-content {
-                background: var(--card-bg);
-                border-radius: 24px;
-                box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
-            }
-            
+            .modal-overlay { background-color: rgba(0, 0, 0, 0.7); }
+            .modal-content { background: var(--card-bg); border-radius: 24px; }
             .modal.active .modal-content { transform: translateY(0); opacity: 1; }
             
             .loading-spinner {
@@ -762,20 +578,8 @@
             
             @keyframes spin { to { transform: rotate(360deg); } }
             
-            .qr-code-container-desktop {
-                display: flex;
-                justify-content: center;
-                margin: 20px 0;
-            }
-            
-            .qr-code-desktop {
-                width: 200px;
-                height: 200px;
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                padding: 10px;
-                background: white;
-            }
+            .qr-code-container-desktop { display: flex; justify-content: center; margin: 20px 0; }
+            .qr-code-desktop { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; background: white; }
             
             .file-input-label-desktop {
                 display: block;
@@ -789,31 +593,9 @@
                 color: var(--text-primary);
             }
             
-            .file-input-label-desktop:hover {
-                border-color: var(--primary);
-                background: var(--primary);
-                color: white;
-            }
+            .file-name-desktop { font-size: 12px; color: var(--text-secondary); margin-top: 8px; word-break: break-all; }
             
-            .file-name-desktop {
-                font-size: 12px;
-                color: var(--text-secondary);
-                margin-top: 8px;
-                word-break: break-all;
-            }
-            
-            .creator-code-input-desktop {
-                background: #fff3cd;
-                border-color: #ffc107;
-                color: #856404;
-                font-weight: 500;
-            }
-            
-            .desktop-header-actions {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
+            .desktop-header-actions { display: flex; align-items: center; gap: 12px; }
             
             .theme-toggle-desktop {
                 background: none;
@@ -821,13 +603,6 @@
                 color: var(--text-primary);
                 font-size: 1.2rem;
                 cursor: pointer;
-                padding: 8px;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
             }
         }
         
@@ -848,8 +623,11 @@
         
         <div class="mobile-content" id="mobile-content">
             <div id="mobile-home-view">
-                <!-- TARJETA DE BALANCE EXACTA DE TOKTOK -->
+                <!-- TARJETA DE BALANCE CON IMAGEN DE FONDO CONFIGURABLE -->
                 <div class="mobile-balance-card">
+                    <div class="card-background-image" id="mobile-card-bg" style="background-image: url('https://comunidadescolar.com.bo/wp-content/uploads/2018/07/LaPazIllimani.jpg');"></div>
+                    <div class="mascot-overlay"></div>
+                    
                     <div class="mobile-card-top">
                         <div class="mobile-card-chip-area">
                             <div class="mobile-card-chip-icon"><i class="fas fa-microchip"></i></div>
@@ -918,6 +696,7 @@
                 </div>
             </div>
             
+            <!-- PERFIL ORIGINAL SIN MODIFICACIONES -->
             <div id="mobile-profile-view" class="hidden">
                 <div class="bg-gradient-to-br from-blue-600 to-blue-800 mx-4 mt-4 rounded-2xl p-6 text-white shadow-lg">
                     <div class="flex items-center space-x-4">
@@ -927,6 +706,24 @@
                         <div class="flex-1">
                             <h2 id="mobile-user-name" class="text-xl font-bold"></h2>
                             <p id="mobile-user-email" class="text-blue-100 text-sm mt-1"></p>
+                            <div class="flex items-center mt-2 text-blue-100">
+                                <i class="fas fa-star text-yellow-300 mr-1 text-xs"></i>
+                                <span class="text-xs">Miembro premium</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mt-6">
+                        <div class="bg-white/10 rounded-xl p-3 text-center backdrop-blur">
+                            <div class="text-xl font-bold" id="mobile-balance-small">Bs0</div>
+                            <div class="text-xs text-blue-100">Balance</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-3 text-center backdrop-blur">
+                            <div class="text-xl font-bold" id="mobile-transactions-count">0</div>
+                            <div class="text-xs text-blue-100">Movimientos</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-3 text-center backdrop-blur">
+                            <div class="text-xl font-bold" id="mobile-recharges-count">0</div>
+                            <div class="text-xs text-blue-100">Recargas</div>
                         </div>
                     </div>
                 </div>
@@ -960,6 +757,42 @@
                                 <div id="mobile-profile-created-at" class="font-medium" style="color: var(--text-primary);"></div>
                             </div>
                         </div>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3"><i class="fas fa-shield-alt"></i></div>
+                            <div>
+                                <div class="text-xs" style="color: var(--text-secondary);">Verificación</div>
+                                <div class="font-medium flex items-center" style="color: var(--text-primary);">
+                                    <i class="fas fa-check-circle text-green-500 mr-1 text-xs"></i>
+                                    Cuenta verificada
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-card mt-4">
+                    <div class="divide-y" style="border-color: var(--border-color);">
+                        <a href="seguridad.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background: var(--input-bg); color: var(--text-secondary);"><i class="fas fa-lock"></i></div>
+                                <span class="font-medium">Seguridad</span>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                        </a>
+                        <a href="ayuda.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background: var(--input-bg); color: var(--text-secondary);"><i class="fas fa-question-circle"></i></div>
+                                <span class="font-medium">Ayuda</span>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                        </a>
+                        <a href="acerca.html" class="flex items-center justify-between p-4 transition" style="color: var(--text-primary);">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background: var(--input-bg); color: var(--text-secondary);"><i class="fas fa-info-circle"></i></div>
+                                <span class="font-medium">Acerca de Giko</span>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                        </a>
                     </div>
                 </div>
                 
@@ -978,27 +811,25 @@
             <a href="#" class="nav-item" data-view="profile"><i class="fas fa-user"></i><span>Perfil</span></a>
         </div>
         
-        <!-- Modal para recarga de saldo -->
+        <!-- Modal recarga -->
         <div id="mobile-recharge-balance-modal" class="mobile-modal">
             <div class="mobile-modal-content">
                 <div class="mobile-modal-header">
                     <div class="mobile-modal-title">Recargar saldo</div>
                     <button id="mobile-close-recharge-balance-modal" class="mobile-modal-close"><i class="fas fa-times"></i></button>
                 </div>
-                
                 <div class="mb-4">
                     <label for="mobile-recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
                     <input type="number" id="mobile-recharge-amount-input" class="mobile-input" placeholder="Ej: 100" min="1">
                 </div>
-                
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
                     <div class="qr-code-container">
-                        <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago" onerror="this.src='https://via.placeholder.com/200x200?text=QR';">
+                        <img src="imagenes/qr.jpeg" class="qr-code" alt="QR de pago" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <p class="hidden text-center text-gray-500">QR no disponible</p>
                     </div>
                     <p class="text-sm text-center mt-2" style="color: var(--text-secondary);">Escanee el código QR para realizar el pago</p>
                 </div>
-                
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Comprobante de pago</label>
                     <input type="file" id="mobile-recharge-receipt" accept="image/*" class="hidden">
@@ -1007,7 +838,6 @@
                         <div id="mobile-recharge-file-name" class="file-name"></div>
                     </label>
                 </div>
-                
                 <button id="mobile-confirm-recharge-balance" class="mobile-btn mobile-btn-primary flex items-center justify-center">
                     <span id="mobile-confirm-recharge-balance-text">Enviar solicitud</span>
                     <div id="mobile-confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
@@ -1016,7 +846,7 @@
             </div>
         </div>
         
-        <!-- Modal para enviar dinero -->
+        <!-- Modal enviar dinero -->
         <div id="mobile-send-money-modal" class="mobile-modal">
             <div class="mobile-modal-content">
                 <div class="mobile-modal-header">
@@ -1045,9 +875,7 @@
     <div class="desktop-only">
         <header class="py-5 px-6 sticky top-0 z-20" style="background: var(--header-bg); border-bottom: 1px solid var(--border-color);">
             <div class="container mx-auto flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Giko</h1>
-                </div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Giko</h1>
                 <div class="desktop-header-actions">
                     <button id="desktop-theme-toggle" class="theme-toggle-desktop"><i class="fas fa-moon"></i></button>
                     <button id="logout-btn" class="flex items-center space-x-2 transition-colors" style="color: var(--text-secondary);">
@@ -1075,6 +903,10 @@
                                     <span class="text-sm" style="color: var(--text-secondary);">Miembro desde</span>
                                     <span id="profile-created-at" class="font-medium"></span>
                                 </div>
+                                <div class="flex justify-between items-center py-2.5 px-4 rounded-xl" style="background: var(--input-bg);">
+                                    <span class="text-sm" style="color: var(--text-secondary);">Verificación</span>
+                                    <span class="font-medium text-green-500 flex items-center"><i class="fas fa-check-circle mr-1"></i>Verificado</span>
+                                </div>
                             </div>
                             <button id="edit-profile-btn" class="mt-6 w-full py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 border font-medium" style="color: var(--primary); border-color: var(--primary); background: transparent;">
                                 <i class="fas fa-user-edit"></i><span>Editar nombre</span>
@@ -1082,8 +914,11 @@
                         </div>
                     </div>
                     
-                    <!-- TARJETA DE BALANCE EXACTA DE TOKTOK - DESKTOP -->
+                    <!-- TARJETA DE BALANCE DESKTOP -->
                     <div class="balance-card">
+                        <div class="card-background-image" id="desktop-card-bg" style="background-image: url('https://comunidadescolar.com.bo/wp-content/uploads/2018/07/LaPazIllimani.jpg');"></div>
+                        <div class="mascot-overlay"></div>
+                        
                         <div class="desktop-card-top">
                             <div class="desktop-card-chip-area">
                                 <div class="desktop-card-chip-icon"><i class="fas fa-microchip"></i></div>
@@ -1106,22 +941,22 @@
                     
                     <div class="space-y-4">
                         <h3 class="text-lg font-semibold px-2">Acciones rápidas</h3>
-                        <button id="send-money-btn" class="action-card btn-primary w-full p-5 flex items-center justify-between text-white">
+                        <button id="send-money-btn" class="w-full p-5 flex items-center justify-between text-white rounded-xl" style="background: var(--primary);">
                             <div class="flex items-center space-x-4">
-                                <div class="action-icon bg-white bg-opacity-20"><i class="fas fa-paper-plane"></i></div>
-                                <div class="text-left"><p class="text-sm font-medium">Enviar dinero</p></div>
+                                <i class="fas fa-paper-plane"></i>
+                                <span class="font-medium">Enviar dinero</span>
                             </div>
                         </button>
-                        <a href="tienda.html" class="action-card w-full p-5 flex items-center justify-between text-white" style="background: #172554;">
+                        <a href="tienda.html" class="w-full p-5 flex items-center justify-between text-white rounded-xl" style="background: #172554;">
                             <div class="flex items-center space-x-4">
-                                <div class="action-icon bg-white bg-opacity-20"><i class="fas fa-store"></i></div>
-                                <div class="text-left"><p class="text-sm font-medium">Shop</p></div>
+                                <i class="fas fa-store"></i>
+                                <span class="font-medium">Shop</span>
                             </div>
                         </a>
-                        <a href="juegos.html" class="action-card w-full p-5 flex items-center justify-between text-white" style="background: #2563eb;">
+                        <a href="juegos.html" class="w-full p-5 flex items-center justify-between text-white rounded-xl" style="background: #2563eb;">
                             <div class="flex items-center space-x-4">
-                                <div class="action-icon bg-white bg-opacity-20"><i class="fas fa-gamepad"></i></div>
-                                <div class="text-left"><p class="text-sm font-medium">Juegos</p></div>
+                                <i class="fas fa-gamepad"></i>
+                                <span class="font-medium">Juegos</span>
                             </div>
                         </a>
                     </div>
@@ -1132,14 +967,14 @@
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-6">
                                 <h3 class="text-lg font-semibold">Historial de transacciones</h3>
-                                <select id="transactions-filter" class="input-field select-field pr-10 text-sm">
+                                <select id="transactions-filter" class="input-field text-sm">
                                     <option value="all">Todas</option>
                                     <option value="deposit">Ingresos</option>
                                     <option value="withdrawal">Retiros</option>
                                     <option value="transfer">Transferencias</option>
                                 </select>
                             </div>
-                            <div class="overflow-x-auto scrollbar-hide">
+                            <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y" style="border-color: var(--border-color);">
                                     <thead>
                                         <tr>
@@ -1149,7 +984,7 @@
                                             <th class="px-6 py-3 text-right text-xs font-medium uppercase">Monto</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="transactions-list" class="divide-y" style="border-color: var(--border-color);">
+                                    <tbody id="transactions-list" class="divide-y">
                                         <tr><td colspan="4" class="px-6 py-8 text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2"></i></td></tr>
                                     </tbody>
                                 </table>
@@ -1170,13 +1005,13 @@
                 </div>
                 <div class="space-y-4">
                     <div>
-                        <label for="recharge-amount-input" class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
+                        <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Monto a recargar (Bs)</label>
                         <input type="number" id="recharge-amount-input" class="input-field w-full" placeholder="Ej: 100" min="1">
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1" style="color: var(--text-secondary);">Método de pago</label>
                         <div class="qr-code-container-desktop">
-                            <img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago" onerror="this.src='https://via.placeholder.com/200x200?text=QR';">
+                            <img src="imagenes/qr.jpeg" class="qr-code-desktop" alt="QR de pago" onerror="this.style.display='none';">
                         </div>
                     </div>
                     <div>
@@ -1188,8 +1023,8 @@
                         </label>
                     </div>
                     <div class="pt-4 flex justify-end space-x-3">
-                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg transition-colors font-medium" style="background: var(--border-color); color: var(--text-primary);">Cancelar</button>
-                        <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg text-white transition-colors font-medium flex items-center justify-center min-w-32" style="background: var(--primary);">
+                        <button id="cancel-recharge-balance" class="px-4 py-2.5 rounded-lg" style="background: var(--border-color); color: var(--text-primary);">Cancelar</button>
+                        <button id="confirm-recharge-balance" class="px-4 py-2.5 rounded-lg text-white flex items-center justify-center" style="background: var(--primary);">
                             <span id="confirm-recharge-balance-text">Enviar solicitud</span>
                             <div id="confirm-recharge-balance-spinner" class="loading-spinner ml-2 hidden"></div>
                         </button>
@@ -1207,9 +1042,9 @@
                     <button id="close-send-modal" style="color: var(--text-secondary);"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="space-y-4">
-                    <div><label for="recipient-phone" class="block text-sm font-medium mb-1">Teléfono del destinatario</label><input type="tel" id="recipient-phone" class="input-field w-full" placeholder="Ej: 77712345"></div>
-                    <div><label for="send-amount" class="block text-sm font-medium mb-1">Monto</label><input type="number" id="send-amount" class="input-field w-full" min="1"></div>
-                    <div><label for="send-description" class="block text-sm font-medium mb-1">Descripción (opcional)</label><textarea id="send-description" rows="2" class="input-field w-full"></textarea></div>
+                    <div><label class="block text-sm font-medium mb-1">Teléfono del destinatario</label><input type="tel" id="recipient-phone" class="input-field w-full" placeholder="Ej: 77712345"></div>
+                    <div><label class="block text-sm font-medium mb-1">Monto</label><input type="number" id="send-amount" class="input-field w-full" min="1"></div>
+                    <div><label class="block text-sm font-medium mb-1">Descripción (opcional)</label><textarea id="send-description" rows="2" class="input-field w-full"></textarea></div>
                     <div class="pt-4 flex justify-end space-x-3">
                         <button id="cancel-send" class="px-4 py-2.5 rounded-lg" style="background: var(--border-color);">Cancelar</button>
                         <button id="confirm-send" class="px-4 py-2.5 rounded-lg text-white" style="background: var(--primary);">Enviar dinero</button>
@@ -1225,6 +1060,7 @@
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
         
+        // Token del bot de Telegram para recargas
         const RECHARGE_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
         const RECHARGE_CHAT_ID = '-5292349166';
         
@@ -1250,26 +1086,29 @@
             setTimeout(() => { toast.remove(); }, 3000);
         };
 
+        // FUNCIÓN CORREGIDA PARA ENVIAR SOLICITUD DE RECARGA
         const sendRechargeRequest = async (data, receiptFile) => {
             try {
-                // Enviar mensaje de texto
+                // 1. Enviar mensaje de texto primero
+                const textMessage = `🔔 NUEVA SOLICITUD DE RECARGA\n\n👤 Nombre: ${data.name}\n📞 Teléfono: ${data.phone}\n💰 Monto: ${data.amount} Bs\n📧 Email: ${data.email}\n🕐 Fecha: ${new Date().toLocaleString()}`;
+                
                 const messageResponse = await fetch(`https://api.telegram.org/bot${RECHARGE_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: RECHARGE_CHAT_ID,
-                        text: `🔔 NUEVA SOLICITUD DE RECARGA\n\n👤 Nombre: ${data.name}\n📞 Teléfono: ${data.phone}\n💰 Monto: ${data.amount} Bs\n📧 Email: ${currentUser.email}\n🕐 Fecha: ${new Date().toLocaleString()}`,
-                        parse_mode: 'HTML'
+                        text: textMessage
                     })
                 });
                 
                 const messageData = await messageResponse.json();
+                console.log('Respuesta del mensaje:', messageData);
+                
                 if (!messageData.ok) {
-                    console.error('Error enviando mensaje:', messageData);
-                    throw new Error('Error al enviar el mensaje a Telegram');
+                    throw new Error(`Error al enviar mensaje: ${messageData.description || 'Error desconocido'}`);
                 }
                 
-                // Enviar comprobante si existe
+                // 2. Enviar la foto del comprobante si existe
                 if (receiptFile) {
                     const formData = new FormData();
                     formData.append('chat_id', RECHARGE_CHAT_ID);
@@ -1282,9 +1121,10 @@
                     });
                     
                     const photoData = await photoResponse.json();
+                    console.log('Respuesta de la foto:', photoData);
+                    
                     if (!photoData.ok) {
-                        console.warn('Error enviando foto:', photoData);
-                        // No lanzamos error, el mensaje ya se envió
+                        console.warn('La foto no se pudo enviar, pero el mensaje sí se envió');
                     }
                 }
                 
@@ -1347,10 +1187,9 @@
             const mobileFullContainer = document.getElementById('mobile-transactions-full-list');
             
             if (transactions.length === 0) {
-                const emptyState = '<div class="w-full text-center py-8"><p>No hay transacciones</p></div>';
-                if (container) container.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center">No hay transacciones</td></tr>`;
-                if (mobileContainer) mobileContainer.innerHTML = emptyState;
-                if (mobileFullContainer) mobileFullContainer.innerHTML = emptyState;
+                if (container) container.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center">No hay transacciones</td></tr>';
+                if (mobileContainer) mobileContainer.innerHTML = '<div class="w-full text-center py-8">No hay transacciones</div>';
+                if (mobileFullContainer) mobileFullContainer.innerHTML = '<div class="w-full text-center py-8">No hay transacciones</div>';
                 return;
             }
             
@@ -1405,7 +1244,7 @@
         const updateUI = async () => {
             if (!currentUser) return;
             currentBalance = await calculateBalance(currentUser.id);
-            document.querySelectorAll('#balance, #mobile-balance').forEach(el => { if (el) el.textContent = formatCurrency(currentBalance); });
+            document.querySelectorAll('#balance, #mobile-balance, #mobile-balance-small').forEach(el => { if (el) el.textContent = formatCurrency(currentBalance); });
             
             const userName = userProfile?.full_name || currentUser.email?.split('@')[0] || 'USUARIO';
             const shortName = userName.length > 18 ? userName.substring(0, 18).toUpperCase() : userName.toUpperCase();
@@ -1415,6 +1254,9 @@
             const mobileFilter = document.getElementById('mobile-transactions-filter')?.value || 'all';
             const transactions = await loadTransactions(currentUser.id, filter || mobileFilter);
             renderTransactions(transactions);
+            
+            const transactionCount = document.getElementById('mobile-transactions-count');
+            if (transactionCount) transactionCount.textContent = transactions.length;
         };
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -1500,7 +1342,7 @@
             document.getElementById('mobile-theme-toggle')?.addEventListener('click', toggleTheme);
             document.getElementById('desktop-theme-toggle')?.addEventListener('click', toggleTheme);
             
-            // Recarga de saldo
+            // Recarga de saldo - ABRIR MODAL
             document.querySelectorAll('#recharge-balance-btn, #mobile-recharge-balance-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     ['recharge-amount-input', 'mobile-recharge-amount-input'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
@@ -1511,6 +1353,7 @@
                 });
             });
             
+            // CERRAR MODAL DE RECARGA
             document.querySelectorAll('#close-recharge-balance-modal, #mobile-close-recharge-balance-modal, #cancel-recharge-balance, #mobile-cancel-recharge-balance').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (btn.id.includes('mobile')) closeMobileModal('mobile-recharge-balance-modal');
@@ -1518,6 +1361,7 @@
                 });
             });
             
+            // MOSTRAR NOMBRE DE ARCHIVO
             document.querySelectorAll('#recharge-receipt, #mobile-recharge-receipt').forEach(input => {
                 input.addEventListener('change', function() {
                     const fileNameElement = this.id === 'mobile-recharge-receipt' ? document.getElementById('mobile-recharge-file-name') : document.getElementById('recharge-file-name');
@@ -1526,7 +1370,7 @@
                 });
             });
             
-            // CORRECCIÓN DEL ENVÍO DE SOLICITUD DE RECARGA
+            // ENVIAR SOLICITUD DE RECARGA - CORREGIDO
             document.querySelectorAll('#confirm-recharge-balance, #mobile-confirm-recharge-balance').forEach(btn => {
                 btn.addEventListener('click', async () => {
                     const isMobile = btn.id === 'mobile-confirm-recharge-balance';
@@ -1536,8 +1380,9 @@
                     const name = userProfile?.full_name || '';
                     const phone = userProfile?.phone || '';
                     
+                    // Validaciones
                     if (!name) { showToast('No hay nombre configurado en tu perfil', 'error'); return; }
-                    if (!phone || phone.length < 7) { showToast('No hay número de teléfono configurado en tu perfil', 'error'); return; }
+                    if (!phone || phone.length < 7) { showToast('No hay número de teléfono configurado', 'error'); return; }
                     if (!amount || parseFloat(amount) <= 0) { showToast('Ingresa un monto válido', 'error'); return; }
                     if (!receiptFile) { showToast('Selecciona un comprobante de pago', 'error'); return; }
                     
@@ -1549,19 +1394,23 @@
                     if (confirmSpinner) confirmSpinner.classList.remove('hidden');
                     
                     try {
-                        const rechargeData = { name, phone, amount, email: currentUser.email };
+                        const rechargeData = { 
+                            name: name, 
+                            phone: phone, 
+                            amount: amount, 
+                            email: currentUser.email 
+                        };
+                        
                         const success = await sendRechargeRequest(rechargeData, receiptFile);
                         
                         if (success) {
-                            showToast('Solicitud de recarga enviada correctamente');
+                            showToast('✅ Solicitud enviada correctamente');
                             if (isMobile) closeMobileModal('mobile-recharge-balance-modal');
                             else closeModal('recharge-balance-modal');
-                        } else {
-                            throw new Error('Error al enviar la solicitud');
                         }
                     } catch (error) {
-                        console.error('Error en el proceso de recarga:', error);
-                        showToast('Error al enviar la solicitud. Intenta de nuevo.', 'error');
+                        console.error('Error:', error);
+                        showToast('❌ Error al enviar: ' + error.message, 'error');
                     } finally {
                         btn.disabled = false;
                         if (confirmText) confirmText.textContent = 'Enviar solicitud';
