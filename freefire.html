@@ -81,9 +81,42 @@
             z-index: 1;
         }
 
+        /* ---- Logo GIKO ---- */
+        .giko-logo {
+            text-align: center;
+            padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .giko-logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--orange-light) 0%, var(--orange-main) 50%, var(--orange-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
+            display: inline-block;
+            position: relative;
+        }
+
+        .giko-logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--orange-main), transparent);
+            border-radius: 2px;
+        }
+
         /* ---- Contenido ---- */
         .games-container {
-            padding: calc(env(safe-area-inset-top, 0px) + 20px) 16px 30px;
+            padding: 10px 16px 30px;
             animation: fade-in-up 0.5s ease-out;
         }
 
@@ -534,6 +567,10 @@
 </head>
 <body>
     <div class="app-container">
+        <div class="giko-logo">
+            <span class="giko-logo-text">GIKO</span>
+        </div>
+
         <div class="games-container">
             <div class="form-card">
                 <div class="section-header">
