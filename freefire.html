@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Recarga de Free Fire - GIKO</title>
+    <title>Recarga de Diamantes - GIKO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1A1A1A">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
         :root {
             --black-deep: #0F0F0F;
             --black-mid: #1A1A1A;
@@ -22,15 +23,32 @@
             --muted: #A0A0A0;
             --hairline: #383838;
             --bg: #121212;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Inter', -apple-system, "SF Pro Text", system-ui, sans-serif;
             background-color: var(--bg);
             color: var(--ink);
-            margin: 0;
-            padding: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+
         .app-container {
             max-width: 480px;
             margin: 0 auto;
@@ -39,399 +57,701 @@
             position: relative;
             padding-bottom: 40px;
         }
-        /* ---- Header negro y rojo ---- */
+
+        /* ---- Header minimalista y elegante ---- */
         .mobile-header {
-            background: linear-gradient(180deg, var(--black-mid) 0%, var(--black-deep) 100%);
+            background: linear-gradient(180deg, #1E1E1E 0%, #0F0F0F 100%);
             color: white;
-            padding: calc(env(safe-area-inset-top, 0px) + 18px) 20px 26px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px 24px;
+            border-bottom-left-radius: var(--radius-xl);
+            border-bottom-right-radius: var(--radius-xl);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
         }
+
+        .mobile-header::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -20%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(229, 57, 53, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .mobile-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(229, 57, 53, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
         .nav-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
+
         .back-arrow {
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             text-decoration: none;
-            background: rgba(229, 57, 53, 0.25);
-            width: 34px;
-            height: 34px;
+            background: rgba(255, 255, 255, 0.08);
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
+
+        .back-arrow:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        .back-arrow:active {
+            transform: scale(0.95);
+        }
+
         .nav-title {
-            font-size: 15px;
-            font-weight: 600;
-            opacity: 0.85;
+            font-size: 16px;
+            font-weight: 700;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
-        .nav-spacer { width: 34px; }
+
+        .nav-spacer {
+            width: 38px;
+        }
+
         .header-game-row {
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
         }
+
         .game-badge {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--red-main) 0%, var(--red-dark) 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: white;
+            font-size: 28px;
+            color: var(--red-main);
             flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(229, 57, 53, 0.2);
+            border: 1px solid rgba(229, 57, 53, 0.3);
+            position: relative;
+            overflow: hidden;
         }
+
+        .game-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(229, 57, 53, 0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
         .header-game-title {
-            font-size: 21px;
-            font-weight: 800;
-            letter-spacing: -0.4px;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FF6B6B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .header-game-sub {
             font-size: 13px;
-            opacity: 0.72;
-            margin-top: 1px;
+            opacity: 0.7;
+            margin-top: 4px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
-        /* ---- Contenido ---- */
+
+        /* ---- Contenido con animaciones de entrada ---- */
         .games-container {
-            padding: 20px 16px 30px;
+            padding: 24px 16px 30px;
+            animation: fade-in-up 0.6s ease-out;
         }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .form-card {
-            background: var(--black-mid);
-            border-radius: 22px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 26px rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--hairline);
-            padding: 20px;
+            background: linear-gradient(180deg, #1E1E1E 0%, #1A1A1A 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px 18px;
+            position: relative;
+            overflow: hidden;
         }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(229, 57, 53, 0.4), transparent);
+        }
+
         .field-label {
             font-size: 13px;
             font-weight: 600;
             color: var(--ink);
             margin-bottom: 8px;
             display: block;
+            letter-spacing: -0.1px;
         }
+
         .input-field {
             width: 100%;
-            padding: 13px 15px;
-            border: 1.5px solid var(--hairline);
-            border-radius: 14px;
+            padding: 14px 16px;
+            border: 2px solid var(--hairline);
+            border-radius: var(--radius-md);
             font-size: 15px;
-            margin-bottom: 16px;
-            background: var(--black-light);
+            margin-bottom: 18px;
+            background: #1E1E1E;
             color: var(--ink);
-            transition: all 0.2s;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
         }
-        .input-field::placeholder { color: #707070; }
+
+        .input-field::placeholder {
+            color: #6B6B6B;
+        }
+
         .input-field:focus {
             border-color: var(--red-main);
             outline: none;
             box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.15);
+            background: #222222;
         }
+
         .section-eyebrow {
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
-            color: var(--muted);
+            color: var(--red-main);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 4px 0 10px;
+            letter-spacing: 1px;
+            margin: 8px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        /* ---- Grid de paquetes: 3 columnas ---- */
+
+        .section-eyebrow::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(229, 57, 53, 0.3), transparent);
+        }
+
+        /* ---- Grid de paquetes mejorado ---- */
         .package-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 9px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 24px;
         }
+
         .package-card {
-            background: var(--black-light);
-            border: 1.5px solid var(--hairline);
-            border-radius: 15px;
-            padding: 10px 6px;
+            background: linear-gradient(180deg, #222222 0%, #1A1A1A 100%);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-md);
+            padding: 14px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            transition: all 0.15s ease;
+            transition: var(--transition);
             cursor: pointer;
             aspect-ratio: 1 / 1;
             position: relative;
+            overflow: hidden;
         }
+
+        .package-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.05), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .package-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(229, 57, 53, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .package-card:hover::before {
+            opacity: 1;
+        }
+
         .package-card:active {
             transform: scale(0.96);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
+
         .package-card.selected {
             border-color: var(--red-main);
-            background: rgba(229, 57, 53, 0.12);
-            box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.18);
+            background: linear-gradient(180deg, rgba(229, 57, 53, 0.2) 0%, rgba(229, 57, 53, 0.1) 100%);
+            box-shadow: 0 8px 24px rgba(229, 57, 53, 0.3), 0 0 0 3px rgba(229, 57, 53, 0.15);
+            animation: selected-pop 0.3s ease-out;
         }
-        .package-card.selected .package-icon { color: var(--red-main); }
-        .package-icon {
-            font-size: 15px;
+
+        @keyframes selected-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .package-card.selected .package-icon {
             color: var(--red-main);
-            margin-bottom: 4px;
+            animation: icon-bounce 0.5s ease-out;
         }
+
+        @keyframes icon-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .package-icon {
+            font-size: 24px;
+            color: var(--red-main);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 8px rgba(229, 57, 53, 0.3));
+        }
+
         .package-main {
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--ink);
-            line-height: 1.15;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
         }
+
         .package-bonus {
-            font-size: 9.5px;
-            font-weight: 600;
+            font-size: 10px;
+            font-weight: 700;
             color: #4ADE80;
-            margin-top: 1px;
-            line-height: 1.1;
+            margin-top: 3px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
         }
+
         .package-label {
-            font-size: 9.5px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--muted);
-            margin-top: 2px;
-            line-height: 1.15;
-            padding: 0 2px;
+            margin-top: 4px;
+            line-height: 1.2;
+            padding: 0 4px;
+            position: relative;
+            z-index: 1;
         }
+
         .package-price {
-            font-size: 11.5px;
+            font-size: 12px;
             font-weight: 700;
             color: white;
-            margin-top: 5px;
-            background: rgba(229, 57, 53, 0.25);
-            border-radius: 8px;
-            padding: 2px 6px;
+            margin-top: 8px;
+            background: rgba(229, 57, 53, 0.3);
+            border-radius: 20px;
+            padding: 4px 10px;
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
         }
+
+        .package-card:hover .package-price {
+            background: rgba(229, 57, 53, 0.5);
+        }
+
         .package-card.card-type {
-            background: rgba(229, 57, 53, 0.08);
-            border-color: rgba(229, 57, 53, 0.25);
+            background: linear-gradient(180deg, #1E1E1E 0%, #141414 100%);
+            border-color: rgba(229, 57, 53, 0.15);
         }
+
         .package-card.card-type.selected {
             border-color: var(--red-main);
-            background: rgba(229, 57, 53, 0.18);
-            box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.2);
+            background: linear-gradient(180deg, rgba(229, 57, 53, 0.25) 0%, rgba(229, 57, 53, 0.15) 100%);
+            box-shadow: 0 8px 24px rgba(229, 57, 53, 0.3);
         }
-        .package-card.card-type .package-icon { color: var(--red-main); }
+
+        .package-card.card-type .package-icon {
+            color: var(--red-main);
+        }
+
+        /* ---- Botones mejorados ---- */
         .btn-primary {
             background: linear-gradient(135deg, var(--red-dark) 0%, var(--red-main) 100%);
             color: white;
             width: 100%;
-            padding: 15px 20px;
+            padding: 16px 20px;
             border: none;
-            border-radius: 15px;
+            border-radius: var(--radius-md);
             font-weight: 700;
             font-size: 15.5px;
-            transition: all 0.2s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.3);
         }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
         .btn-primary:active:not(:disabled) {
             transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
         }
+
         .btn-primary:disabled {
-            opacity: 0.45;
+            opacity: 0.5;
             cursor: not-allowed;
         }
+
         .loading-spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 1s ease-in-out infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .footnote {
             font-size: 12px;
             color: var(--muted);
             text-align: center;
-            margin-top: 12px;
+            margin-top: 16px;
         }
-        /* ---- Modal inferior deslizante ---- */
+
+        /* ---- Modal inferior deslizante mejorado ---- */
         .bottom-sheet-modal {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.65);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 100;
             display: flex;
             align-items: flex-end;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
-        .bottom-sheet-modal.active { opacity: 1; visibility: visible; }
+
+        .bottom-sheet-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .bottom-sheet-content {
-            background: var(--black-mid);
+            background: linear-gradient(180deg, #1E1E1E 0%, #141414 100%);
             width: 100%;
             max-width: 480px;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            padding: 22px;
-            max-height: 55vh;
+            border-top-left-radius: var(--radius-xl);
+            border-top-right-radius: var(--radius-xl);
+            padding: 24px;
+            max-height: 65vh;
             overflow-y: auto;
             transform: translateY(100%);
-            transition: transform 0.35s ease;
-            border: 1px solid var(--hairline);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
         }
+
         .bottom-sheet-modal.active .bottom-sheet-content {
             transform: translateY(0);
         }
+
         .sheet-handle {
-            width: 36px;
-            height: 4px;
-            background: var(--hairline);
-            border-radius: 2px;
-            margin: 0 auto 16px;
+            width: 40px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 0 auto 20px;
         }
+
         .sheet-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 800;
             color: white;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             text-align: center;
+            letter-spacing: -0.3px;
         }
+
         .selected-package-info {
-            background: rgba(229, 57, 53, 0.12);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(229, 57, 53, 0.25);
+            background: rgba(229, 57, 53, 0.15);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(229, 57, 53, 0.3);
+            box-shadow: inset 0 2px 8px rgba(229, 57, 53, 0.1);
         }
+
         .package-info-text {
             text-align: center;
             font-size: 15px;
             font-weight: 600;
             color: white;
+            margin-bottom: 6px;
         }
+
         .package-info-price {
             text-align: center;
-            font-size: 20px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 900;
             color: var(--red-main);
-            margin-top: 4px;
+            letter-spacing: -0.5px;
         }
+
         .modal-btn-row {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            gap: 12px;
+            margin-top: 12px;
         }
+
         .modal-btn {
             flex: 1;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: var(--radius-md);
             font-weight: 700;
             font-size: 15px;
             border: none;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
         }
-        .modal-btn:active { transform: scale(0.97); }
+
+        .modal-btn:active {
+            transform: scale(0.97);
+        }
+
         .modal-btn-secondary {
-            background: var(--black-light);
+            background: rgba(255, 255, 255, 0.05);
             color: white;
-            border: 1px solid var(--hairline);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
+
+        .modal-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .modal-btn-primary {
             background: linear-gradient(135deg, var(--red-dark) 0%, var(--red-main) 100%);
             color: white;
+            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.3);
         }
-        /* ---- Modales normales ---- */
+
+        /* ---- Modales normales mejorados ---- */
         .modal {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.65);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s;
+            transition: var(--transition);
+            padding: 20px;
         }
-        .modal.active { opacity: 1; visibility: visible; }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .modal-content {
-            background: var(--black-mid);
-            width: 90%;
-            max-width: 400px;
-            border-radius: 24px;
-            padding: 22px;
-            transform: translateY(16px);
-            transition: all 0.3s;
-            max-height: 90vh;
+            background: linear-gradient(180deg, #1E1E1E 0%, #141414 100%);
+            width: 100%;
+            max-width: 420px;
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            transform: translateY(20px) scale(0.95);
+            transition: var(--transition);
+            max-height: 85vh;
             overflow-y: auto;
-            border: 1px solid var(--hairline);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-lg);
         }
-        .modal.active .modal-content { transform: translateY(0); }
+
+        .modal.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
         .modal-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: white;
-        }
-        /* ---- Factura ---- */
-        .invoice-container {
-            background: var(--black-mid);
-            border-radius: 16px;
-            max-width: 100%;
-        }
-        .invoice-header {
-            text-align: center;
-            margin-bottom: 16px;
-            border-bottom: 2px solid var(--red-main);
-            padding-bottom: 12px;
-        }
-        .invoice-logo {
             font-size: 20px;
             font-weight: 800;
             color: white;
-            margin-bottom: 4px;
+            letter-spacing: -0.3px;
         }
+
+        /* ---- Factura mejorada ---- */
+        .invoice-container {
+            background: linear-gradient(180deg, #1E1E1E 0%, #141414 100%);
+            border-radius: var(--radius-md);
+            max-width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--red-main);
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(229, 57, 53, 0.1) 0%, transparent 100%);
+            position: relative;
+        }
+
+        .invoice-logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
         .invoice-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 16px;
+            padding: 20px;
         }
+
         .invoice-label {
             font-weight: 600;
             color: var(--muted);
             font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
         .invoice-value {
             color: white;
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 600;
         }
+
         .invoice-amount {
             text-align: center;
-            font-size: 22px;
-            font-weight: 800;
-            margin: 16px 0;
-            padding: 12px;
-            background: rgba(229, 57, 53, 0.12);
-            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 900;
+            margin: 20px;
+            padding: 20px;
+            background: rgba(229, 57, 53, 0.15);
+            border-radius: var(--radius-md);
             grid-column: 1 / -1;
             color: var(--red-main);
+            letter-spacing: -0.5px;
+            border: 1px solid rgba(229, 57, 53, 0.2);
         }
+
         .status-success {
-            background-color: rgba(74, 222, 128, 0.15);
+            background-color: rgba(74, 222, 128, 0.2);
             color: #4ADE80;
-            padding: 2px 8px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
-        .success-animation { animation: successPulse 1.5s ease-in-out; }
+
+        .success-animation {
+            animation: successPulse 2s ease-in-out;
+        }
+
         @keyframes successPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
     </style>
 </head>
@@ -446,17 +766,19 @@
                 <div class="nav-spacer"></div>
             </div>
             <div class="header-game-row">
-                <div class="game-badge"><i class="fas fa-fire"></i></div>
+                <div class="game-badge">
+                    <i class="fas fa-gem"></i>
+                </div>
                 <div>
-                    <div class="header-game-title">Free Fire</div>
-                    <div class="header-game-sub">Recarga diamantes al instante</div>
+                    <div class="header-game-title">Diamantes</div>
+                    <div class="header-game-sub">Recarga instantánea</div>
                 </div>
             </div>
         </div>
         <div class="games-container">
             <div id="freefire-form" class="game-form">
                 <div class="form-card">
-                    <div class="section-eyebrow">Diamantes</div>
+                    <div class="section-eyebrow">Paquetes de Diamantes</div>
                     <div class="package-grid">
                         <div class="package-card" data-id="d100" data-price="12.71">
                             <div class="package-icon"><i class="fas fa-gem"></i></div>
@@ -495,20 +817,20 @@
                             <div class="package-price">415.71 Bs</div>
                         </div>
                     </div>
-                    <div class="section-eyebrow">Tarjetas y pases</div>
+                    <div class="section-eyebrow">Tarjetas y Pases</div>
                     <div class="package-grid">
                         <div class="package-card card-type" data-id="card_semanal_basica" data-price="7.40">
-                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-icon"><i class="fas fa-ticket-alt"></i></div>
                             <div class="package-label">Semanal Básica</div>
                             <div class="package-price">7.40 Bs</div>
                         </div>
                         <div class="package-card card-type" data-id="card_semanal" data-price="19.00">
-                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-icon"><i class="fas fa-ticket-alt"></i></div>
                             <div class="package-label">Tarjeta Semanal</div>
                             <div class="package-price">19.00 Bs</div>
                         </div>
                         <div class="package-card card-type" data-id="card_mensual" data-price="80.60">
-                            <div class="package-icon"><i class="fas fa-ticket"></i></div>
+                            <div class="package-icon"><i class="fas fa-ticket-alt"></i></div>
                             <div class="package-label">Tarjeta Mensual</div>
                             <div class="package-price">80.60 Bs</div>
                         </div>
@@ -550,16 +872,16 @@
     <!-- Modal de confirmación -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
                 <h3 class="modal-title">Confirmar recarga</h3>
-                <button id="close-confirmation-modal" style="background:#272727;width:32px;height:32px;border-radius:50%;border:none;color:#A0A0A0;font-size:14px;">
+                <button id="close-confirmation-modal" style="background:rgba(255,255,255,0.08);width:36px;height:36px;border-radius:50%;border:none;color:#A0A0A0;font-size:15px;cursor:pointer;transition:all 0.2s;">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div style="margin-bottom:22px;">
-                <p id="confirmation-text" style="color:#D0D0D0;line-height:1.6;font-size:14.5px;"></p>
+            <div style="margin-bottom:24px;">
+                <p id="confirmation-text" style="color:#D0D0D0;line-height:1.6;font-size:15px;"></p>
             </div>
-            <div style="display:flex;gap:10px;">
+            <div style="display:flex;gap:12px;">
                 <button id="cancel-recharge" class="modal-btn modal-btn-secondary">
                     Cancelar
                 </button>
@@ -574,14 +896,14 @@
     <!-- Modal de resultado -->
     <div id="result-modal" class="modal">
         <div class="modal-content">
-            <div style="display:flex;justify-content:center;margin-bottom:16px;">
-                <div id="result-icon" style="width:76px;height:76px;border-radius:50%;background:rgba(74,222,128,0.15);display:flex;align-items:center;justify-content:center;font-size:34px;">
+            <div style="display:flex;justify-content:center;margin-bottom:20px;">
+                <div id="result-icon" style="width:80px;height:80px;border-radius:50%;background:rgba(74,222,128,0.15);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 24px rgba(74,222,128,0.2);">
                     <i class="fas fa-check-circle" style="color:#4ADE80;"></i>
                 </div>
             </div>
-            <div style="text-align:center;margin-bottom:22px;">
-                <h3 id="result-title" style="font-size:20px;font-weight:800;color:#FFFFFF;margin-bottom:6px;">¡Recarga exitosa!</h3>
-                <p id="result-message" style="color:#A0A0A0;font-size:14.5px;">Los diamantes se han recargado correctamente.</p>
+            <div style="text-align:center;margin-bottom:24px;">
+                <h3 id="result-title" style="font-size:22px;font-weight:800;color:#FFFFFF;margin-bottom:8px;">¡Recarga exitosa!</h3>
+                <p id="result-message" style="color:#A0A0A0;font-size:15px;line-height:1.5;">Los diamantes se han recargado correctamente.</p>
             </div>
             <button id="close-result-modal" class="modal-btn modal-btn-primary" style="width:100%;">
                 Aceptar
@@ -593,16 +915,16 @@
     <div id="invoice-modal" class="modal fixed inset-0 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
         <div class="modal-overlay absolute inset-0"></div>
         <div class="modal-content w-full max-w-md mx-4" style="padding:0;">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #383838;">
-                <div style="font-size:16px;font-weight:800;color:#FFFFFF;">Comprobante GIKO</div>
-                <button id="close-invoice-modal" style="background:#272727;width:32px;height:32px;border-radius:50%;border:none;color:#A0A0A0;font-size:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:18px;font-weight:800;color:#FFFFFF;">Comprobante GIKO</div>
+                <button id="close-invoice-modal" style="background:rgba(255,255,255,0.08);width:36px;height:36px;border-radius:50%;border:none;color:#A0A0A0;font-size:15px;cursor:pointer;">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div id="invoice-content" style="padding:16px;max-height:60vh;overflow-y:auto;">
+            <div id="invoice-content" style="padding:20px;max-height:60vh;overflow-y:auto;">
             </div>
-            <div style="padding:16px;border-top:1px solid #383838;background:#1A1A1A;">
-                <button id="download-invoice" class="modal-btn modal-btn-primary" style="width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <div style="padding:20px;border-top:1px solid rgba(255,255,255,0.1);background:#1A1A1A;">
+                <button id="download-invoice" class="modal-btn modal-btn-primary" style="width:100%;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
                     <i class="fas fa-download"></i>
                     <span>Descargar Comprobante</span>
                 </button>
@@ -934,7 +1256,6 @@ Monto: ${formatCurrency(currentInvoiceData.transaction.amount)}
 
                 const telegramMessage = `
 <b>🔔 NUEVA RECARGA - GIKO</b>
-🎮 <b>Juego:</b> Free Fire
 💎 <b>Paquete:</b> ${pkgInfo.label}
 💰 <b>Monto:</b> Bs ${selectedPackage.price}
 🆔 <b>ID:</b> ${gameId}
@@ -953,7 +1274,7 @@ Monto: ${formatCurrency(currentInvoiceData.transaction.amount)}
 
                 const transaction = await createTransaction(
                     currentUser.id, selectedPackage.price, 'withdrawal',
-                    `Recarga de Free Fire - ${pkgInfo.label}`,
+                    `Recarga de Diamantes - ${pkgInfo.label}`,
                     { game: currentGame, game_id: gameId, player_name: playerName, package_id: selectedPackage.id }
                 );
                 if (!transaction) throw new Error('Error en transacción');
