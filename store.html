@@ -244,8 +244,6 @@
             font-size: 9.5px; font-weight: 700;
         }
         .stock-available { background: rgba(209,250,229,0.95); color: #059669; }
-        .stock-low { background: rgba(254,243,199,0.95); color: #d97706; }
-        .stock-out { background: rgba(254,226,226,0.95); color: #dc2626; }
         .product-info { padding: 8px 9px 10px; }
         .product-name {
             font-weight: 600; font-size: 12.5px; color: #1e293b;
@@ -259,7 +257,6 @@
         }
         .price-row { display: flex; align-items: baseline; gap: 6px; }
         .product-price { color: var(--primary); font-weight: 800; font-size: 14.5px; }
-        .product-price-old { color: #cbd5e1; font-size: 11px; text-decoration: line-through; }
 
         .modal {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -280,24 +277,15 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white; padding: 12px 16px; border-radius: 12px;
-            font-weight: 700; transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; display: flex; align-items: center; justify-content: center;
             border: none; font-size: 14.5px; width: 100%;
         }
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .loading-spinner {
-            width: 18px; height: 18px;
-            border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
-            border-top-color: white; animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
         .input-field {
             width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0;
             border-radius: 10px; font-size: 14px; margin-bottom: 12px; background: white;
         }
-        .input-field:focus { border-color: var(--primary); outline: none; }
 
         .product-detail-image {
             width: 100%; height: 190px; object-fit: contain;
@@ -309,37 +297,23 @@
         .quantity-btn {
             width: 34px; height: 34px; border-radius: 50%; background: #f1f5f9; border: none;
             display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;
-            color: #475569; cursor: pointer; transition: all .2s;
+            color: #475569; cursor: pointer;
         }
         .quantity-btn:disabled { opacity: .5; cursor: not-allowed; }
         .quantity-display { font-size: 17px; font-weight: 700; min-width: 36px; text-align: center; }
 
         .hidden { display: none !important; }
-        .history-item {
-            background: white;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 8px;
-            border: 1px solid #e2e8f0;
-        }
     </style>
 </head>
 <body>
 
     <div class="mobile-header">
         <div class="mobile-header-title">GC <span>STORE</span></div>
-        <div class="flex items-center gap-3">
-            <i class="fas fa-user text-gray-400 text-sm"></i>
-        </div>
     </div>
 
     <div class="tabs-container">
-        <button class="tab-btn active" data-tab="shop">
-            <i class="fas fa-store mr-1"></i> Tienda
-        </button>
-        <button class="tab-btn" data-tab="history">
-            <i class="fas fa-history mr-1"></i> Historial
-        </button>
+        <button class="tab-btn active" data-tab="shop">Tienda</button>
+        <button class="tab-btn" data-tab="history">Historial</button>
     </div>
 
     <div id="shop-section">
@@ -350,7 +324,7 @@
             <div class="oferta-dia-texto">
                 <div class="oferta-dia-etiqueta">🔥 Oferta del día</div>
                 <div class="oferta-dia-nombre">Netflix Premium 4K</div>
-                <div class="oferta-dia-precio">Bs 35/mes <span style="color:#94a3b8;text-decoration:line-through;font-weight:400;font-size:10px;">Bs 45</span></div>
+                <div class="oferta-dia-precio">Bs 35/mes <span style="color:#94a3b8;text-decoration:line-through;font-size:10px;">Bs 45</span></div>
             </div>
             <span class="oferta-dia-badge">-22%</span>
             <i class="fas fa-chevron-right oferta-dia-flecha"></i>
@@ -374,42 +348,27 @@
             <button class="category-btn" data-category="Música">Música</button>
             <button class="category-btn" data-category="Software">Software</button>
             <button class="category-btn" data-category="IA">IA</button>
-            <button class="category-btn" data-category="Ofertas">Ofertas</button>
         </div>
 
         <div class="products-container">
             <div class="products-grid" id="products-list"></div>
         </div>
-
-        <div id="no-products" class="hidden text-center py-10 px-4">
-            <i class="fas fa-search text-3xl text-gray-300 mb-3"></i>
-            <p class="text-gray-500 font-medium text-sm">No se encontraron suscripciones</p>
-        </div>
     </div>
 
     <div id="history-section" class="hidden px-3 py-3">
         <div id="history-list"></div>
-        <div id="no-history" class="text-center py-10 text-gray-400">
-            <i class="fas fa-receipt text-3xl mb-3"></i>
-            <p class="font-medium text-sm">Sin compras aún</p>
-        </div>
     </div>
 
-    <!-- Modal de detalle -->
+    <!-- Modal detalle -->
     <div id="product-detail-modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="text-lg font-semibold text-gray-800" id="product-detail-title"></h3>
+                <h3 class="text-lg font-semibold" id="product-detail-title"></h3>
                 <button id="close-product-detail" class="text-gray-400"><i class="fas fa-times"></i></button>
             </div>
             <img id="product-detail-image" class="product-detail-image" src="" alt="">
-            <p id="product-detail-description" class="text-gray-600 mb-3 text-xs"></p>
             <div class="flex justify-between items-center mb-3">
                 <div>
-                    <div class="text-xs text-gray-500">Disponibilidad:</div>
-                    <div id="product-detail-stock" class="text-base font-semibold"></div>
-                </div>
-                <div class="text-right">
                     <div class="text-xs text-gray-500">Precio:</div>
                     <div id="product-detail-price" class="text-base font-bold" style="color:var(--primary)"></div>
                 </div>
@@ -437,16 +396,13 @@
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="text-lg font-semibold text-gray-800">Confirmar suscripción</h3>
+                <h3 class="text-lg font-semibold">Confirmar suscripción</h3>
                 <button id="close-confirmation-modal" class="text-gray-400"><i class="fas fa-times"></i></button>
             </div>
             <div class="mb-3"><p id="confirmation-text" class="text-gray-600 text-sm"></p></div>
             <div class="flex space-x-2">
-                <button id="cancel-purchase" class="flex-1 py-2 px-3 rounded-lg bg-gray-100 text-gray-800 font-medium text-sm">Cancelar</button>
-                <button id="confirm-purchase" class="flex-1 py-2 px-3 rounded-lg text-white font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
-                    <span id="confirm-purchase-text">Confirmar</span>
-                    <div id="confirm-purchase-spinner" class="loading-spinner ml-2 hidden"></div>
-                </button>
+                <button id="cancel-purchase" class="flex-1 py-2 px-3 rounded-lg bg-gray-100 font-medium text-sm">Cancelar</button>
+                <button id="confirm-purchase" class="flex-1 py-2 px-3 rounded-lg text-white font-medium text-sm" style="background:var(--primary)">Confirmar</button>
             </div>
         </div>
     </div>
@@ -454,13 +410,8 @@
     <!-- Modal resultado -->
     <div id="result-modal" class="modal">
         <div class="modal-content">
-            <div class="flex justify-center mb-3">
-                <div id="result-icon" class="w-14 h-14 rounded-full flex items-center justify-center text-2xl">
-                    <i class="fas fa-check-circle text-green-500"></i>
-                </div>
-            </div>
             <div class="text-center mb-4">
-                <h3 id="result-title" class="text-lg font-semibold text-gray-800 mb-1">¡Suscripción exitosa!</h3>
+                <h3 id="result-title" class="text-lg font-semibold mb-1">¡Suscripción exitosa!</h3>
                 <p id="result-message" class="text-gray-600 text-sm"></p>
             </div>
             <button id="close-result-modal" class="w-full py-2 px-3 rounded-lg text-white font-medium text-sm" style="background:var(--primary)">Aceptar</button>
@@ -468,36 +419,20 @@
     </div>
 
     <script>
-        // ---------- Configuración Supabase (MISMAS CREDENCIALES QUE GIKO SHOP) ----------
+        // ========== CONFIGURACIÓN SUPABASE - EXACTAMENTE IGUAL QUE GIKO SHOP ==========
         const supabaseUrl = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // ---------- Datos de productos ----------
-        const products = [
-            { id: 'p1', name: 'Netflix Premium', description: '4K UHD + Multi-perfil', category: 'Streaming', price: 45, stock: 100, image_url: 'https://cdn.simpleicons.org/netflix/E50914', is_featured: true, discount_percentage: 22, is_active: true },
-            { id: 'p2', name: 'Disney+', description: 'Animación y familia', category: 'Streaming', price: 38, stock: 100, image_url: 'https://cdn.simpleicons.org/disneyplus/113ccf', is_featured: false, discount_percentage: 10, is_active: true },
-            { id: 'p3', name: 'Max (HBO)', description: 'Series originales', category: 'Streaming', price: 42, stock: 50, image_url: 'https://cdn.simpleicons.org/hbomax/000000', is_featured: false, discount_percentage: 0, is_active: true },
-            { id: 'p4', name: 'Prime Video', description: 'TV y películas', category: 'Streaming', price: 30, stock: 80, image_url: 'https://cdn.simpleicons.org/primevideo/00a8e1', is_featured: false, discount_percentage: 15, is_active: true },
-            { id: 'p5', name: 'YouTube Premium', description: 'Sin anuncios', category: 'Streaming', price: 28, stock: 100, image_url: 'https://cdn.simpleicons.org/youtube/ff0000', is_featured: false, discount_percentage: 0, is_active: true },
-            { id: 'p6', name: 'Spotify Premium', description: 'Música ilimitada', category: 'Música', price: 25, stock: 100, image_url: 'https://cdn.simpleicons.org/spotify/1ed760', is_featured: true, discount_percentage: 20, is_active: true },
-            { id: 'p7', name: 'Apple Music', description: 'Música y letras', category: 'Música', price: 22, stock: 100, image_url: 'https://cdn.simpleicons.org/applemusic/fa243c', is_featured: false, discount_percentage: 0, is_active: true },
-            { id: 'p8', name: 'Audible', description: 'Libros hablados', category: 'Música', price: 20, stock: 50, image_url: 'https://cdn.simpleicons.org/audible/f8991c', is_featured: false, discount_percentage: 0, is_active: true },
-            { id: 'p9', name: 'Microsoft Office', description: 'Documentos y hojas', category: 'Software', price: 60, stock: 100, image_url: 'https://cdn.simpleicons.org/microsoftoffice/d83b01', is_featured: true, discount_percentage: 10, is_active: true },
-            { id: 'p10', name: 'Windows 11', description: 'Activación oficial', category: 'Software', price: 80, stock: 100, image_url: 'https://cdn.simpleicons.org/windows/0078d4', is_featured: false, discount_percentage: 0, is_active: true },
-            { id: 'p11', name: 'Canva Pro', description: 'Diseño gráfico', category: 'Software', price: 35, stock: 100, image_url: 'https://cdn.simpleicons.org/canva/00c4cc', is_featured: false, discount_percentage: 0, is_active: true },
-            { id: 'p12', name: 'ChatGPT Plus', description: 'Inteligencia artificial', category: 'IA', price: 90, stock: 100, image_url: 'https://cdn.simpleicons.org/openai/000000', is_featured: true, discount_percentage: 5, is_active: true },
-        ];
-
-        // ---------- Estado global ----------
+        // ========== ESTADO GLOBAL ==========
         let currentUser = null;
+        let userProfile = null;
         let currentBalance = 0;
         let currentProduct = null;
         let selectedQuantity = 1;
-        let currentCategory = 'all';
 
-        // ---------- Utilidades ----------
-        const formatCurrency = (amount) => 'Bs ' + parseFloat(amount).toFixed(2);
+        // ========== UTILIDADES ==========
+        const formatCurrency = (amount) => 'Bs ' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         const openModal = (modalId) => {
             document.getElementById(modalId).classList.add('active');
@@ -508,129 +443,74 @@
             document.body.style.overflow = '';
         };
 
-        // ---------- CARGAR SALDO DEL USUARIO (IGUAL QUE GIKO SHOP) ----------
-        async function loadUserBalance() {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                
-                if (!session) {
-                    window.location.href = 'index.html';
-                    return;
-                }
+        // ========== MÉTODO EXACTO DE GIKO SHOP PARA CARGAR USUARIO Y SALDO ==========
+        const loadUserProfile = async (userId) => {
+            const { data, error } = await supabase.from('user_profiles').select('*').eq('id', userId).single();
+            if (error && error.code !== 'PGRST116') { console.error('Error loading profile:', error); return null; }
+            return data;
+        };
 
-                currentUser = session.user;
+        const calculateBalance = async (userId) => {
+            const { data, error } = await supabase.from('transactions').select('amount, type').eq('user_id', userId).eq('status', 'completed');
+            if (error) { console.error('Error calculating balance:', error); return 0; }
+            let balance = 0;
+            data.forEach(t => { balance += (t.type === 'deposit' ? t.amount : -t.amount); });
+            return balance;
+        };
 
-                const { data: transactions, error } = await supabase
-                    .from('transactions')
-                    .select('amount, type')
-                    .eq('user_id', currentUser.id)
-                    .eq('status', 'completed');
-
-                if (error) throw error;
-
-                let balance = 0;
-                transactions.forEach(t => {
-                    if (t.type === 'deposit') {
-                        balance += t.amount;
-                    } else if (t.type === 'withdrawal') {
-                        balance -= t.amount;
-                    }
-                });
-
-                currentBalance = balance;
-                document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
-
-            } catch (error) {
-                console.error('Error loading balance:', error);
-                document.getElementById('current-balance').textContent = 'Error';
-            }
+        function updateBalanceDisplay() {
+            document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
         }
 
-        // ---------- CREAR TRANSACCIÓN DE COMPRA ----------
-        async function createPurchaseTransaction(userId, amount, description, metadata) {
+        // ========== CREAR TRANSACCIÓN DE COMPRA (IGUAL QUE GIKO SHOP) ==========
+        const createPurchaseTransaction = async (userId, amount, description, metadata) => {
             const { data, error } = await supabase
                 .from('transactions')
-                .insert([{ 
-                    user_id: userId, 
-                    amount: amount, 
-                    type: 'withdrawal', 
-                    description: description, 
-                    metadata: metadata, 
-                    status: 'completed' 
-                }])
+                .insert([{ user_id: userId, amount, type: 'withdrawal', description, metadata, status: 'completed' }])
                 .select()
                 .single();
-            
-            if (error) throw error;
+            if (error) { console.error('Error creating transaction:', error); return null; }
             return data;
-        }
+        };
 
-        // ---------- Oferta del día ----------
-        function openOfertaDia() {
-            const netflix = products.find(p => p.id === 'p1');
-            if (netflix) openProductDetail(netflix);
-        }
+        // ========== PRODUCTOS ==========
+        const products = [
+            { id: 'p1', name: 'Netflix Premium', description: '4K UHD + Multi-perfil', category: 'Streaming', price: 45, stock: 100, image_url: 'https://cdn.simpleicons.org/netflix/E50914', is_featured: true, discount_percentage: 22 },
+            { id: 'p2', name: 'Disney+', description: 'Animación y familia', category: 'Streaming', price: 38, stock: 100, image_url: 'https://cdn.simpleicons.org/disneyplus/113ccf', discount_percentage: 10 },
+            { id: 'p3', name: 'Max (HBO)', description: 'Series originales', category: 'Streaming', price: 42, stock: 50, image_url: 'https://cdn.simpleicons.org/hbomax/000000', discount_percentage: 0 },
+            { id: 'p4', name: 'Prime Video', description: 'TV y películas', category: 'Streaming', price: 30, stock: 80, image_url: 'https://cdn.simpleicons.org/primevideo/00a8e1', discount_percentage: 15 },
+            { id: 'p5', name: 'YouTube Premium', description: 'Sin anuncios', category: 'Streaming', price: 28, stock: 100, image_url: 'https://cdn.simpleicons.org/youtube/ff0000', discount_percentage: 0 },
+            { id: 'p6', name: 'Spotify Premium', description: 'Música ilimitada', category: 'Música', price: 25, stock: 100, image_url: 'https://cdn.simpleicons.org/spotify/1ed760', is_featured: true, discount_percentage: 20 },
+            { id: 'p7', name: 'Apple Music', description: 'Música y letras', category: 'Música', price: 22, stock: 100, image_url: 'https://cdn.simpleicons.org/applemusic/fa243c', discount_percentage: 0 },
+            { id: 'p8', name: 'Audible', description: 'Libros hablados', category: 'Música', price: 20, stock: 50, image_url: 'https://cdn.simpleicons.org/audible/f8991c', discount_percentage: 0 },
+            { id: 'p9', name: 'Microsoft Office', description: 'Documentos y hojas', category: 'Software', price: 60, stock: 100, image_url: 'https://cdn.simpleicons.org/microsoftoffice/d83b01', discount_percentage: 10 },
+            { id: 'p10', name: 'Windows 11', description: 'Activación oficial', category: 'Software', price: 80, stock: 100, image_url: 'https://cdn.simpleicons.org/windows/0078d4', discount_percentage: 0 },
+            { id: 'p11', name: 'Canva Pro', description: 'Diseño gráfico', category: 'Software', price: 35, stock: 100, image_url: 'https://cdn.simpleicons.org/canva/00c4cc', discount_percentage: 0 },
+            { id: 'p12', name: 'ChatGPT Plus', description: 'Inteligencia artificial', category: 'IA', price: 90, stock: 100, image_url: 'https://cdn.simpleicons.org/openai/000000', is_featured: true, discount_percentage: 5 },
+        ];
 
-        // ---------- Tabs ----------
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
-            document.getElementById('shop-section').classList.toggle('hidden', tab !== 'shop');
-            document.getElementById('history-section').classList.toggle('hidden', tab !== 'history');
-            if (tab === 'history') loadPurchaseHistory();
-        }
-
-        // ---------- Productos ----------
+        // ========== CARGAR PRODUCTOS ==========
         function loadProducts(searchTerm = '', category = 'all') {
-            let filteredProducts = products.filter(p => p.is_active);
-            if (searchTerm) {
-                filteredProducts = filteredProducts.filter(p => 
-                    p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                    p.description.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-            }
-            if (category !== 'all') {
-                filteredProducts = filteredProducts.filter(p => p.category === category);
-            }
-            filteredProducts.sort((a, b) => {
-                if (a.is_featured && !b.is_featured) return -1;
-                if (!a.is_featured && b.is_featured) return 1;
-                return a.name.localeCompare(b.name);
-            });
-            renderProducts(filteredProducts);
-        }
-
-        function renderProducts(productsToRender) {
-            const productsList = document.getElementById('products-list');
-            const noProducts = document.getElementById('no-products');
-
-            if (!productsToRender || productsToRender.length === 0) {
-                productsList.innerHTML = '';
-                noProducts.classList.remove('hidden');
-                return;
-            }
-            noProducts.classList.add('hidden');
-
-            productsList.innerHTML = productsToRender.map(product => {
-                const stockClass = product.stock > 10 ? 'stock-available' : product.stock > 0 ? 'stock-low' : 'stock-out';
-                const stockText = product.stock > 10 ? 'Disponible' : product.stock > 0 ? `${product.stock} unid.` : 'Agotado';
-                const hasDiscount = product.discount_percentage > 0;
-                const finalPrice = hasDiscount ? product.price * (1 - product.discount_percentage / 100) : product.price;
-
+            let filtered = products;
+            if (searchTerm) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            if (category !== 'all') filtered = filtered.filter(p => p.category === category);
+            
+            const list = document.getElementById('products-list');
+            list.innerHTML = filtered.map(p => {
+                const finalPrice = p.discount_percentage > 0 ? p.price * (1 - p.discount_percentage / 100) : p.price;
                 return `
-                    <div class="product-card" data-product-id="${product.id}">
+                    <div class="product-card" data-product-id="${p.id}">
                         <div class="product-image-wrap">
-                            <img src="${product.image_url}" alt="${product.name}" class="product-image">
-                            ${hasDiscount ? `<span class="badge-discount">-${product.discount_percentage}%</span>` : ''}
-                            ${product.is_featured ? `<span class="badge-featured">★ Destacado</span>` : ''}
-                            <span class="stock-badge ${stockClass}">${stockText}</span>
+                            <img src="${p.image_url}" class="product-image">
+                            ${p.discount_percentage > 0 ? `<span class="badge-discount">-${p.discount_percentage}%</span>` : ''}
+                            ${p.is_featured ? `<span class="badge-featured">★</span>` : ''}
+                            <span class="stock-badge stock-available">Disponible</span>
                         </div>
                         <div class="product-info">
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-description">${product.description || ''}</div>
+                            <div class="product-name">${p.name}</div>
+                            <div class="product-description">${p.description}</div>
                             <div class="price-row">
                                 <span class="product-price">${formatCurrency(finalPrice)}</span>
-                                ${hasDiscount ? `<span class="product-price-old">${formatCurrency(product.price)}</span>` : ''}
                             </div>
                         </div>
                     </div>`;
@@ -639,7 +519,7 @@
             document.querySelectorAll('.product-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const product = products.find(p => p.id === card.dataset.productId);
-                    if (product && product.stock > 0) openProductDetail(product);
+                    if (product) openProductDetail(product);
                 });
             });
         }
@@ -647,18 +527,14 @@
         function openProductDetail(product) {
             currentProduct = product;
             selectedQuantity = 1;
-            const hasDiscount = product.discount_percentage > 0;
-            const finalPrice = hasDiscount ? product.price * (1 - product.discount_percentage / 100) : product.price;
+            const finalPrice = product.discount_percentage > 0 ? product.price * (1 - product.discount_percentage / 100) : product.price;
             currentProduct._finalPrice = finalPrice;
 
             document.getElementById('product-detail-title').textContent = product.name;
-            document.getElementById('product-detail-description').textContent = product.description || 'Sin descripción';
             document.getElementById('product-detail-price').textContent = formatCurrency(finalPrice);
-            document.getElementById('product-detail-stock').textContent = `${product.stock} disponibles`;
-            document.getElementById('product-detail-stock').className = `text-base font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`;
             document.getElementById('product-detail-image').src = product.image_url;
             document.getElementById('delivery-email').value = '';
-
+            
             updateQuantityUI();
             updateBuyButton();
             openModal('product-detail-modal');
@@ -667,92 +543,33 @@
         function updateQuantityUI() {
             document.getElementById('quantity-display').textContent = selectedQuantity;
             document.getElementById('decrease-quantity').disabled = selectedQuantity <= 1;
-            document.getElementById('increase-quantity').disabled = selectedQuantity >= currentProduct.stock;
             const totalPrice = selectedQuantity * currentProduct._finalPrice;
             document.getElementById('total-price').textContent = formatCurrency(totalPrice);
         }
 
         function updateBuyButton() {
-            const buyBtn = document.getElementById('buy-product-btn');
             const email = document.getElementById('delivery-email').value.trim();
             const totalPrice = selectedQuantity * currentProduct._finalPrice;
             const hasBalance = currentBalance >= totalPrice;
-            
-            buyBtn.disabled = !email || !hasBalance;
-            
-            if (!email) {
-                buyBtn.innerHTML = '<i class="fas fa-envelope mr-2"></i>Ingresa tu correo';
-            } else if (!hasBalance) {
-                buyBtn.innerHTML = '<i class="fas fa-wallet mr-2"></i>Saldo insuficiente';
-            } else {
-                buyBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>Suscribirse ahora';
-            }
+            const btn = document.getElementById('buy-product-btn');
+            btn.disabled = !email || !hasBalance;
+            btn.innerHTML = !email ? 'Ingresa tu correo' : !hasBalance ? 'Saldo insuficiente' : '<i class="fas fa-shopping-cart mr-2"></i> Suscribirse ahora';
         }
 
-        // ---------- Historial ----------
-        function getPurchaseHistory() {
-            const history = localStorage.getItem('gc_store_history');
-            return history ? JSON.parse(history) : [];
-        }
-
-        function savePurchaseToHistory(purchaseData) {
-            const history = getPurchaseHistory();
-            purchaseData.id = 'SUB-' + Date.now();
-            purchaseData.date = new Date().toISOString();
-            history.unshift(purchaseData);
-            if (history.length > 20) history.pop();
-            localStorage.setItem('gc_store_history', JSON.stringify(history));
-        }
-
-        function loadPurchaseHistory() {
-            const history = getPurchaseHistory();
-            const list = document.getElementById('history-list');
-            const noHistory = document.getElementById('no-history');
-
-            if (history.length === 0) {
-                list.innerHTML = '';
-                noHistory.classList.remove('hidden');
-                return;
-            }
-
-            noHistory.classList.add('hidden');
-            list.innerHTML = history.map(purchase => `
-                <div class="history-item">
-                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
-                        <div style="font-weight:600;font-size:13px;color:#1e293b;">${purchase.product_name}</div>
-                        <div style="font-size:10px;color:#94a3b8;">${new Date(purchase.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
-                    </div>
-                    <div style="font-size:11px;color:#64748b;margin-bottom:3px;">Cantidad: ${purchase.quantity} | Correo: ${purchase.delivery_email}</div>
-                    <div style="font-weight:700;color:#dc2626;font-size:13px;">-${formatCurrency(purchase.total_price)}</div>
-                </div>
-            `).join('');
-        }
-
-        // ---------- Compra ----------
+        // ========== COMPRA ==========
         function initiatePurchase() {
             const totalPrice = selectedQuantity * currentProduct._finalPrice;
             const email = document.getElementById('delivery-email').value.trim();
-
             document.getElementById('confirmation-text').innerHTML = `
-                <div class="bg-gray-50 p-2 rounded-lg mb-2 text-sm">
-                    <strong>${currentProduct.name}</strong><br>
-                    Cantidad: ${selectedQuantity} cuenta(s)<br>
-                    Total: <strong style="color:var(--primary)">${formatCurrency(totalPrice)}</strong>
-                </div>
-                <div class="text-xs"><strong>Correo entrega:</strong> ${email}</div>
+                <strong>${currentProduct.name}</strong><br>
+                Cantidad: ${selectedQuantity}<br>
+                Total: <strong style="color:var(--primary)">${formatCurrency(totalPrice)}</strong><br>
+                Correo: ${email}
             `;
             openModal('confirmation-modal');
         }
 
         async function processPurchase() {
-            const confirmBtn = document.getElementById('confirm-purchase');
-            const confirmText = document.getElementById('confirm-purchase-text');
-            const confirmSpinner = document.getElementById('confirm-purchase-spinner');
-
-            confirmBtn.disabled = true;
-            confirmText.textContent = 'Procesando...';
-            confirmSpinner.classList.remove('hidden');
-
             try {
                 const totalPrice = selectedQuantity * currentProduct._finalPrice;
                 const email = document.getElementById('delivery-email').value.trim();
@@ -766,27 +583,20 @@
                     delivery_email: email
                 };
 
-                await createPurchaseTransaction(
+                const transaction = await createPurchaseTransaction(
                     currentUser.id,
                     totalPrice,
                     `Suscripción: ${selectedQuantity} x ${currentProduct.name}`,
                     metadata
                 );
 
-                savePurchaseToHistory({
-                    product_name: currentProduct.name,
-                    quantity: selectedQuantity,
-                    total_price: totalPrice,
-                    delivery_email: email
-                });
+                if (!transaction) throw new Error('Error al registrar');
 
                 currentBalance -= totalPrice;
-                document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
+                updateBalanceDisplay();
 
                 document.getElementById('result-title').textContent = '¡Suscripción exitosa!';
-                document.getElementById('result-message').textContent = `Se ha descontado ${formatCurrency(totalPrice)} de tu saldo.`;
-                document.getElementById('result-icon').innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
-
+                document.getElementById('result-message').textContent = `Se descontó ${formatCurrency(totalPrice)} de tu saldo.`;
                 closeModal('confirmation-modal');
                 closeModal('product-detail-modal');
                 openModal('result-modal');
@@ -795,38 +605,57 @@
                 console.error('Error:', error);
                 document.getElementById('result-title').textContent = 'Error';
                 document.getElementById('result-message').textContent = 'Error al procesar';
-                document.getElementById('result-icon').innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
                 closeModal('confirmation-modal');
                 openModal('result-modal');
-            } finally {
-                confirmBtn.disabled = false;
-                confirmText.textContent = 'Confirmar';
-                confirmSpinner.classList.add('hidden');
             }
         }
 
-        // ---------- Inicialización ----------
+        // ========== OFERTA DEL DÍA ==========
+        function openOfertaDia() {
+            const netflix = products.find(p => p.id === 'p1');
+            if (netflix) openProductDetail(netflix);
+        }
+
+        // ========== INICIALIZACIÓN - EXACTAMENTE COMO GIKO SHOP ==========
         document.addEventListener('DOMContentLoaded', async () => {
-            await loadUserBalance();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            currentUser = session.user;
+            userProfile = await loadUserProfile(currentUser.id);
+            if (!userProfile) { window.location.href = 'index.html'; return; }
+
+            currentBalance = await calculateBalance(currentUser.id);
+            updateBalanceDisplay();
+
             loadProducts();
 
+            // Tabs
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('shop-section').classList.toggle('hidden', btn.dataset.tab !== 'shop');
+                    document.getElementById('history-section').classList.toggle('hidden', btn.dataset.tab !== 'history');
+                });
             });
 
+            // Search
             document.getElementById('product-search').addEventListener('input', (e) => {
-                loadProducts(e.target.value, currentCategory);
+                const cat = document.querySelector('.category-btn.active')?.dataset.category || 'all';
+                loadProducts(e.target.value, cat);
             });
 
+            // Categories
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    currentCategory = btn.dataset.category;
-                    loadProducts(document.getElementById('product-search').value, currentCategory);
+                    loadProducts(document.getElementById('product-search').value, btn.dataset.category);
                 });
             });
 
+            // Quantity
             document.getElementById('increase-quantity').addEventListener('click', () => {
                 if (selectedQuantity < currentProduct.stock) { selectedQuantity++; updateQuantityUI(); updateBuyButton(); }
             });
@@ -834,17 +663,16 @@
                 if (selectedQuantity > 1) { selectedQuantity--; updateQuantityUI(); updateBuyButton(); }
             });
 
+            // Email
             document.getElementById('delivery-email').addEventListener('input', updateBuyButton);
 
+            // Modals
             document.getElementById('close-product-detail').addEventListener('click', () => closeModal('product-detail-modal'));
             document.getElementById('buy-product-btn').addEventListener('click', initiatePurchase);
             document.getElementById('close-confirmation-modal').addEventListener('click', () => closeModal('confirmation-modal'));
             document.getElementById('cancel-purchase').addEventListener('click', () => closeModal('confirmation-modal'));
             document.getElementById('confirm-purchase').addEventListener('click', processPurchase);
-            document.getElementById('close-result-modal').addEventListener('click', () => { 
-                closeModal('result-modal'); 
-                loadProducts(document.getElementById('product-search').value, currentCategory);
-            });
+            document.getElementById('close-result-modal').addEventListener('click', () => closeModal('result-modal'));
         });
     </script>
 </body>
