@@ -14,7 +14,6 @@
         :root {
             --primary: #dc2626;
             --primary-dark: #b91c1c;
-            --primary-light: #ef4444;
         }
 
         * { -webkit-tap-highlight-color: transparent; }
@@ -100,10 +99,7 @@
             height: 28px;
             object-fit: contain;
         }
-        .oferta-dia-texto {
-            flex: 1;
-            min-width: 0;
-        }
+        .oferta-dia-texto { flex: 1; min-width: 0; }
         .oferta-dia-etiqueta {
             font-size: 8px;
             font-weight: 800;
@@ -139,11 +135,6 @@
             border-radius: 8px;
             letter-spacing: 0.5px;
             flex-shrink: 0;
-            animation: pulso 2s infinite;
-        }
-        @keyframes pulso {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         .balance-display {
@@ -285,10 +276,6 @@
             max-height: 92vh; overflow-y: auto;
         }
         .modal.active .modal-content { transform: translateY(0); }
-        @media (min-width: 560px) {
-            .modal { align-items: center; }
-            .modal-content { border-radius: 18px; }
-        }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -297,7 +284,6 @@
             display: flex; align-items: center; justify-content: center;
             border: none; font-size: 14.5px; width: 100%;
         }
-        .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(220,38,38,0.25); }
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .loading-spinner {
@@ -311,7 +297,7 @@
             width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0;
             border-radius: 10px; font-size: 14px; margin-bottom: 12px; background: white;
         }
-        .input-field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+        .input-field:focus { border-color: var(--primary); outline: none; }
 
         .product-detail-image {
             width: 100%; height: 190px; object-fit: contain;
@@ -325,31 +311,16 @@
             display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;
             color: #475569; cursor: pointer; transition: all .2s;
         }
-        .quantity-btn:hover:not(:disabled) { background: #e2e8f0; }
         .quantity-btn:disabled { opacity: .5; cursor: not-allowed; }
         .quantity-display { font-size: 17px; font-weight: 700; min-width: 36px; text-align: center; }
 
-        .no-history {
-            text-align: center;
-            padding: 30px;
-            color: #94a3b8;
-        }
-
         .hidden { display: none !important; }
-
         .history-item {
             background: white;
             border-radius: 10px;
             padding: 12px;
             margin-bottom: 8px;
             border: 1px solid #e2e8f0;
-        }
-        .receipt-container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            margin: 10px 0;
         }
     </style>
 </head>
@@ -362,7 +333,6 @@
         </div>
     </div>
 
-    <!-- Tabs: Tienda / Historial -->
     <div class="tabs-container">
         <button class="tab-btn active" data-tab="shop">
             <i class="fas fa-store mr-1"></i> Tienda
@@ -372,9 +342,7 @@
         </button>
     </div>
 
-    <!-- Sección Tienda -->
     <div id="shop-section">
-        <!-- OFERTA DEL DÍA -->
         <div class="oferta-dia" onclick="openOfertaDia()">
             <div class="oferta-dia-icono">
                 <img src="https://cdn.simpleicons.org/netflix/E50914" alt="Netflix">
@@ -416,33 +384,26 @@
         <div id="no-products" class="hidden text-center py-10 px-4">
             <i class="fas fa-search text-3xl text-gray-300 mb-3"></i>
             <p class="text-gray-500 font-medium text-sm">No se encontraron suscripciones</p>
-            <p class="text-xs text-gray-400 mt-1">Intenta con otra búsqueda</p>
         </div>
     </div>
 
-    <!-- Sección Historial -->
     <div id="history-section" class="hidden px-3 py-3">
         <div id="history-list"></div>
-        <div id="no-history" class="no-history">
+        <div id="no-history" class="text-center py-10 text-gray-400">
             <i class="fas fa-receipt text-3xl mb-3"></i>
             <p class="font-medium text-sm">Sin compras aún</p>
-            <p class="text-xs mt-1">Tus suscripciones aparecerán aquí</p>
         </div>
     </div>
 
-    <!-- Modal de detalle de producto -->
+    <!-- Modal de detalle -->
     <div id="product-detail-modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="text-lg font-semibold text-gray-800" id="product-detail-title"></h3>
-                <button id="close-product-detail" class="text-gray-400 hover:text-gray-500">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button id="close-product-detail" class="text-gray-400"><i class="fas fa-times"></i></button>
             </div>
-
             <img id="product-detail-image" class="product-detail-image" src="" alt="">
             <p id="product-detail-description" class="text-gray-600 mb-3 text-xs"></p>
-
             <div class="flex justify-between items-center mb-3">
                 <div>
                     <div class="text-xs text-gray-500">Disponibilidad:</div>
@@ -453,56 +414,36 @@
                     <div id="product-detail-price" class="text-base font-bold" style="color:var(--primary)"></div>
                 </div>
             </div>
-
             <div class="quantity-selector">
                 <button id="decrease-quantity" class="quantity-btn" disabled><i class="fas fa-minus"></i></button>
                 <div id="quantity-display" class="quantity-display">1</div>
                 <button id="increase-quantity" class="quantity-btn"><i class="fas fa-plus"></i></button>
             </div>
-
             <div class="text-center mb-4">
                 <div class="text-xs text-gray-500">Total:</div>
                 <div id="total-price" class="text-xl font-bold" style="color:var(--primary)"></div>
             </div>
-
             <div class="mb-3">
                 <label class="block text-xs font-medium text-gray-700 mb-1">Correo para entrega</label>
                 <input type="email" id="delivery-email" class="input-field" placeholder="tucorreo@gmail.com">
             </div>
-
-            <div class="mb-3">
-                <label class="block text-xs font-medium text-gray-700 mb-1">Notas (opcional)</label>
-                <textarea id="delivery-notes" class="input-field" placeholder="Instrucciones especiales" rows="2"></textarea>
-            </div>
-
             <button id="buy-product-btn" class="btn-primary" disabled>
                 <i class="fas fa-shopping-cart mr-2"></i> Suscribirse ahora
             </button>
         </div>
     </div>
 
-    <!-- Modal de comprobante -->
-    <div id="receipt-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-lg font-semibold text-gray-800">Comprobante de suscripción</h3>
-                <button id="close-receipt-modal" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="receipt-content" class="receipt-container"></div>
-        </div>
-    </div>
-
-    <!-- Confirmación -->
+    <!-- Modal confirmación -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="text-lg font-semibold text-gray-800">Confirmar suscripción</h3>
-                <button id="close-confirmation-modal" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times"></i></button>
+                <button id="close-confirmation-modal" class="text-gray-400"><i class="fas fa-times"></i></button>
             </div>
             <div class="mb-3"><p id="confirmation-text" class="text-gray-600 text-sm"></p></div>
             <div class="flex space-x-2">
-                <button id="cancel-purchase" class="flex-1 py-2 px-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium text-sm">Cancelar</button>
-                <button id="confirm-purchase" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
+                <button id="cancel-purchase" class="flex-1 py-2 px-3 rounded-lg bg-gray-100 text-gray-800 font-medium text-sm">Cancelar</button>
+                <button id="confirm-purchase" class="flex-1 py-2 px-3 rounded-lg text-white font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
                     <span id="confirm-purchase-text">Confirmar</span>
                     <div id="confirm-purchase-spinner" class="loading-spinner ml-2 hidden"></div>
                 </button>
@@ -510,7 +451,7 @@
         </div>
     </div>
 
-    <!-- Resultado -->
+    <!-- Modal resultado -->
     <div id="result-modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-center mb-3">
@@ -520,17 +461,17 @@
             </div>
             <div class="text-center mb-4">
                 <h3 id="result-title" class="text-lg font-semibold text-gray-800 mb-1">¡Suscripción exitosa!</h3>
-                <p id="result-message" class="text-gray-600 text-sm">Tu suscripción se ha procesado correctamente.</p>
+                <p id="result-message" class="text-gray-600 text-sm"></p>
             </div>
-            <button id="close-result-modal" class="w-full py-2 px-3 rounded-lg text-white transition-colors font-medium text-sm" style="background:var(--primary)">Aceptar</button>
+            <button id="close-result-modal" class="w-full py-2 px-3 rounded-lg text-white font-medium text-sm" style="background:var(--primary)">Aceptar</button>
         </div>
     </div>
 
     <script>
-        // ---------- Configuración Supabase ----------
+        // ---------- Configuración Supabase (MISMAS CREDENCIALES QUE GIKO SHOP) ----------
         const supabaseUrl = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // ---------- Datos de productos ----------
         const products = [
@@ -553,12 +494,10 @@
         let currentBalance = 0;
         let currentProduct = null;
         let selectedQuantity = 1;
-        let currentTab = 'shop';
         let currentCategory = 'all';
-        let purchaseHistory = [];
 
         // ---------- Utilidades ----------
-        const formatCurrency = (amount) => 'Bs ' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const formatCurrency = (amount) => 'Bs ' + parseFloat(amount).toFixed(2);
 
         const openModal = (modalId) => {
             document.getElementById(modalId).classList.add('active');
@@ -569,7 +508,7 @@
             document.body.style.overflow = '';
         };
 
-        // ---------- Cargar saldo del usuario desde Supabase ----------
+        // ---------- CARGAR SALDO DEL USUARIO (IGUAL QUE GIKO SHOP) ----------
         async function loadUserBalance() {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
@@ -581,7 +520,6 @@
 
                 currentUser = session.user;
 
-                // Obtener todas las transacciones completadas del usuario
                 const { data: transactions, error } = await supabase
                     .from('transactions')
                     .select('amount, type')
@@ -590,7 +528,6 @@
 
                 if (error) throw error;
 
-                // Calcular saldo: depósitos suman, retiros restan
                 let balance = 0;
                 transactions.forEach(t => {
                     if (t.type === 'deposit') {
@@ -609,7 +546,7 @@
             }
         }
 
-        // ---------- Crear transacción de compra en Supabase ----------
+        // ---------- CREAR TRANSACCIÓN DE COMPRA ----------
         async function createPurchaseTransaction(userId, amount, description, metadata) {
             const { data, error } = await supabase
                 .from('transactions')
@@ -636,39 +573,30 @@
 
         // ---------- Tabs ----------
         function switchTab(tab) {
-            currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
-            
             document.getElementById('shop-section').classList.toggle('hidden', tab !== 'shop');
             document.getElementById('history-section').classList.toggle('hidden', tab !== 'history');
-            
-            if (tab === 'history') {
-                loadPurchaseHistory();
-            }
+            if (tab === 'history') loadPurchaseHistory();
         }
 
         // ---------- Productos ----------
         function loadProducts(searchTerm = '', category = 'all') {
             let filteredProducts = products.filter(p => p.is_active);
-            
             if (searchTerm) {
                 filteredProducts = filteredProducts.filter(p => 
                     p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                     p.description.toLowerCase().includes(searchTerm.toLowerCase())
                 );
             }
-            
             if (category !== 'all') {
                 filteredProducts = filteredProducts.filter(p => p.category === category);
             }
-            
             filteredProducts.sort((a, b) => {
                 if (a.is_featured && !b.is_featured) return -1;
                 if (!a.is_featured && b.is_featured) return 1;
                 return a.name.localeCompare(b.name);
             });
-            
             renderProducts(filteredProducts);
         }
 
@@ -719,7 +647,6 @@
         function openProductDetail(product) {
             currentProduct = product;
             selectedQuantity = 1;
-
             const hasDiscount = product.discount_percentage > 0;
             const finalPrice = hasDiscount ? product.price * (1 - product.discount_percentage / 100) : product.price;
             currentProduct._finalPrice = finalPrice;
@@ -727,17 +654,10 @@
             document.getElementById('product-detail-title').textContent = product.name;
             document.getElementById('product-detail-description').textContent = product.description || 'Sin descripción';
             document.getElementById('product-detail-price').textContent = formatCurrency(finalPrice);
-
-            const stockElement = document.getElementById('product-detail-stock');
-            stockElement.textContent = `${product.stock} disponibles`;
-            stockElement.className = `text-base font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`;
-
-            const imgElement = document.getElementById('product-detail-image');
-            imgElement.src = product.image_url;
-            imgElement.alt = product.name;
-
+            document.getElementById('product-detail-stock').textContent = `${product.stock} disponibles`;
+            document.getElementById('product-detail-stock').className = `text-base font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`;
+            document.getElementById('product-detail-image').src = product.image_url;
             document.getElementById('delivery-email').value = '';
-            document.getElementById('delivery-notes').value = '';
 
             updateQuantityUI();
             updateBuyButton();
@@ -769,7 +689,7 @@
             }
         }
 
-        // ---------- Historial de compras ----------
+        // ---------- Historial ----------
         function getPurchaseHistory() {
             const history = localStorage.getItem('gc_store_history');
             return history ? JSON.parse(history) : [];
@@ -782,7 +702,6 @@
             history.unshift(purchaseData);
             if (history.length > 20) history.pop();
             localStorage.setItem('gc_store_history', JSON.stringify(history));
-            purchaseHistory = history;
         }
 
         function loadPurchaseHistory() {
@@ -801,21 +720,18 @@
                 <div class="history-item">
                     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
                         <div style="font-weight:600;font-size:13px;color:#1e293b;">${purchase.product_name}</div>
-                        <div style="font-size:10px;color:#94a3b8;">${new Date(purchase.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                        <div style="font-size:10px;color:#94a3b8;">${new Date(purchase.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
                     </div>
-                    <div style="font-size:11px;color:#64748b;margin-bottom:3px;">
-                        Cantidad: ${purchase.quantity} | Correo: ${purchase.delivery_email}
-                    </div>
+                    <div style="font-size:11px;color:#64748b;margin-bottom:3px;">Cantidad: ${purchase.quantity} | Correo: ${purchase.delivery_email}</div>
                     <div style="font-weight:700;color:#dc2626;font-size:13px;">-${formatCurrency(purchase.total_price)}</div>
                 </div>
             `).join('');
         }
 
-        // ---------- Flujo de compra ----------
+        // ---------- Compra ----------
         function initiatePurchase() {
             const totalPrice = selectedQuantity * currentProduct._finalPrice;
             const email = document.getElementById('delivery-email').value.trim();
-            const notes = document.getElementById('delivery-notes').value.trim();
 
             document.getElementById('confirmation-text').innerHTML = `
                 <div class="bg-gray-50 p-2 rounded-lg mb-2 text-sm">
@@ -823,10 +739,7 @@
                     Cantidad: ${selectedQuantity} cuenta(s)<br>
                     Total: <strong style="color:var(--primary)">${formatCurrency(totalPrice)}</strong>
                 </div>
-                <div class="text-xs">
-                    <div class="mb-1"><strong>Correo entrega:</strong> ${email}</div>
-                    ${notes ? `<div><strong>Notas:</strong><br>${notes}</div>` : ''}
-                </div>
+                <div class="text-xs"><strong>Correo entrega:</strong> ${email}</div>
             `;
             openModal('confirmation-modal');
         }
@@ -843,17 +756,14 @@
             try {
                 const totalPrice = selectedQuantity * currentProduct._finalPrice;
                 const email = document.getElementById('delivery-email').value.trim();
-                const notes = document.getElementById('delivery-notes').value.trim();
 
-                // Crear transacción en Supabase
                 const metadata = {
                     product_id: currentProduct.id,
                     product_name: currentProduct.name,
                     quantity: selectedQuantity,
                     unit_price: currentProduct._finalPrice,
                     total_price: totalPrice,
-                    delivery_email: email,
-                    delivery_notes: notes
+                    delivery_email: email
                 };
 
                 await createPurchaseTransaction(
@@ -863,22 +773,18 @@
                     metadata
                 );
 
-                // Guardar en historial local
                 savePurchaseToHistory({
                     product_name: currentProduct.name,
                     quantity: selectedQuantity,
-                    unit_price: currentProduct._finalPrice,
                     total_price: totalPrice,
-                    delivery_email: email,
-                    delivery_notes: notes
+                    delivery_email: email
                 });
 
-                // Actualizar saldo
                 currentBalance -= totalPrice;
                 document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
 
                 document.getElementById('result-title').textContent = '¡Suscripción exitosa!';
-                document.getElementById('result-message').textContent = `Se ha descontado ${formatCurrency(totalPrice)} de tu saldo. Recibirás un correo con las instrucciones.`;
+                document.getElementById('result-message').textContent = `Se ha descontado ${formatCurrency(totalPrice)} de tu saldo.`;
                 document.getElementById('result-icon').innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
 
                 closeModal('confirmation-modal');
@@ -886,9 +792,9 @@
                 openModal('result-modal');
 
             } catch (error) {
-                console.error('Error en la compra:', error);
+                console.error('Error:', error);
                 document.getElementById('result-title').textContent = 'Error';
-                document.getElementById('result-message').textContent = 'Error al procesar suscripción';
+                document.getElementById('result-message').textContent = 'Error al procesar';
                 document.getElementById('result-icon').innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
                 closeModal('confirmation-modal');
                 openModal('result-modal');
@@ -901,33 +807,26 @@
 
         // ---------- Inicialización ----------
         document.addEventListener('DOMContentLoaded', async () => {
-            // Cargar saldo del usuario
             await loadUserBalance();
-
             loadProducts();
 
-            // Tabs
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => switchTab(btn.dataset.tab));
             });
 
-            // Search
             document.getElementById('product-search').addEventListener('input', (e) => {
                 loadProducts(e.target.value, currentCategory);
             });
 
-            // Categories
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentCategory = btn.dataset.category;
-                    const searchTerm = document.getElementById('product-search').value;
-                    loadProducts(searchTerm, currentCategory);
+                    loadProducts(document.getElementById('product-search').value, currentCategory);
                 });
             });
 
-            // Quantity
             document.getElementById('increase-quantity').addEventListener('click', () => {
                 if (selectedQuantity < currentProduct.stock) { selectedQuantity++; updateQuantityUI(); updateBuyButton(); }
             });
@@ -935,10 +834,8 @@
                 if (selectedQuantity > 1) { selectedQuantity--; updateQuantityUI(); updateBuyButton(); }
             });
 
-            // Email input
             document.getElementById('delivery-email').addEventListener('input', updateBuyButton);
 
-            // Modals
             document.getElementById('close-product-detail').addEventListener('click', () => closeModal('product-detail-modal'));
             document.getElementById('buy-product-btn').addEventListener('click', initiatePurchase);
             document.getElementById('close-confirmation-modal').addEventListener('click', () => closeModal('confirmation-modal'));
@@ -948,7 +845,6 @@
                 closeModal('result-modal'); 
                 loadProducts(document.getElementById('product-search').value, currentCategory);
             });
-            document.getElementById('close-receipt-modal').addEventListener('click', () => closeModal('receipt-modal'));
         });
     </script>
 </body>
