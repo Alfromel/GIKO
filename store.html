@@ -6,6 +6,7 @@
     <title>GC STORE - Tienda Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta name="theme-color" content="#dc2626" id="theme-color">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -69,7 +70,6 @@
             border-bottom-color: var(--primary);
         }
 
-        /* ---------- OFERTA DEL DÍA - PEQUEÑA Y BONITA ---------- */
         .oferta-dia {
             margin: 12px 12px 4px;
             padding: 10px 12px;
@@ -329,11 +329,6 @@
         .quantity-btn:disabled { opacity: .5; cursor: not-allowed; }
         .quantity-display { font-size: 17px; font-weight: 700; min-width: 36px; text-align: center; }
 
-        .section-title {
-            font-weight: 700; color: #374151; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 6px; font-size: 14px;
-        }
-
         .no-history {
             text-align: center;
             padding: 30px;
@@ -379,10 +374,10 @@
 
     <!-- Sección Tienda -->
     <div id="shop-section">
-        <!-- OFERTA DEL DÍA - PEQUEÑA Y BONITA -->
+        <!-- OFERTA DEL DÍA -->
         <div class="oferta-dia" onclick="openOfertaDia()">
             <div class="oferta-dia-icono">
-                <img src="https://cdn.simpleicons.org/netflix/E50914" alt="Netflix" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;font-size:20px;font-weight:800;color:#dc2626&quot;>N</span>'">
+                <img src="https://cdn.simpleicons.org/netflix/E50914" alt="Netflix">
             </div>
             <div class="oferta-dia-texto">
                 <div class="oferta-dia-etiqueta">🔥 Oferta del día</div>
@@ -396,7 +391,7 @@
         <div class="balance-display">
             <div>
                 <div class="balance-label">Saldo disponible</div>
-                <div id="current-balance" class="balance-amount">Bs 500.00</div>
+                <div id="current-balance" class="balance-amount">Cargando...</div>
             </div>
             <i class="fas fa-wallet text-white text-lg"></i>
         </div>
@@ -494,14 +489,6 @@
                 <button id="close-receipt-modal" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times"></i></button>
             </div>
             <div id="receipt-content" class="receipt-container"></div>
-            <div class="flex gap-2 mt-3">
-                <button id="download-receipt" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
-                    <i class="fas fa-download mr-2"></i> Descargar
-                </button>
-                <button id="share-receipt" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:#10b981">
-                    <i class="fas fa-share-alt mr-2"></i> Compartir
-                </button>
-            </div>
         </div>
     </div>
 
@@ -540,7 +527,12 @@
     </div>
 
     <script>
-        // ---------- Datos de productos (suscripciones) ----------
+        // ---------- Configuración Supabase ----------
+        const supabaseUrl = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
+        const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // ---------- Datos de productos ----------
         const products = [
             { id: 'p1', name: 'Netflix Premium', description: '4K UHD + Multi-perfil', category: 'Streaming', price: 45, stock: 100, image_url: 'https://cdn.simpleicons.org/netflix/E50914', is_featured: true, discount_percentage: 22, is_active: true },
             { id: 'p2', name: 'Disney+', description: 'Animación y familia', category: 'Streaming', price: 38, stock: 100, image_url: 'https://cdn.simpleicons.org/disneyplus/113ccf', is_featured: false, discount_percentage: 10, is_active: true },
@@ -557,7 +549,8 @@
         ];
 
         // ---------- Estado global ----------
-        let currentBalance = 500;
+        let currentUser = null;
+        let currentBalance = 0;
         let currentProduct = null;
         let selectedQuantity = 1;
         let currentTab = 'shop';
@@ -575,6 +568,65 @@
             document.getElementById(modalId).classList.remove('active');
             document.body.style.overflow = '';
         };
+
+        // ---------- Cargar saldo del usuario desde Supabase ----------
+        async function loadUserBalance() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                currentUser = session.user;
+
+                // Obtener todas las transacciones completadas del usuario
+                const { data: transactions, error } = await supabase
+                    .from('transactions')
+                    .select('amount, type')
+                    .eq('user_id', currentUser.id)
+                    .eq('status', 'completed');
+
+                if (error) throw error;
+
+                // Calcular saldo: depósitos suman, retiros restan
+                let balance = 0;
+                transactions.forEach(t => {
+                    if (t.type === 'deposit') {
+                        balance += t.amount;
+                    } else if (t.type === 'withdrawal') {
+                        balance -= t.amount;
+                    }
+                });
+
+                currentBalance = balance;
+                document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
+
+            } catch (error) {
+                console.error('Error loading balance:', error);
+                document.getElementById('current-balance').textContent = 'Error';
+            }
+        }
+
+        // ---------- Crear transacción de compra en Supabase ----------
+        async function createPurchaseTransaction(userId, amount, description, metadata) {
+            const { data, error } = await supabase
+                .from('transactions')
+                .insert([{ 
+                    user_id: userId, 
+                    amount: amount, 
+                    type: 'withdrawal', 
+                    description: description, 
+                    metadata: metadata, 
+                    status: 'completed' 
+                }])
+                .select()
+                .single();
+            
+            if (error) throw error;
+            return data;
+        }
 
         // ---------- Oferta del día ----------
         function openOfertaDia() {
@@ -611,7 +663,6 @@
                 filteredProducts = filteredProducts.filter(p => p.category === category);
             }
             
-            // Ordenar: destacados primero, luego por nombre
             filteredProducts.sort((a, b) => {
                 if (a.is_featured && !b.is_featured) return -1;
                 if (!a.is_featured && b.is_featured) return 1;
@@ -756,62 +807,8 @@
                         Cantidad: ${purchase.quantity} | Correo: ${purchase.delivery_email}
                     </div>
                     <div style="font-weight:700;color:#dc2626;font-size:13px;">-${formatCurrency(purchase.total_price)}</div>
-                    <button onclick="generateReceipt('${purchase.id}')" style="display:inline-flex;align-items:center;gap:4px;background:#10b981;color:white;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;margin-top:6px;">
-                        <i class="fas fa-download"></i> Comprobante
-                    </button>
                 </div>
             `).join('');
-        }
-
-        function generateReceipt(purchaseId) {
-            const history = getPurchaseHistory();
-            const purchase = history.find(p => p.id === purchaseId);
-            if (!purchase) return;
-
-            const receiptHtml = `
-                <div style="text-align:center;border-bottom:2px dashed #e2e8f0;padding-bottom:15px;margin-bottom:15px;">
-                    <div style="font-size:24px;font-weight:800;color:#dc2626;">GC STORE</div>
-                    <div style="font-size:12px;color:#64748b;margin-top:5px;">Comprobante de suscripción</div>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
-                        <span style="color:#64748b;">N° Suscripción:</span>
-                        <span style="font-weight:600;">${purchase.id}</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
-                        <span style="color:#64748b;">Fecha:</span>
-                        <span style="font-weight:600;">${new Date(purchase.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
-                        <span style="color:#64748b;">Servicio:</span>
-                        <span style="font-weight:600;">${purchase.product_name}</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
-                        <span style="color:#64748b;">Cantidad:</span>
-                        <span style="font-weight:600;">${purchase.quantity} cuenta(s)</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
-                        <span style="color:#64748b;">Correo entrega:</span>
-                        <span style="font-weight:600;">${purchase.delivery_email}</span>
-                    </div>
-                    ${purchase.delivery_notes ? `
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
-                        <span style="color:#64748b;">Notas:</span>
-                        <span style="font-weight:600;">${purchase.delivery_notes}</span>
-                    </div>
-                    ` : ''}
-                    <div style="display:flex;justify-content:space-between;border-top:2px solid #e2e8f0;padding-top:10px;margin-top:10px;font-size:16px;font-weight:800;color:#dc2626;">
-                        <span>TOTAL:</span>
-                        <span>${formatCurrency(purchase.total_price)}</span>
-                    </div>
-                </div>
-                <div style="text-align:center;font-size:10px;color:#94a3b8;margin-top:15px;padding-top:10px;border-top:1px solid #e2e8f0;">
-                    Gracias por tu suscripción<br>GC STORE - Bolivia
-                </div>
-            `;
-
-            document.getElementById('receipt-content').innerHTML = receiptHtml;
-            openModal('receipt-modal');
         }
 
         // ---------- Flujo de compra ----------
@@ -844,12 +841,29 @@
             confirmSpinner.classList.remove('hidden');
 
             try {
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
                 const totalPrice = selectedQuantity * currentProduct._finalPrice;
                 const email = document.getElementById('delivery-email').value.trim();
                 const notes = document.getElementById('delivery-notes').value.trim();
 
+                // Crear transacción en Supabase
+                const metadata = {
+                    product_id: currentProduct.id,
+                    product_name: currentProduct.name,
+                    quantity: selectedQuantity,
+                    unit_price: currentProduct._finalPrice,
+                    total_price: totalPrice,
+                    delivery_email: email,
+                    delivery_notes: notes
+                };
+
+                await createPurchaseTransaction(
+                    currentUser.id,
+                    totalPrice,
+                    `Suscripción: ${selectedQuantity} x ${currentProduct.name}`,
+                    metadata
+                );
+
+                // Guardar en historial local
                 savePurchaseToHistory({
                     product_name: currentProduct.name,
                     quantity: selectedQuantity,
@@ -859,6 +873,7 @@
                     delivery_notes: notes
                 });
 
+                // Actualizar saldo
                 currentBalance -= totalPrice;
                 document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
 
@@ -871,6 +886,7 @@
                 openModal('result-modal');
 
             } catch (error) {
+                console.error('Error en la compra:', error);
                 document.getElementById('result-title').textContent = 'Error';
                 document.getElementById('result-message').textContent = 'Error al procesar suscripción';
                 document.getElementById('result-icon').innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
@@ -884,9 +900,11 @@
         }
 
         // ---------- Inicialización ----------
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Cargar saldo del usuario
+            await loadUserBalance();
+
             loadProducts();
-            document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
 
             // Tabs
             document.querySelectorAll('.tab-btn').forEach(btn => {
