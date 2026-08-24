@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>GC STORE - Premium Digital</title>
+<title>GC STORE</title>
 <style>
   :root{
     --vino-950:#0a0101;
@@ -18,24 +18,23 @@
     --vino-300:#c73a3a;
     --dorado:#d4af37;
     --dorado-claro:#f0d68a;
-    --dorado-oscuro:#b8960f;
     --texto-100:#fef8f8;
     --texto-300:#e8d5d5;
     --texto-500:#b8a0a0;
     --texto-700:#8a7070;
-    --linea:rgba(255,255,255,0.08);
-    --superficie-1:#1a0606;
-    --superficie-2:#220808;
-    --superficie-3:#2e0e0e;
-    --radio-xl:28px;
-    --radio-lg:20px;
-    --radio-md:14px;
-    --radio-sm:10px;
+    --linea:rgba(255,255,255,0.06);
+    --superficie-1:#180505;
+    --superficie-2:#200707;
+    --superficie-3:#2a0a0a;
+    --radio-xl:20px;
+    --radio-lg:16px;
+    --radio-md:12px;
+    --radio-sm:8px;
     --fuente-display:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     --fuente-texto:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-    --sombra-fuerte:0 24px 48px rgba(0,0,0,0.8);
-    --sombra-media:0 12px 28px rgba(0,0,0,0.6);
-    --sombra-suave:0 6px 16px rgba(0,0,0,0.4);
+    --sombra-fuerte:0 16px 32px rgba(0,0,0,0.7);
+    --sombra-media:0 8px 20px rgba(0,0,0,0.5);
+    --sombra-suave:0 4px 12px rgba(0,0,0,0.3);
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{width:100%;height:100%;overflow:hidden;background:var(--vino-950);font-family:var(--fuente-texto);color:var(--texto-100);}
@@ -43,255 +42,231 @@
   .app{
     width:100%;height:100%;display:flex;flex-direction:column;
     background:
-      radial-gradient(1200px 500px at 50% -20%, rgba(168,33,33,0.3), transparent 60%),
-      radial-gradient(900px 400px at 100% 10%, rgba(120,30,30,0.2), transparent 50%),
-      radial-gradient(700px 300px at 0% 30%, rgba(80,15,15,0.15), transparent 40%),
+      radial-gradient(1000px 400px at 50% -20%, rgba(168,33,33,0.25), transparent 60%),
       linear-gradient(180deg, #0a0101 0%, #050000 100%);
   }
 
-  /* HEADER MEJORADO CON BUSCADOR */
   header.encabezado{
-    padding:20px 24px 0;flex-shrink:0;
+    padding:12px 16px 0;flex-shrink:0;
     background:linear-gradient(180deg, rgba(10,1,1,0.95) 0%, rgba(10,1,1,0.7) 80%, transparent 100%);
     z-index:10;
   }
-  .fila-superior{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-  .fecha{font-size:11.5px;font-weight:500;letter-spacing:0.5px;color:var(--texto-700);text-transform:capitalize;}
+  .fila-superior{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .fecha{font-size:10px;font-weight:500;letter-spacing:0.3px;color:var(--texto-700);text-transform:capitalize;}
   .perfil-btn{
-    width:38px;height:38px;border-radius:50%;
+    width:30px;height:30px;border-radius:50%;
     background:linear-gradient(145deg,var(--superficie-3),var(--superficie-1));
-    border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;
+    border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;
     color:var(--texto-300);cursor:pointer;transition:all .2s;box-shadow:var(--sombra-suave);
   }
   .perfil-btn:active{transform:scale(0.9);}
-  .marca{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .perfil-btn svg{width:14px;height:14px;}
+
+  .marca{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
   .marca-icono{
-    width:48px;height:48px;border-radius:16px;flex-shrink:0;
+    width:36px;height:36px;border-radius:12px;flex-shrink:0;
     background:linear-gradient(145deg,var(--vino-500),var(--vino-800));
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 10px 24px rgba(168,33,33,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
-    border:1px solid rgba(255,255,255,0.15);
+    box-shadow:0 6px 14px rgba(168,33,33,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.1);
   }
+  .marca-icono svg{width:18px;height:18px;}
   .marca-texto{display:flex;flex-direction:column;}
   .titulo-pagina{
-    font-family:var(--fuente-display);font-size:26px;font-weight:800;
+    font-family:var(--fuente-display);font-size:20px;font-weight:800;
     letter-spacing:-0.5px;line-height:1.1;
     background:linear-gradient(135deg,#fff 60%,var(--dorado-claro));
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   }
-  .subtitulo{font-size:12.5px;color:var(--texto-700);font-weight:500;margin-top:2px;letter-spacing:0.3px;}
+  .subtitulo{font-size:10px;color:var(--texto-700);font-weight:500;margin-top:1px;}
 
-  /* BUSCADOR PROFESIONAL */
-  .buscador-contenedor{
-    position:relative;margin-bottom:16px;
-  }
+  .buscador-contenedor{margin-bottom:10px;}
   .buscador{
-    display:flex;align-items:center;gap:12px;
+    display:flex;align-items:center;gap:8px;
     background:linear-gradient(145deg,var(--superficie-2),var(--superficie-1));
-    border:1px solid rgba(255,255,255,0.12);border-radius:16px;
-    padding:0 18px;height:52px;
-    box-shadow:var(--sombra-media), inset 0 1px 0 rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.08);border-radius:12px;
+    padding:0 12px;height:40px;
+    box-shadow:var(--sombra-suave), inset 0 1px 0 rgba(255,255,255,0.05);
     transition:all .3s ease;
   }
   .buscador:focus-within{
     border-color:var(--dorado);
-    box-shadow:var(--sombra-media), 0 0 20px rgba(212,175,55,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+    box-shadow:var(--sombra-suave), 0 0 12px rgba(212,175,55,0.12);
   }
-  .buscador svg{width:20px;height:20px;color:var(--texto-700);flex-shrink:0;}
+  .buscador svg{width:16px;height:16px;color:var(--texto-700);flex-shrink:0;}
   .buscador input{
     flex:1;background:transparent;border:none;outline:none;
-    color:var(--texto-100);font-size:14px;font-weight:500;
-    font-family:var(--fuente-texto);letter-spacing:0.2px;
+    color:var(--texto-100);font-size:12px;font-weight:500;
+    font-family:var(--fuente-texto);
   }
   .buscador input::placeholder{color:var(--texto-700);font-weight:400;}
   .buscador-mic{
-    width:32px;height:32px;border-radius:10px;flex-shrink:0;
+    width:26px;height:26px;border-radius:8px;flex-shrink:0;
     background:var(--superficie-3);border:1px solid var(--linea);
     display:flex;align-items:center;justify-content:center;cursor:pointer;
     color:var(--texto-500);transition:all .2s;
   }
-  .buscador-mic:active{transform:scale(0.9);background:var(--superficie-2);}
+  .buscador-mic:active{transform:scale(0.9);}
+  .buscador-mic svg{width:12px;height:12px;}
 
-  /* CATEGORÍAS RÁPIDAS */
   .categorias-rapidas{
-    display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:4px;
+    display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;
   }
   .categorias-rapidas::-webkit-scrollbar{display:none;}
   .cat-chip{
-    flex-shrink:0;padding:8px 16px;border-radius:20px;
+    flex-shrink:0;padding:6px 12px;border-radius:14px;
     background:var(--superficie-2);border:1px solid var(--linea);
-    font-size:12px;font-weight:600;color:var(--texto-500);
+    font-size:10px;font-weight:600;color:var(--texto-500);
     cursor:pointer;transition:all .2s;white-space:nowrap;
   }
   .cat-chip.activo{
     background:linear-gradient(145deg,var(--vino-500),var(--vino-700));
-    color:var(--texto-100);border-color:rgba(255,255,255,0.2);
+    color:var(--texto-100);border-color:rgba(255,255,255,0.15);
     box-shadow:var(--sombra-suave);
   }
   .cat-chip:active{transform:scale(0.95);}
 
-  main.contenido{flex:1;overflow-y:auto;padding:18px 24px 40px;-webkit-overflow-scrolling:touch;}
+  main.contenido{flex:1;overflow-y:auto;padding:10px 16px 30px;-webkit-overflow-scrolling:touch;}
   main.contenido::-webkit-scrollbar{display:none;}
 
-  /* OFERTA DESTACADA */
   .destacada{
-    position:relative;border-radius:var(--radio-xl);overflow:hidden;margin-bottom:32px;
+    position:relative;border-radius:var(--radio-xl);overflow:hidden;margin-bottom:20px;
     background:
-      linear-gradient(145deg, rgba(150,30,30,0.9) 0%, rgba(40,5,5,0.98) 50%, rgba(10,2,2,0.98) 100%),
-      url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.08"><path d="M10 50 Q25 30 50 50 T90 50" stroke="gold" fill="none" stroke-width="0.5"/><circle cx="50" cy="50" r="30" stroke="gold" fill="none" stroke-width="0.3"/><circle cx="50" cy="50" r="45" stroke="gold" fill="none" stroke-width="0.2"/><circle cx="25" cy="25" r="10" stroke="gold" fill="none" stroke-width="0.2"/><circle cx="75" cy="75" r="8" stroke="gold" fill="none" stroke-width="0.2"/></svg>');
+      linear-gradient(145deg, rgba(150,30,30,0.85) 0%, rgba(40,5,5,0.95) 50%, rgba(10,2,2,0.95) 100%),
+      url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.06"><path d="M10 50 Q25 30 50 50 T90 50" stroke="gold" fill="none" stroke-width="0.5"/><circle cx="50" cy="50" r="30" stroke="gold" fill="none" stroke-width="0.3"/><circle cx="50" cy="50" r="45" stroke="gold" fill="none" stroke-width="0.2"/></svg>');
     background-blend-mode:overlay;
     box-shadow:var(--sombra-fuerte);
-    border:1px solid rgba(212,175,55,0.25);
+    border:1px solid rgba(212,175,55,0.2);
     cursor:pointer; transition:transform .25s ease;
-    min-height:210px; display:flex; align-items:center; gap:22px; padding:28px;
+    min-height:150px; display:flex; align-items:center; gap:12px; padding:16px;
   }
   .destacada::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
     background:linear-gradient(90deg,transparent,var(--dorado),var(--dorado-claro),var(--dorado),transparent);
-    animation:brillo 3s ease-in-out infinite;
   }
-  @keyframes brillo{
-    0%,100%{opacity:0.5;}
-    50%{opacity:1;}
-  }
-  .destacada::after{
-    content:'';position:absolute;top:-50%;right:-20%;width:60%;height:200%;
-    background:radial-gradient(ellipse at center, rgba(255,215,0,0.08) 0%, transparent 70%);
-    pointer-events:none;
-  }
-  .destacada:active{transform:scale(0.98);}
+  .destacada:active{transform:scale(0.97);}
   .destacada-logo{
-    width:100px;height:100px;border-radius:24px;flex-shrink:0;
-    background:rgba(0,0,0,0.7);backdrop-filter:blur(20px);
-    display:flex;align-items:center;justify-content:center;padding:22px;
-    box-shadow:0 16px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
-    border:1px solid rgba(255,255,255,0.2);
+    width:64px;height:64px;border-radius:16px;flex-shrink:0;
+    background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);
+    display:flex;align-items:center;justify-content:center;padding:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
   }
-  .destacada-logo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.6));}
+  .destacada-logo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.5));}
   .destacada-etiqueta{
-    font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-    color:var(--dorado-claro);background:rgba(0,0,0,0.6);width:fit-content;
-    padding:6px 16px;border-radius:20px;margin-bottom:10px;
-    border:1px solid rgba(212,175,55,0.4);backdrop-filter:blur(10px);
+    font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    color:var(--dorado-claro);background:rgba(0,0,0,0.5);width:fit-content;
+    padding:3px 8px;border-radius:10px;margin-bottom:4px;
+    border:1px solid rgba(212,175,55,0.3);
   }
   .destacada-titulo{
-    font-family:var(--fuente-display);font-size:26px;font-weight:800;
-    margin-bottom:6px;letter-spacing:-0.5px;
+    font-family:var(--fuente-display);font-size:16px;font-weight:800;
+    margin-bottom:2px;letter-spacing:-0.3px;
     background:linear-gradient(90deg,#fff 40%,var(--dorado-claro));
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   }
-  .destacada-desc{font-size:13px;color:var(--texto-300);font-weight:400;line-height:1.5;}
+  .destacada-desc{font-size:9px;color:var(--texto-300);font-weight:400;line-height:1.4;}
 
-  section.seccion{margin-bottom:36px;}
-  .seccion-cabecera{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;}
+  section.seccion{margin-bottom:20px;}
+  .seccion-cabecera{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
   .seccion-titulo{
-    font-family:var(--fuente-display);font-size:19px;font-weight:800;
-    letter-spacing:-0.3px;position:relative;padding-left:16px;
+    font-family:var(--fuente-display);font-size:15px;font-weight:800;
+    letter-spacing:-0.3px;position:relative;padding-left:10px;
   }
   .seccion-titulo::before{
     content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
-    width:4px;height:22px;border-radius:4px;
+    width:3px;height:16px;border-radius:2px;
     background:linear-gradient(180deg,var(--dorado),var(--vino-400));
   }
-  .seccion-sub{font-size:11px;color:var(--texto-700);font-weight:500;margin-top:2px;padding-left:16px;}
+  .seccion-sub{font-size:9px;color:var(--texto-700);font-weight:500;margin-top:1px;padding-left:10px;}
   .ver-todo{
-    font-size:12px;color:var(--dorado-claro);font-weight:700;cursor:pointer;
-    padding:8px 16px;border-radius:18px;background:var(--superficie-2);
-    border:1px solid rgba(212,175,55,0.3);transition:all .2s;
-    letter-spacing:0.3px;
+    font-size:10px;color:var(--dorado-claro);font-weight:700;cursor:pointer;
+    padding:5px 10px;border-radius:12px;background:var(--superficie-2);
+    border:1px solid rgba(212,175,55,0.25);transition:all .2s;
   }
-  .ver-todo:active{transform:scale(0.95);background:var(--superficie-3);}
+  .ver-todo:active{transform:scale(0.95);}
 
-  .lista-h{display:flex;gap:16px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x proximity;}
+  .lista-h{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity;}
   .lista-h::-webkit-scrollbar{display:none;}
 
   .app-card{
-    flex-shrink:0;width:154px;scroll-snap-align:start;cursor:pointer;
+    flex-shrink:0;width:110px;scroll-snap-align:start;cursor:pointer;
     transition:transform .2s ease;
   }
   .app-card:active{transform:scale(0.95);}
   .icono{
-    width:154px;height:154px;border-radius:28px;position:relative;overflow:hidden;
-    display:flex;align-items:center;justify-content:center;margin-bottom:10px;
-    box-shadow:var(--sombra-media), inset 0 1px 0 rgba(255,255,255,0.2);
-    border:1px solid rgba(255,255,255,0.12);
+    width:110px;height:110px;border-radius:18px;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;margin-bottom:6px;
+    box-shadow:var(--sombra-media), inset 0 1px 0 rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.08);
     background:#fff;
-    transition:all .2s ease;
   }
   .icono::after{
-    content:'';position:absolute;bottom:0;left:0;right:0;height:30%;
-    background:linear-gradient(0deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+    content:'';position:absolute;bottom:0;left:0;right:0;height:25%;
+    background:linear-gradient(0deg, rgba(0,0,0,0.25) 0%, transparent 100%);
     pointer-events:none;
   }
   .icono img{
-    width:68%;height:68%;object-fit:contain;position:relative;z-index:2;
-    filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-    transition:transform .2s ease;
+    width:60%;height:60%;object-fit:contain;position:relative;z-index:2;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));
   }
-  .icono:hover img{transform:scale(1.08);}
   .icono .respaldo{
     display:none;width:100%;height:100%;align-items:center;justify-content:center;
-    font-family:var(--fuente-display);font-size:46px;font-weight:800;color:#fff;
+    font-family:var(--fuente-display);font-size:32px;font-weight:800;color:#fff;
   }
   .icono.error img{display:none;}
   .icono.error .respaldo{display:flex;}
-  .app-nombre{font-size:13px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;}
-  .app-meta{display:flex;justify-content:space-between;align-items:center;}
-  .app-cat{font-size:10.5px;color:var(--texto-700);font-weight:500;}
+  .app-nombre{font-size:10.5px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;}
+  .app-meta{display:flex;flex-direction:column;gap:3px;}
+  .app-cat{font-size:8.5px;color:var(--texto-700);font-weight:500;}
   .app-precio{
-    font-size:10.5px;color:var(--dorado-claro);font-weight:800;
+    font-size:8.5px;color:var(--dorado-claro);font-weight:800;
     background:linear-gradient(145deg,var(--superficie-3),var(--superficie-1));
-    border:1px solid rgba(212,175,55,0.3);padding:4px 12px;border-radius:14px;
-    box-shadow:var(--sombra-suave);letter-spacing:0.3px;
-    display:flex;align-items:center;gap:3px;
+    border:1px solid rgba(212,175,55,0.25);padding:3px 8px;border-radius:10px;
+    box-shadow:var(--sombra-suave);letter-spacing:0.2px;
+    display:inline-flex;align-items:center;gap:2px;width:fit-content;
   }
-  .app-precio::before{
-    content:'✦';font-size:8px;color:var(--dorado);
-  }
+  .app-precio::before{content:'✦';font-size:6px;color:var(--dorado);}
 
   .fila-lista{
-    display:flex;align-items:center;gap:16px;padding:16px 8px;
+    display:flex;align-items:center;gap:10px;padding:10px 4px;
     border-bottom:1px solid var(--linea);cursor:pointer;
-    transition:background .2s;border-radius:16px;
-    margin-bottom:2px;
+    transition:background .2s;border-radius:10px;margin-bottom:1px;
   }
-  .fila-lista:hover{background:rgba(255,255,255,0.03);}
+  .fila-lista:hover{background:rgba(255,255,255,0.02);}
   .fila-lista:last-child{border-bottom:none;margin-bottom:0;}
   .fila-rank{
-    width:30px;font-size:15px;font-weight:800;color:var(--texto-700);text-align:center;
-    font-family:var(--fuente-display);
+    width:20px;font-size:12px;font-weight:800;color:var(--texto-700);text-align:center;
+    font-family:var(--fuente-display);flex-shrink:0;
   }
-  .fila-rank.gold{color:var(--dorado);text-shadow:0 0 12px rgba(212,175,55,0.5);}
+  .fila-rank.gold{color:var(--dorado);text-shadow:0 0 8px rgba(212,175,55,0.4);}
   .fila-icono{
-    width:56px;height:56px;border-radius:16px;flex-shrink:0;
+    width:40px;height:40px;border-radius:12px;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:var(--sombra-media), inset 0 1px 0 rgba(255,255,255,0.2);
+    box-shadow:var(--sombra-suave), inset 0 1px 0 rgba(255,255,255,0.15);
     background:#fff;overflow:hidden;position:relative;
   }
-  .fila-icono img{width:65%;height:65%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));}
-  .fila-icono .respaldo{display:none;width:100%;height:100%;align-items:center;justify-content:center;font-family:var(--fuente-display);font-size:18px;font-weight:800;color:#fff;}
+  .fila-icono img{width:60%;height:60%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.2));}
+  .fila-icono .respaldo{display:none;width:100%;height:100%;align-items:center;justify-content:center;font-family:var(--fuente-display);font-size:14px;font-weight:800;color:#fff;}
   .fila-icono.error img{display:none;}
   .fila-icono.error .respaldo{display:flex;}
   .fila-info{flex:1;min-width:0;}
-  .fila-nombre{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;}
-  .fila-cat{font-size:11.5px;color:var(--texto-700);margin-top:2px;}
+  .fila-nombre{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;}
+  .fila-cat{font-size:9px;color:var(--texto-700);margin-top:1px;}
   .fila-btn{
-    font-size:11.5px;font-weight:800;color:var(--dorado-claro);
+    font-size:9.5px;font-weight:800;color:var(--dorado-claro);
     background:linear-gradient(145deg,var(--superficie-3),var(--superficie-1));
-    border:1px solid rgba(212,175,55,0.4);padding:8px 20px;border-radius:20px;
+    border:1px solid rgba(212,175,55,0.3);padding:5px 12px;border-radius:14px;
     flex-shrink:0;box-shadow:var(--sombra-suave);transition:all .2s;
-    letter-spacing:0.5px;display:flex;align-items:center;gap:4px;
+    display:flex;align-items:center;gap:2px;
   }
-  .fila-btn::before{
-    content:'⬇';font-size:10px;color:var(--dorado);
-  }
-  .fila-btn:active{transform:scale(0.92);background:var(--superficie-3);}
+  .fila-btn::before{content:'⬇';font-size:8px;color:var(--dorado);}
+  .fila-btn:active{transform:scale(0.9);}
 
   .bg-r1{background:#e50914;} .bg-r2{background:#1ed760;} .bg-r3{background:#113ccf;}
   .bg-r4{background:#0064e0;} .bg-r5{background:#5c2d91;} .bg-r6{background:#00c4cc;}
   .bg-r7{background:#10a37f;} .bg-r8{background:#ff9900;} .bg-r9{background:#f25022;}
   .bg-r10{background:#8c67ef;} .bg-r11{background:#ff0000;} .bg-r12{background:#a52a2a;}
-  .bg-vino{background:linear-gradient(150deg,var(--vino-500),var(--vino-900));}
 </style>
 </head>
 <body>
@@ -301,31 +276,29 @@
     <div class="fila-superior">
       <span class="fecha" id="fechaActual"></span>
       <div class="perfil-btn">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.5-4 5-5.5 7.5-5.5s6 1.5 7.5 5.5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.5-4 5-5.5 7.5-5.5s6 1.5 7.5 5.5"/></svg>
       </div>
     </div>
     <div class="marca">
       <div class="marca-icono">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/></svg>
       </div>
       <div class="marca-texto">
         <h1 class="titulo-pagina">GC Store</h1>
-        <p class="subtitulo">Premium digital marketplace</p>
+        <p class="subtitulo">Premium digital</p>
       </div>
     </div>
 
-    <!-- BUSCADOR PROFESIONAL -->
     <div class="buscador-contenedor">
       <div class="buscador">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input type="text" placeholder="Buscar plataformas, apps, servicios..." />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" placeholder="Buscar plataformas..." />
         <div class="buscador-mic">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M8 22h8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M8 22h8"/></svg>
         </div>
       </div>
     </div>
 
-    <!-- CATEGORÍAS RÁPIDAS -->
     <div class="categorias-rapidas">
       <div class="cat-chip activo">Todo</div>
       <div class="cat-chip">Streaming</div>
@@ -341,12 +314,12 @@
     <!-- OFERTA DESTACADA -->
     <div class="destacada">
       <div class="destacada-logo">
-        <img src="https://cdn.simpleicons.org/netflix/E50914" alt="Netflix Premium" onerror="this.parentElement.innerHTML='<span style="font-family:var(--fuente-display);font-size:30px;font-weight:800;color:#c73a3a">N</span>'">
+        <img src="https://cdn.simpleicons.org/netflix/E50914" alt="Netflix Premium" onerror="this.parentElement.innerHTML='<span style="font-family:var(--fuente-display);font-size:24px;font-weight:800;color:#c73a3a">N</span>'">
       </div>
       <div>
         <p class="destacada-etiqueta">🔥 Oferta exclusiva</p>
         <h3 class="destacada-titulo">Netflix Premium 4K</h3>
-        <p class="destacada-desc">Cuentas completas · 4K UHD · Multi-perfil · Garantía total</p>
+        <p class="destacada-desc">Cuentas completas · 4K UHD · Garantía total</p>
       </div>
     </div>
 
@@ -355,7 +328,7 @@
       <div class="seccion-cabecera">
         <div>
           <h3 class="seccion-titulo">Streaming de video</h3>
-          <p class="seccion-sub">Las plataformas más vendidas</p>
+          <p class="seccion-sub">Las más vendidas</p>
         </div>
         <span class="ver-todo">Ver todo ›</span>
       </div>
@@ -367,8 +340,7 @@
             <div class="respaldo">N</div>
           </div>
           <div class="app-nombre">Netflix</div>
-          <div class="app-meta"><span class="app-cat">Películas y series</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 45/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Películas</span><span class="app-precio">Bs 45/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -377,8 +349,7 @@
             <div class="respaldo">D+</div>
           </div>
           <div class="app-nombre">Disney+</div>
-          <div class="app-meta"><span class="app-cat">Animación y familia</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 38/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Familia</span><span class="app-precio">Bs 38/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -387,8 +358,7 @@
             <div class="respaldo">M</div>
           </div>
           <div class="app-nombre">Max</div>
-          <div class="app-meta"><span class="app-cat">Series originales</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 42/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Series</span><span class="app-precio">Bs 42/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -397,8 +367,7 @@
             <div class="respaldo">P</div>
           </div>
           <div class="app-nombre">Prime Video</div>
-          <div class="app-meta"><span class="app-cat">TV y películas</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 30/mes</span></div>
+          <div class="app-meta"><span class="app-cat">TV y pelis</span><span class="app-precio">Bs 30/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -406,9 +375,8 @@
             <img src="https://cdn.simpleicons.org/youtube/ffffff" alt="YouTube Premium" onerror="this.parentElement.classList.add('error')">
             <div class="respaldo">Y</div>
           </div>
-          <div class="app-nombre">YouTube Premium</div>
-          <div class="app-meta"><span class="app-cat">Sin anuncios</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 28/mes</span></div>
+          <div class="app-nombre">YouTube</div>
+          <div class="app-meta"><span class="app-cat">Sin anuncios</span><span class="app-precio">Bs 28/mes</span></div>
         </div>
 
       </div>
@@ -431,8 +399,7 @@
             <div class="respaldo">S</div>
           </div>
           <div class="app-nombre">Spotify</div>
-          <div class="app-meta"><span class="app-cat">Música ilimitada</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 25/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Música</span><span class="app-precio">Bs 25/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -441,8 +408,7 @@
             <div class="respaldo">A</div>
           </div>
           <div class="app-nombre">Apple Music</div>
-          <div class="app-meta"><span class="app-cat">Música y letras</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 22/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Música</span><span class="app-precio">Bs 22/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -451,8 +417,7 @@
             <div class="respaldo">A</div>
           </div>
           <div class="app-nombre">Audible</div>
-          <div class="app-meta"><span class="app-cat">Libros hablados</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 20/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Libros</span><span class="app-precio">Bs 20/mes</span></div>
         </div>
 
       </div>
@@ -462,8 +427,8 @@
     <section class="seccion">
       <div class="seccion-cabecera">
         <div>
-          <h3 class="seccion-titulo">Software y productividad</h3>
-          <p class="seccion-sub">Licencias y suscripciones oficiales</p>
+          <h3 class="seccion-titulo">Software</h3>
+          <p class="seccion-sub">Licencias y suscripciones</p>
         </div>
         <span class="ver-todo">Ver todo ›</span>
       </div>
@@ -474,9 +439,8 @@
             <img src="https://cdn.simpleicons.org/microsoftoffice/ffffff" alt="Microsoft Office" onerror="this.parentElement.classList.add('error')">
             <div class="respaldo">O</div>
           </div>
-          <div class="app-nombre">Microsoft Office</div>
-          <div class="app-meta"><span class="app-cat">Documentos y hojas</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 60/año</span></div>
+          <div class="app-nombre">Office</div>
+          <div class="app-meta"><span class="app-cat">Documentos</span><span class="app-precio">Bs 60/año</span></div>
         </div>
 
         <div class="app-card">
@@ -485,8 +449,7 @@
             <div class="respaldo">W</div>
           </div>
           <div class="app-nombre">Windows</div>
-          <div class="app-meta"><span class="app-cat">Activación oficial</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 80 único</span></div>
+          <div class="app-meta"><span class="app-cat">Activación</span><span class="app-precio">Bs 80</span></div>
         </div>
 
         <div class="app-card">
@@ -495,8 +458,7 @@
             <div class="respaldo">C</div>
           </div>
           <div class="app-nombre">Canva</div>
-          <div class="app-meta"><span class="app-cat">Diseño gráfico</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 35/mes</span></div>
+          <div class="app-meta"><span class="app-cat">Diseño</span><span class="app-precio">Bs 35/mes</span></div>
         </div>
 
         <div class="app-card">
@@ -504,9 +466,8 @@
             <img src="https://cdn.simpleicons.org/openai/ffffff" alt="ChatGPT" onerror="this.parentElement.classList.add('error')">
             <div class="respaldo">AI</div>
           </div>
-          <div class="app-nombre">ChatGPT Plus</div>
-          <div class="app-meta"><span class="app-cat">Inteligencia artificial</span></div>
-          <div class="app-meta" style="margin-top:6px;"><span class="app-precio">Bs 90/mes</span></div>
+          <div class="app-nombre">ChatGPT</div>
+          <div class="app-meta"><span class="app-cat">IA</span><span class="app-precio">Bs 90/mes</span></div>
         </div>
 
       </div>
@@ -528,7 +489,7 @@
             <img src="https://cdn.simpleicons.org/netflix/ffffff" alt="Netflix" onerror="this.parentElement.classList.add('error')">
             <div class="respaldo">N</div>
           </div>
-          <div class="fila-info"><div class="fila-nombre">Netflix</div><div class="fila-cat">Streaming de video</div></div>
+          <div class="fila-info"><div class="fila-nombre">Netflix</div><div class="fila-cat">Streaming</div></div>
           <span class="fila-btn">Obtener</span>
         </div>
 
@@ -538,7 +499,7 @@
             <img src="https://cdn.simpleicons.org/spotify/ffffff" alt="Spotify" onerror="this.parentElement.classList.add('error')">
             <div class="respaldo">S</div>
           </div>
-          <div class="fila-info"><div class="fila-nombre">Spotify</div><div class="fila-cat">Música y audio</div></div>
+          <div class="fila-info"><div class="fila-nombre">Spotify</div><div class="fila-cat">Música</div></div>
           <span class="fila-btn">Obtener</span>
         </div>
 
@@ -558,7 +519,7 @@
             <img src="https://cdn.simpleicons.org/microsoftoffice/ffffff" alt="Microsoft Office" onerror="this.parentElement.classList.add('error')">
             <div class="respaldo">O</div>
           </div>
-          <div class="fila-info"><div class="fila-nombre">Microsoft Office</div><div class="fila-cat">Software</div></div>
+          <div class="fila-info"><div class="fila-nombre">Office</div><div class="fila-cat">Software</div></div>
           <span class="fila-btn">Obtener</span>
         </div>
 
