@@ -1,557 +1,824 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>GC STORE</title>
-<style>
-  :root{
-    --gris-950:#0a0a0c;
-    --gris-900:#121215;
-    --gris-800:#1a1a1e;
-    --gris-700:#222228;
-    --gris-600:#2a2a30;
-    --gris-500:#3a3a42;
-    --rojo-400:#e63946;
-    --rojo-500:#c1121f;
-    --rojo-600:#a4161a;
-    --rojo-700:#7a0c0c;
-    --blanco-100:#fafafa;
-    --blanco-300:#e8e8ea;
-    --blanco-500:#b0b0b8;
-    --blanco-700:#808088;
-    --dorado:#d4af37;
-    --dorado-claro:#f0d68a;
-    --linea:rgba(255,255,255,0.08);
-    --superficie-1:#1a1a1e;
-    --superficie-2:#222228;
-    --superficie-3:#2a2a30;
-    --radio-xl:22px;
-    --radio-lg:16px;
-    --radio-md:12px;
-    --radio-sm:8px;
-    --fuente-display:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    --fuente-texto:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-    --sombra-fuerte:0 20px 40px rgba(0,0,0,0.8);
-    --sombra-media:0 10px 24px rgba(0,0,0,0.6);
-    --sombra-suave:0 4px 12px rgba(0,0,0,0.4);
-  }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{width:100%;height:100%;overflow:hidden;background:var(--gris-950);font-family:var(--fuente-texto);color:var(--blanco-100);}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GC STORE - Tienda Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="theme-color" content="#dc2626" id="theme-color">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-  .app{
-    width:100%;height:100%;display:flex;flex-direction:column;
-    background:
-      radial-gradient(1000px 400px at 50% -20%, rgba(230,57,70,0.15), transparent 60%),
-      linear-gradient(180deg, var(--gris-950) 0%, var(--gris-900) 100%);
-  }
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --primary-light: #ef4444;
+        }
 
-  header.encabezado{
-    padding:10px 14px 0;flex-shrink:0;
-    background:linear-gradient(180deg, rgba(10,10,12,0.95) 0%, rgba(10,10,12,0.7) 80%, transparent 100%);
-    z-index:10;
-  }
-  .fila-superior{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-  .fecha{font-size:9.5px;font-weight:500;letter-spacing:0.3px;color:var(--blanco-700);text-transform:capitalize;}
-  .perfil-btn{
-    width:28px;height:28px;border-radius:50%;
-    background:linear-gradient(145deg,var(--superficie-3),var(--superficie-1));
-    border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;
-    color:var(--blanco-500);cursor:pointer;transition:all .2s;box-shadow:var(--sombra-suave);
-  }
-  .perfil-btn:active{transform:scale(0.9);}
-  .perfil-btn svg{width:13px;height:13px;}
+        * { -webkit-tap-highlight-color: transparent; }
 
-  .marca{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-  .marca-icono{
-    width:34px;height:34px;border-radius:10px;flex-shrink:0;
-    background:linear-gradient(145deg,var(--rojo-400),var(--rojo-700));
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 6px 14px rgba(230,57,70,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-    border:1px solid rgba(255,255,255,0.1);
-  }
-  .marca-icono svg{width:17px;height:17px;}
-  .marca-texto{display:flex;flex-direction:column;}
-  .titulo-pagina{
-    font-family:var(--fuente-display);font-size:19px;font-weight:800;
-    letter-spacing:-0.5px;line-height:1.1;
-    color:var(--blanco-100);
-  }
-  .titulo-pagina span{color:var(--rojo-400);}
-  .subtitulo{font-size:9px;color:var(--blanco-700);font-weight:500;margin-top:1px;}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding-bottom: env(safe-area-inset-bottom);
+            max-width: 480px;
+            margin: 0 auto;
+        }
 
-  .buscador-contenedor{margin-bottom:8px;}
-  .buscador{
-    display:flex;align-items:center;gap:8px;
-    background:linear-gradient(145deg,var(--superficie-2),var(--superficie-1));
-    border:1px solid rgba(255,255,255,0.06);border-radius:12px;
-    padding:0 12px;height:38px;
-    box-shadow:var(--sombra-suave), inset 0 1px 0 rgba(255,255,255,0.04);
-    transition:all .3s ease;
-  }
-  .buscador:focus-within{
-    border-color:var(--rojo-400);
-    box-shadow:var(--sombra-suave), 0 0 12px rgba(230,57,70,0.15);
-  }
-  .buscador svg{width:14px;height:14px;color:var(--blanco-700);flex-shrink:0;}
-  .buscador input{
-    flex:1;background:transparent;border:none;outline:none;
-    color:var(--blanco-100);font-size:11px;font-weight:500;
-    font-family:var(--fuente-texto);
-  }
-  .buscador input::placeholder{color:var(--blanco-700);font-weight:400;}
-  .buscador-mic{
-    width:24px;height:24px;border-radius:7px;flex-shrink:0;
-    background:var(--superficie-3);border:1px solid var(--linea);
-    display:flex;align-items:center;justify-content:center;cursor:pointer;
-    color:var(--blanco-500);transition:all .2s;
-  }
-  .buscador-mic:active{transform:scale(0.9);}
-  .buscador-mic svg{width:11px;height:11px;}
+        /* ---------- HEADER ---------- */
+        .mobile-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mobile-header-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #1e293b;
+            letter-spacing: -0.02em;
+        }
+        .mobile-header-title span { color: var(--primary); }
 
-  .categorias-rapidas{
-    display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;
-  }
-  .categorias-rapidas::-webkit-scrollbar{display:none;}
-  .cat-chip{
-    flex-shrink:0;padding:5px 10px;border-radius:12px;
-    background:var(--superficie-2);border:1px solid var(--linea);
-    font-size:9px;font-weight:600;color:var(--blanco-500);
-    cursor:pointer;transition:all .2s;white-space:nowrap;
-  }
-  .cat-chip.activo{
-    background:linear-gradient(145deg,var(--rojo-400),var(--rojo-600));
-    color:var(--blanco-100);border-color:rgba(255,255,255,0.15);
-    box-shadow:var(--sombra-suave);
-  }
-  .cat-chip:active{transform:scale(0.95);}
+        /* ---------- TABS ---------- */
+        .tabs-container {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
+            padding: 0 12px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
 
-  main.contenido{flex:1;overflow-y:auto;padding:8px 14px 24px;-webkit-overflow-scrolling:touch;}
-  main.contenido::-webkit-scrollbar{display:none;}
+        /* ---------- BALANCE ---------- */
+        .balance-display {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.25);
+        }
+        .balance-label { font-size: 12px; opacity: 0.9; }
+        .balance-amount { font-size: 19px; font-weight: 800; }
 
-  .destacada{
-    position:relative;border-radius:var(--radio-xl);overflow:hidden;margin-bottom:16px;
-    background:
-      linear-gradient(145deg, rgba(230,57,70,0.85) 0%, rgba(150,20,25,0.9) 50%, rgba(30,5,5,0.95) 100%),
-      url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.04"><circle cx="50" cy="50" r="30" stroke="white" fill="none" stroke-width="0.3"/><circle cx="50" cy="50" r="45" stroke="white" fill="none" stroke-width="0.2"/></svg>');
-    background-blend-mode:overlay;
-    box-shadow:var(--sombra-fuerte);
-    border:1px solid rgba(230,57,70,0.3);
-    cursor:pointer; transition:transform .25s ease;
-    min-height:130px; display:flex; align-items:center; gap:10px; padding:12px;
-  }
-  .destacada::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:2px;
-    background:linear-gradient(90deg,transparent,var(--rojo-400),var(--rojo-400),transparent);
-  }
-  .destacada:active{transform:scale(0.97);}
-  .destacada-logo{
-    width:56px;height:56px;border-radius:14px;flex-shrink:0;
-    background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);
-    display:flex;align-items:center;justify-content:center;padding:10px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.15);
-  }
-  .destacada-logo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.5));}
-  .destacada-etiqueta{
-    font-size:7px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
-    color:#fff;background:rgba(0,0,0,0.5);width:fit-content;
-    padding:3px 7px;border-radius:8px;margin-bottom:3px;
-    border:1px solid rgba(255,255,255,0.2);
-  }
-  .destacada-titulo{
-    font-family:var(--fuente-display);font-size:14px;font-weight:800;
-    margin-bottom:2px;letter-spacing:-0.3px;color:#fff;
-  }
-  .destacada-desc{font-size:8px;color:rgba(255,255,255,0.7);font-weight:400;line-height:1.3;}
+        /* ---------- SEARCH ---------- */
+        .search-container { padding: 0 12px 10px; }
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 14px;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 12px center;
+            background-size: 16px;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+        }
 
-  section.seccion{margin-bottom:18px;}
-  .seccion-cabecera{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
-  .seccion-titulo{
-    font-family:var(--fuente-display);font-size:14px;font-weight:800;
-    letter-spacing:-0.3px;position:relative;padding-left:8px;
-    color:var(--blanco-100);
-  }
-  .seccion-titulo::before{
-    content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
-    width:3px;height:14px;border-radius:2px;
-    background:linear-gradient(180deg,var(--rojo-400),var(--rojo-600));
-  }
-  .seccion-sub{font-size:8px;color:var(--blanco-700);font-weight:500;margin-top:1px;padding-left:8px;}
-  .ver-todo{
-    font-size:9px;color:var(--rojo-400);font-weight:700;cursor:pointer;
-    padding:4px 8px;border-radius:10px;background:var(--superficie-2);
-    border:1px solid rgba(230,57,70,0.2);transition:all .2s;
-  }
-  .ver-todo:active{transform:scale(0.95);}
+        /* ---------- CATEGORY CHIPS ---------- */
+        .category-filters {
+            display: flex;
+            gap: 8px;
+            padding: 4px 12px 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .category-filters::-webkit-scrollbar { display: none; }
+        .category-btn {
+            flex-shrink: 0;
+            padding: 7px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            background: white;
+            color: #4b5563;
+            font-size: 12.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
 
-  .lista-h{display:flex;gap:8px;overflow-x:auto;padding-bottom:5px;scroll-snap-type:x proximity;}
-  .lista-h::-webkit-scrollbar{display:none;}
+        /* ---------- PRODUCT GRID ---------- */
+        .products-container { padding: 4px 12px 24px; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .product-card {
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            border: 1px solid #eef1f5;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            position: relative;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .product-card:active { transform: scale(0.98); }
+        .product-image-wrap { position: relative; }
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            background: #f1f5f9;
+            display: block;
+        }
+        .badge-discount {
+            position: absolute; top: 6px; left: 6px;
+            background: #ef4444; color: #fff;
+            font-size: 10px; font-weight: 700;
+            padding: 2px 6px; border-radius: 5px;
+        }
+        .badge-featured {
+            position: absolute; top: 6px; right: 6px;
+            background: #fbbf24; color: #78350f;
+            font-size: 9.5px; font-weight: 700;
+            padding: 2px 6px; border-radius: 5px;
+        }
+        .stock-badge {
+            position: absolute; bottom: 6px; left: 6px;
+            padding: 2px 6px; border-radius: 5px;
+            font-size: 9.5px; font-weight: 700;
+        }
+        .stock-available { background: rgba(209,250,229,0.95); color: #059669; }
+        .stock-low { background: rgba(254,243,199,0.95); color: #d97706; }
+        .stock-out { background: rgba(254,226,226,0.95); color: #dc2626; }
+        .product-info { padding: 8px 9px 10px; }
+        .product-name {
+            font-weight: 600; font-size: 12.5px; color: #1e293b;
+            display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-description {
+            font-size: 11px; color: #94a3b8; margin: 2px 0 6px;
+            display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .price-row { display: flex; align-items: baseline; gap: 6px; }
+        .product-price { color: var(--primary); font-weight: 800; font-size: 14.5px; }
+        .product-price-old { color: #cbd5e1; font-size: 11px; text-decoration: line-through; }
 
-  .app-card{
-    flex-shrink:0;width:96px;scroll-snap-align:start;cursor:pointer;
-    transition:transform .2s ease;
-  }
-  .app-card:active{transform:scale(0.95);}
-  .icono{
-    width:96px;height:96px;border-radius:16px;position:relative;overflow:hidden;
-    display:flex;align-items:center;justify-content:center;margin-bottom:5px;
-    box-shadow:var(--sombra-media), inset 0 1px 0 rgba(255,255,255,0.15);
-    border:1px solid rgba(255,255,255,0.08);
-    background:#fff;
-  }
-  .icono::after{
-    content:'';position:absolute;bottom:0;left:0;right:0;height:20%;
-    background:linear-gradient(0deg, rgba(0,0,0,0.2) 0%, transparent 100%);
-    pointer-events:none;
-  }
-  .icono img{
-    width:55%;height:55%;object-fit:contain;position:relative;z-index:2;
-    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-  }
-  .icono .respaldo{
-    display:none;width:100%;height:100%;align-items:center;justify-content:center;
-    font-family:var(--fuente-display);font-size:28px;font-weight:800;color:#fff;
-  }
-  .icono.error img{display:none;}
-  .icono.error .respaldo{display:flex;}
-  .app-nombre{font-size:9px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;color:var(--blanco-100);}
-  .app-meta{display:flex;flex-direction:column;gap:2px;}
-  .app-cat{font-size:7.5px;color:var(--blanco-700);font-weight:500;}
-  .app-precio{
-    font-size:8px;color:var(--rojo-400);font-weight:800;
-    background:linear-gradient(145deg,var(--superficie-3),var(--superficie-1));
-    border:1px solid rgba(230,57,70,0.2);padding:2px 7px;border-radius:8px;
-    box-shadow:var(--sombra-suave);letter-spacing:0.2px;
-    display:inline-flex;align-items:center;gap:2px;width:fit-content;
-  }
-  .app-precio::before{content:'●';font-size:4px;color:var(--rojo-400);}
+        /* ---------- MODALS ---------- */
+        .modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.55);
+            z-index: 100;
+            display: flex; align-items: flex-end; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.25s;
+        }
+        .modal.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: white; width: 100%; max-width: 480px;
+            border-radius: 20px 20px 0 0; padding: 18px;
+            transform: translateY(24px); transition: all 0.3s;
+            max-height: 92vh; overflow-y: auto;
+        }
+        .modal.active .modal-content { transform: translateY(0); }
+        @media (min-width: 560px) {
+            .modal { align-items: center; }
+            .modal-content { border-radius: 18px; }
+        }
 
-  .fila-lista{
-    display:flex;align-items:center;gap:8px;padding:8px 3px;
-    border-bottom:1px solid var(--linea);cursor:pointer;
-    transition:background .2s;border-radius:8px;margin-bottom:1px;
-  }
-  .fila-lista:hover{background:rgba(255,255,255,0.02);}
-  .fila-lista:last-child{border-bottom:none;margin-bottom:0;}
-  .fila-rank{
-    width:18px;font-size:11px;font-weight:800;color:var(--blanco-700);text-align:center;
-    font-family:var(--fuente-display);flex-shrink:0;
-  }
-  .fila-rank.gold{color:var(--dorado);text-shadow:0 0 8px rgba(212,175,55,0.4);}
-  .fila-icono{
-    width:36px;height:36px;border-radius:10px;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:var(--sombra-suave), inset 0 1px 0 rgba(255,255,255,0.15);
-    background:#fff;overflow:hidden;position:relative;
-  }
-  .fila-icono img{width:55%;height:55%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.2));}
-  .fila-icono .respaldo{display:none;width:100%;height:100%;align-items:center;justify-content:center;font-family:var(--fuente-display);font-size:12px;font-weight:800;color:#fff;}
-  .fila-icono.error img{display:none;}
-  .fila-icono.error .respaldo{display:flex;}
-  .fila-info{flex:1;min-width:0;}
-  .fila-nombre{font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;color:var(--blanco-100);}
-  .fila-cat{font-size:8px;color:var(--blanco-700);margin-top:1px;}
-  .fila-btn{
-    font-size:8.5px;font-weight:800;color:var(--rojo-400);
-    background:linear-gradient(145deg,var(--superficie-3),var(--superficie-1));
-    border:1px solid rgba(230,57,70,0.3);padding:4px 10px;border-radius:12px;
-    flex-shrink:0;box-shadow:var(--sombra-suave);transition:all .2s;
-    display:flex;align-items:center;gap:2px;
-  }
-  .fila-btn::before{content:'⬇';font-size:7px;color:var(--rojo-400);}
-  .fila-btn:active{transform:scale(0.9);}
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white; padding: 12px 16px; border-radius: 12px;
+            font-weight: 700; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            border: none; font-size: 14.5px; width: 100%;
+        }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(220,38,38,0.25); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .bg-r1{background:#e50914;} .bg-r2{background:#1ed760;} .bg-r3{background:#113ccf;}
-  .bg-r4{background:#0064e0;} .bg-r5{background:#5c2d91;} .bg-r6{background:#00c4cc;}
-  .bg-r7{background:#10a37f;} .bg-r8{background:#ff9900;} .bg-r9{background:#f25022;}
-  .bg-r10{background:#8c67ef;} .bg-r11{background:#ff0000;} .bg-r12{background:#a52a2a;}
-</style>
+        .loading-spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+            border-top-color: white; animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .input-field {
+            width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0;
+            border-radius: 10px; font-size: 14px; margin-bottom: 12px; background: white;
+        }
+        .input-field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+
+        .product-detail-image {
+            width: 100%; height: 190px; object-fit: contain;
+            background: #f8fafc; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0;
+        }
+
+        .quantity-selector { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 12px 0; }
+        .quantity-btn {
+            width: 34px; height: 34px; border-radius: 50%; background: #f1f5f9; border: none;
+            display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;
+            color: #475569; cursor: pointer; transition: all .2s;
+        }
+        .quantity-btn:hover:not(:disabled) { background: #e2e8f0; }
+        .quantity-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .quantity-display { font-size: 17px; font-weight: 700; min-width: 36px; text-align: center; }
+
+        .section-title {
+            font-weight: 700; color: #374151; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 6px; font-size: 14px;
+        }
+
+        .no-history {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
-<div class="app">
 
-  <header class="encabezado">
-    <div class="fila-superior">
-      <span class="fecha" id="fechaActual"></span>
-      <div class="perfil-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.5-4 5-5.5 7.5-5.5s6 1.5 7.5 5.5"/></svg>
-      </div>
-    </div>
-    <div class="marca">
-      <div class="marca-icono">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/></svg>
-      </div>
-      <div class="marca-texto">
-        <h1 class="titulo-pagina">GC <span>STORE</span></h1>
-        <p class="subtitulo">Premium digital marketplace</p>
-      </div>
+    <div class="mobile-header">
+        <div class="mobile-header-title">GC <span>STORE</span></div>
+        <div class="flex items-center gap-3">
+            <i class="fas fa-user text-gray-400 text-sm"></i>
+        </div>
     </div>
 
-    <div class="buscador-contenedor">
-      <div class="buscador">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input type="text" placeholder="Buscar apps, streaming, software..." />
-        <div class="buscador-mic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M8 22h8"/></svg>
-        </div>
-      </div>
+    <!-- Tabs: Tienda / Historial -->
+    <div class="tabs-container">
+        <button class="tab-btn active" data-tab="shop">
+            <i class="fas fa-store mr-1"></i> Tienda
+        </button>
+        <button class="tab-btn" data-tab="history">
+            <i class="fas fa-history mr-1"></i> Historial
+        </button>
     </div>
 
-    <div class="categorias-rapidas">
-      <div class="cat-chip activo">Todo</div>
-      <div class="cat-chip">Streaming</div>
-      <div class="cat-chip">Música</div>
-      <div class="cat-chip">Software</div>
-      <div class="cat-chip">IA</div>
-      <div class="cat-chip">Ofertas</div>
+    <!-- Sección Tienda -->
+    <div id="shop-section">
+        <div class="balance-display">
+            <div>
+                <div class="balance-label">Saldo disponible</div>
+                <div id="current-balance" class="balance-amount">Bs 500.00</div>
+            </div>
+            <i class="fas fa-wallet text-white text-lg"></i>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="product-search" class="search-input" placeholder="Buscar suscripciones...">
+        </div>
+
+        <div class="category-filters">
+            <button class="category-btn active" data-category="all">Todos</button>
+            <button class="category-btn" data-category="Streaming">Streaming</button>
+            <button class="category-btn" data-category="Música">Música</button>
+            <button class="category-btn" data-category="Software">Software</button>
+            <button class="category-btn" data-category="IA">IA</button>
+            <button class="category-btn" data-category="Ofertas">Ofertas</button>
+        </div>
+
+        <div class="products-container">
+            <div class="products-grid" id="products-list"></div>
+        </div>
+
+        <div id="no-products" class="hidden text-center py-10 px-4">
+            <i class="fas fa-search text-3xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500 font-medium text-sm">No se encontraron suscripciones</p>
+            <p class="text-xs text-gray-400 mt-1">Intenta con otra búsqueda</p>
+        </div>
     </div>
-  </header>
 
-  <main class="contenido">
-
-    <!-- OFERTA DESTACADA -->
-    <div class="destacada">
-      <div class="destacada-logo">
-        <img src="https://cdn.simpleicons.org/netflix/E50914" alt="Netflix Premium" onerror="this.parentElement.innerHTML='<span style="font-family:var(--fuente-display);font-size:20px;font-weight:800;color:#e63946">N</span>'">
-      </div>
-      <div>
-        <p class="destacada-etiqueta">🔥 Oferta exclusiva</p>
-        <h3 class="destacada-titulo">Netflix Premium 4K</h3>
-        <p class="destacada-desc">Cuentas completas · 4K UHD · Garantía total</p>
-      </div>
+    <!-- Sección Historial -->
+    <div id="history-section" class="hidden px-3 py-3">
+        <div id="history-list"></div>
+        <div id="no-history" class="no-history">
+            <i class="fas fa-receipt text-3xl mb-3"></i>
+            <p class="font-medium text-sm">Sin compras aún</p>
+            <p class="text-xs mt-1">Tus suscripciones aparecerán aquí</p>
+        </div>
     </div>
 
-    <!-- Streaming de video -->
-    <section class="seccion">
-      <div class="seccion-cabecera">
-        <div>
-          <h3 class="seccion-titulo">Streaming de video</h3>
-          <p class="seccion-sub">Las más vendidas</p>
+    <!-- Modal de detalle de producto -->
+    <div id="product-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-800" id="product-detail-title"></h3>
+                <button id="close-product-detail" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <img id="product-detail-image" class="product-detail-image" src="" alt="">
+            <p id="product-detail-description" class="text-gray-600 mb-3 text-xs"></p>
+
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <div class="text-xs text-gray-500">Disponibilidad:</div>
+                    <div id="product-detail-stock" class="text-base font-semibold"></div>
+                </div>
+                <div class="text-right">
+                    <div class="text-xs text-gray-500">Precio:</div>
+                    <div id="product-detail-price" class="text-base font-bold" style="color:var(--primary)"></div>
+                </div>
+            </div>
+
+            <div class="quantity-selector">
+                <button id="decrease-quantity" class="quantity-btn" disabled><i class="fas fa-minus"></i></button>
+                <div id="quantity-display" class="quantity-display">1</div>
+                <button id="increase-quantity" class="quantity-btn"><i class="fas fa-plus"></i></button>
+            </div>
+
+            <div class="text-center mb-4">
+                <div class="text-xs text-gray-500">Total:</div>
+                <div id="total-price" class="text-xl font-bold" style="color:var(--primary)"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Correo para entrega</label>
+                <input type="email" id="delivery-email" class="input-field" placeholder="tucorreo@gmail.com">
+            </div>
+
+            <div class="mb-3">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Notas (opcional)</label>
+                <textarea id="delivery-notes" class="input-field" placeholder="Instrucciones especiales" rows="2"></textarea>
+            </div>
+
+            <button id="buy-product-btn" class="btn-primary" disabled>
+                <i class="fas fa-shopping-cart mr-2"></i> Suscribirse ahora
+            </button>
         </div>
-        <span class="ver-todo">Ver todo ›</span>
-      </div>
-      <div class="lista-h">
+    </div>
 
-        <div class="app-card">
-          <div class="icono bg-r1">
-            <img src="https://cdn.simpleicons.org/netflix/ffffff" alt="Netflix" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">N</div>
-          </div>
-          <div class="app-nombre">Netflix</div>
-          <div class="app-meta"><span class="app-cat">Películas</span><span class="app-precio">Bs 45/mes</span></div>
+    <!-- Modal de comprobante -->
+    <div id="receipt-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Comprobante de suscripción</h3>
+                <button id="close-receipt-modal" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="receipt-content" class="receipt-container"></div>
+            <div class="flex gap-2 mt-3">
+                <button id="download-receipt" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
+                    <i class="fas fa-download mr-2"></i> Descargar
+                </button>
+                <button id="share-receipt" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:#10b981">
+                    <i class="fas fa-share-alt mr-2"></i> Compartir
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="app-card">
-          <div class="icono" style="background:#113ccf;">
-            <img src="https://cdn.simpleicons.org/disneyplus/ffffff" alt="Disney+" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">D+</div>
-          </div>
-          <div class="app-nombre">Disney+</div>
-          <div class="app-meta"><span class="app-cat">Familia</span><span class="app-precio">Bs 38/mes</span></div>
+    <!-- Confirmación -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Confirmar suscripción</h3>
+                <button id="close-confirmation-modal" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="mb-3"><p id="confirmation-text" class="text-gray-600 text-sm"></p></div>
+            <div class="flex space-x-2">
+                <button id="cancel-purchase" class="flex-1 py-2 px-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors font-medium text-sm">Cancelar</button>
+                <button id="confirm-purchase" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
+                    <span id="confirm-purchase-text">Confirmar</span>
+                    <div id="confirm-purchase-spinner" class="loading-spinner ml-2 hidden"></div>
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="app-card">
-          <div class="icono" style="background:#000000;">
-            <img src="https://cdn.simpleicons.org/hbomax/ffffff" alt="Max" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">M</div>
-          </div>
-          <div class="app-nombre">Max</div>
-          <div class="app-meta"><span class="app-cat">Series</span><span class="app-precio">Bs 42/mes</span></div>
+    <!-- Resultado -->
+    <div id="result-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-center mb-3">
+                <div id="result-icon" class="w-14 h-14 rounded-full flex items-center justify-center text-2xl">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                </div>
+            </div>
+            <div class="text-center mb-4">
+                <h3 id="result-title" class="text-lg font-semibold text-gray-800 mb-1">¡Suscripción exitosa!</h3>
+                <p id="result-message" class="text-gray-600 text-sm">Tu suscripción se ha procesado correctamente.</p>
+            </div>
+            <button id="close-result-modal" class="w-full py-2 px-3 rounded-lg text-white transition-colors font-medium text-sm" style="background:var(--primary)">Aceptar</button>
         </div>
+    </div>
 
-        <div class="app-card">
-          <div class="icono" style="background:#00a8e1;">
-            <img src="https://cdn.simpleicons.org/primevideo/ffffff" alt="Prime Video" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">P</div>
-          </div>
-          <div class="app-nombre">Prime Video</div>
-          <div class="app-meta"><span class="app-cat">TV y pelis</span><span class="app-precio">Bs 30/mes</span></div>
-        </div>
+    <script>
+        // ---------- Datos de productos (suscripciones) ----------
+        const products = [
+            { id: 'p1', name: 'Netflix Premium', description: '4K UHD + Multi-perfil', category: 'Streaming', price: 45, stock: 100, image_url: 'https://cdn.simpleicons.org/netflix/E50914', is_featured: true, discount_percentage: 0, is_active: true },
+            { id: 'p2', name: 'Disney+', description: 'Animación y familia', category: 'Streaming', price: 38, stock: 100, image_url: 'https://cdn.simpleicons.org/disneyplus/113ccf', is_featured: false, discount_percentage: 10, is_active: true },
+            { id: 'p3', name: 'Max (HBO)', description: 'Series originales', category: 'Streaming', price: 42, stock: 50, image_url: 'https://cdn.simpleicons.org/hbomax/000000', is_featured: false, discount_percentage: 0, is_active: true },
+            { id: 'p4', name: 'Prime Video', description: 'TV y películas', category: 'Streaming', price: 30, stock: 80, image_url: 'https://cdn.simpleicons.org/primevideo/00a8e1', is_featured: false, discount_percentage: 15, is_active: true },
+            { id: 'p5', name: 'YouTube Premium', description: 'Sin anuncios', category: 'Streaming', price: 28, stock: 100, image_url: 'https://cdn.simpleicons.org/youtube/ff0000', is_featured: false, discount_percentage: 0, is_active: true },
+            { id: 'p6', name: 'Spotify Premium', description: 'Música ilimitada', category: 'Música', price: 25, stock: 100, image_url: 'https://cdn.simpleicons.org/spotify/1ed760', is_featured: true, discount_percentage: 20, is_active: true },
+            { id: 'p7', name: 'Apple Music', description: 'Música y letras', category: 'Música', price: 22, stock: 100, image_url: 'https://cdn.simpleicons.org/applemusic/fa243c', is_featured: false, discount_percentage: 0, is_active: true },
+            { id: 'p8', name: 'Audible', description: 'Libros hablados', category: 'Música', price: 20, stock: 50, image_url: 'https://cdn.simpleicons.org/audible/f8991c', is_featured: false, discount_percentage: 0, is_active: true },
+            { id: 'p9', name: 'Microsoft Office', description: 'Documentos y hojas', category: 'Software', price: 60, stock: 100, image_url: 'https://cdn.simpleicons.org/microsoftoffice/d83b01', is_featured: true, discount_percentage: 10, is_active: true },
+            { id: 'p10', name: 'Windows 11', description: 'Activación oficial', category: 'Software', price: 80, stock: 100, image_url: 'https://cdn.simpleicons.org/windows/0078d4', is_featured: false, discount_percentage: 0, is_active: true },
+            { id: 'p11', name: 'Canva Pro', description: 'Diseño gráfico', category: 'Software', price: 35, stock: 100, image_url: 'https://cdn.simpleicons.org/canva/00c4cc', is_featured: false, discount_percentage: 0, is_active: true },
+            { id: 'p12', name: 'ChatGPT Plus', description: 'Inteligencia artificial', category: 'IA', price: 90, stock: 100, image_url: 'https://cdn.simpleicons.org/openai/000000', is_featured: true, discount_percentage: 5, is_active: true },
+        ];
 
-        <div class="app-card">
-          <div class="icono" style="background:#ff0000;">
-            <img src="https://cdn.simpleicons.org/youtube/ffffff" alt="YouTube Premium" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">Y</div>
-          </div>
-          <div class="app-nombre">YouTube</div>
-          <div class="app-meta"><span class="app-cat">Sin anuncios</span><span class="app-precio">Bs 28/mes</span></div>
-        </div>
+        // ---------- Estado global ----------
+        let currentBalance = 500;
+        let currentProduct = null;
+        let selectedQuantity = 1;
+        let currentTab = 'shop';
+        let currentCategory = 'all';
+        let purchaseHistory = [];
 
-      </div>
-    </section>
+        // ---------- Utilidades ----------
+        const formatCurrency = (amount) => 'Bs ' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    <!-- Música -->
-    <section class="seccion">
-      <div class="seccion-cabecera">
-        <div>
-          <h3 class="seccion-titulo">Música y audio</h3>
-          <p class="seccion-sub">Escucha sin límites</p>
-        </div>
-        <span class="ver-todo">Ver todo ›</span>
-      </div>
-      <div class="lista-h">
+        const openModal = (modalId) => {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+        const closeModal = (modalId) => {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = '';
+        };
 
-        <div class="app-card">
-          <div class="icono" style="background:#1ed760;">
-            <img src="https://cdn.simpleicons.org/spotify/ffffff" alt="Spotify" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">S</div>
-          </div>
-          <div class="app-nombre">Spotify</div>
-          <div class="app-meta"><span class="app-cat">Música</span><span class="app-precio">Bs 25/mes</span></div>
-        </div>
+        // ---------- Tabs ----------
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+            
+            document.getElementById('shop-section').classList.toggle('hidden', tab !== 'shop');
+            document.getElementById('history-section').classList.toggle('hidden', tab !== 'history');
+            
+            if (tab === 'history') {
+                loadPurchaseHistory();
+            }
+        }
 
-        <div class="app-card">
-          <div class="icono" style="background:#fa243c;">
-            <img src="https://cdn.simpleicons.org/applemusic/ffffff" alt="Apple Music" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">A</div>
-          </div>
-          <div class="app-nombre">Apple Music</div>
-          <div class="app-meta"><span class="app-cat">Música</span><span class="app-precio">Bs 22/mes</span></div>
-        </div>
+        // ---------- Productos ----------
+        function loadProducts(searchTerm = '', category = 'all') {
+            let filteredProducts = products.filter(p => p.is_active);
+            
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                    p.description.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            if (category !== 'all') {
+                filteredProducts = filteredProducts.filter(p => p.category === category);
+            }
+            
+            // Ordenar: destacados primero, luego por nombre
+            filteredProducts.sort((a, b) => {
+                if (a.is_featured && !b.is_featured) return -1;
+                if (!a.is_featured && b.is_featured) return 1;
+                return a.name.localeCompare(b.name);
+            });
+            
+            renderProducts(filteredProducts);
+        }
 
-        <div class="app-card">
-          <div class="icono" style="background:#f8991c;">
-            <img src="https://cdn.simpleicons.org/audible/ffffff" alt="Audible" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">A</div>
-          </div>
-          <div class="app-nombre">Audible</div>
-          <div class="app-meta"><span class="app-cat">Libros</span><span class="app-precio">Bs 20/mes</span></div>
-        </div>
+        function renderProducts(productsToRender) {
+            const productsList = document.getElementById('products-list');
+            const noProducts = document.getElementById('no-products');
 
-      </div>
-    </section>
+            if (!productsToRender || productsToRender.length === 0) {
+                productsList.innerHTML = '';
+                noProducts.classList.remove('hidden');
+                return;
+            }
+            noProducts.classList.add('hidden');
 
-    <!-- Software y productividad -->
-    <section class="seccion">
-      <div class="seccion-cabecera">
-        <div>
-          <h3 class="seccion-titulo">Software</h3>
-          <p class="seccion-sub">Licencias y suscripciones</p>
-        </div>
-        <span class="ver-todo">Ver todo ›</span>
-      </div>
-      <div class="lista-h">
+            productsList.innerHTML = productsToRender.map(product => {
+                const stockClass = product.stock > 10 ? 'stock-available' : product.stock > 0 ? 'stock-low' : 'stock-out';
+                const stockText = product.stock > 10 ? 'Disponible' : product.stock > 0 ? `${product.stock} unid.` : 'Agotado';
+                const hasDiscount = product.discount_percentage > 0;
+                const finalPrice = hasDiscount ? product.price * (1 - product.discount_percentage / 100) : product.price;
 
-        <div class="app-card">
-          <div class="icono" style="background:#d83b01;">
-            <img src="https://cdn.simpleicons.org/microsoftoffice/ffffff" alt="Microsoft Office" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">O</div>
-          </div>
-          <div class="app-nombre">Office</div>
-          <div class="app-meta"><span class="app-cat">Documentos</span><span class="app-precio">Bs 60/año</span></div>
-        </div>
+                return `
+                    <div class="product-card" data-product-id="${product.id}">
+                        <div class="product-image-wrap">
+                            <img src="${product.image_url}" alt="${product.name}" class="product-image" style="background:#f1f5f9;padding:20px;">
+                            ${hasDiscount ? `<span class="badge-discount">-${product.discount_percentage}%</span>` : ''}
+                            ${product.is_featured ? `<span class="badge-featured">★ Destacado</span>` : ''}
+                            <span class="stock-badge ${stockClass}">${stockText}</span>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-description">${product.description || ''}</div>
+                            <div class="price-row">
+                                <span class="product-price">${formatCurrency(finalPrice)}</span>
+                                ${hasDiscount ? `<span class="product-price-old">${formatCurrency(product.price)}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
 
-        <div class="app-card">
-          <div class="icono" style="background:#0078d4;">
-            <img src="https://cdn.simpleicons.org/windows/ffffff" alt="Windows" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">W</div>
-          </div>
-          <div class="app-nombre">Windows</div>
-          <div class="app-meta"><span class="app-cat">Activación</span><span class="app-precio">Bs 80</span></div>
-        </div>
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const product = products.find(p => p.id === card.dataset.productId);
+                    if (product && product.stock > 0) openProductDetail(product);
+                });
+            });
+        }
 
-        <div class="app-card">
-          <div class="icono" style="background:#00c4cc;">
-            <img src="https://cdn.simpleicons.org/canva/ffffff" alt="Canva" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">C</div>
-          </div>
-          <div class="app-nombre">Canva</div>
-          <div class="app-meta"><span class="app-cat">Diseño</span><span class="app-precio">Bs 35/mes</span></div>
-        </div>
+        function openProductDetail(product) {
+            currentProduct = product;
+            selectedQuantity = 1;
 
-        <div class="app-card">
-          <div class="icono" style="background:#000000;">
-            <img src="https://cdn.simpleicons.org/openai/ffffff" alt="ChatGPT" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">AI</div>
-          </div>
-          <div class="app-nombre">ChatGPT</div>
-          <div class="app-meta"><span class="app-cat">IA</span><span class="app-precio">Bs 90/mes</span></div>
-        </div>
+            const hasDiscount = product.discount_percentage > 0;
+            const finalPrice = hasDiscount ? product.price * (1 - product.discount_percentage / 100) : product.price;
+            currentProduct._finalPrice = finalPrice;
 
-      </div>
-    </section>
+            document.getElementById('product-detail-title').textContent = product.name;
+            document.getElementById('product-detail-description').textContent = product.description || 'Sin descripción';
+            document.getElementById('product-detail-price').textContent = formatCurrency(finalPrice);
 
-    <!-- Top ventas -->
-    <section class="seccion">
-      <div class="seccion-cabecera">
-        <div>
-          <h3 class="seccion-titulo">Top ventas</h3>
-          <p class="seccion-sub">Lo más pedido esta semana</p>
-        </div>
-      </div>
-      <div class="lista-vertical">
+            const stockElement = document.getElementById('product-detail-stock');
+            stockElement.textContent = `${product.stock} disponibles`;
+            stockElement.className = `text-base font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`;
 
-        <div class="fila-lista">
-          <span class="fila-rank gold">1</span>
-          <div class="fila-icono" style="background:#e50914;">
-            <img src="https://cdn.simpleicons.org/netflix/ffffff" alt="Netflix" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">N</div>
-          </div>
-          <div class="fila-info"><div class="fila-nombre">Netflix</div><div class="fila-cat">Streaming</div></div>
-          <span class="fila-btn">Obtener</span>
-        </div>
+            const imgElement = document.getElementById('product-detail-image');
+            imgElement.src = product.image_url;
+            imgElement.alt = product.name;
 
-        <div class="fila-lista">
-          <span class="fila-rank">2</span>
-          <div class="fila-icono" style="background:#1ed760;">
-            <img src="https://cdn.simpleicons.org/spotify/ffffff" alt="Spotify" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">S</div>
-          </div>
-          <div class="fila-info"><div class="fila-nombre">Spotify</div><div class="fila-cat">Música</div></div>
-          <span class="fila-btn">Obtener</span>
-        </div>
+            document.getElementById('delivery-email').value = '';
+            document.getElementById('delivery-notes').value = '';
 
-        <div class="fila-lista">
-          <span class="fila-rank">3</span>
-          <div class="fila-icono" style="background:#000000;">
-            <img src="https://cdn.simpleicons.org/openai/ffffff" alt="ChatGPT" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">AI</div>
-          </div>
-          <div class="fila-info"><div class="fila-nombre">ChatGPT Plus</div><div class="fila-cat">Software</div></div>
-          <span class="fila-btn">Obtener</span>
-        </div>
+            updateQuantityUI();
+            updateBuyButton();
+            openModal('product-detail-modal');
+        }
 
-        <div class="fila-lista">
-          <span class="fila-rank">4</span>
-          <div class="fila-icono" style="background:#d83b01;">
-            <img src="https://cdn.simpleicons.org/microsoftoffice/ffffff" alt="Microsoft Office" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">O</div>
-          </div>
-          <div class="fila-info"><div class="fila-nombre">Office</div><div class="fila-cat">Software</div></div>
-          <span class="fila-btn">Obtener</span>
-        </div>
+        function updateQuantityUI() {
+            document.getElementById('quantity-display').textContent = selectedQuantity;
+            document.getElementById('decrease-quantity').disabled = selectedQuantity <= 1;
+            document.getElementById('increase-quantity').disabled = selectedQuantity >= currentProduct.stock;
+            const totalPrice = selectedQuantity * currentProduct._finalPrice;
+            document.getElementById('total-price').textContent = formatCurrency(totalPrice);
+        }
 
-        <div class="fila-lista">
-          <span class="fila-rank">5</span>
-          <div class="fila-icono" style="background:#00c4cc;">
-            <img src="https://cdn.simpleicons.org/canva/ffffff" alt="Canva" onerror="this.parentElement.classList.add('error')">
-            <div class="respaldo">C</div>
-          </div>
-          <div class="fila-info"><div class="fila-nombre">Canva</div><div class="fila-cat">Software</div></div>
-          <span class="fila-btn">Obtener</span>
-        </div>
+        function updateBuyButton() {
+            const buyBtn = document.getElementById('buy-product-btn');
+            const email = document.getElementById('delivery-email').value.trim();
+            const totalPrice = selectedQuantity * currentProduct._finalPrice;
+            const hasBalance = currentBalance >= totalPrice;
+            
+            buyBtn.disabled = !email || !hasBalance;
+            
+            if (!email) {
+                buyBtn.innerHTML = '<i class="fas fa-envelope mr-2"></i>Ingresa tu correo';
+            } else if (!hasBalance) {
+                buyBtn.innerHTML = '<i class="fas fa-wallet mr-2"></i>Saldo insuficiente';
+            } else {
+                buyBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>Suscribirse ahora';
+            }
+        }
 
-      </div>
-    </section>
+        // ---------- Historial de compras ----------
+        function getPurchaseHistory() {
+            const history = localStorage.getItem('gc_store_history');
+            return history ? JSON.parse(history) : [];
+        }
 
-  </main>
+        function savePurchaseToHistory(purchaseData) {
+            const history = getPurchaseHistory();
+            purchaseData.id = 'SUB-' + Date.now();
+            purchaseData.date = new Date().toISOString();
+            history.unshift(purchaseData);
+            if (history.length > 20) history.pop();
+            localStorage.setItem('gc_store_history', JSON.stringify(history));
+            purchaseHistory = history;
+        }
 
-</div>
+        function loadPurchaseHistory() {
+            const history = getPurchaseHistory();
+            const list = document.getElementById('history-list');
+            const noHistory = document.getElementById('no-history');
 
-<script>
-  const fechaEl = document.getElementById('fechaActual');
-  const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
-  fechaEl.textContent = new Date().toLocaleDateString('es-ES', opciones);
+            if (history.length === 0) {
+                list.innerHTML = '';
+                noHistory.classList.remove('hidden');
+                return;
+            }
 
-  document.querySelectorAll('.cat-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('activo'));
-      chip.classList.add('activo');
-    });
-  });
-</script>
+            noHistory.classList.add('hidden');
+            list.innerHTML = history.map(purchase => `
+                <div class="history-item" style="background:white;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #e2e8f0;">
+                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                        <div style="font-weight:600;font-size:13px;color:#1e293b;">${purchase.product_name}</div>
+                        <div style="font-size:10px;color:#94a3b8;">${new Date(purchase.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                    <div style="font-size:11px;color:#64748b;margin-bottom:3px;">
+                        Cantidad: ${purchase.quantity} | Correo: ${purchase.delivery_email}
+                    </div>
+                    <div style="font-weight:700;color:#dc2626;font-size:13px;">-${formatCurrency(purchase.total_price)}</div>
+                    <button onclick="generateReceipt('${purchase.id}')" style="display:inline-flex;align-items:center;gap:4px;background:#10b981;color:white;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;margin-top:6px;">
+                        <i class="fas fa-download"></i> Comprobante
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function generateReceipt(purchaseId) {
+            const history = getPurchaseHistory();
+            const purchase = history.find(p => p.id === purchaseId);
+            if (!purchase) return;
+
+            const receiptHtml = `
+                <div style="text-align:center;border-bottom:2px dashed #e2e8f0;padding-bottom:15px;margin-bottom:15px;">
+                    <div style="font-size:24px;font-weight:800;color:#dc2626;">GC STORE</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:5px;">Comprobante de suscripción</div>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
+                        <span style="color:#64748b;">N° Suscripción:</span>
+                        <span style="font-weight:600;">${purchase.id}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
+                        <span style="color:#64748b;">Fecha:</span>
+                        <span style="font-weight:600;">${new Date(purchase.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
+                        <span style="color:#64748b;">Servicio:</span>
+                        <span style="font-weight:600;">${purchase.product_name}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
+                        <span style="color:#64748b;">Cantidad:</span>
+                        <span style="font-weight:600;">${purchase.quantity} cuenta(s)</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
+                        <span style="color:#64748b;">Correo entrega:</span>
+                        <span style="font-weight:600;">${purchase.delivery_email}</span>
+                    </div>
+                    ${purchase.delivery_notes ? `
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;">
+                        <span style="color:#64748b;">Notas:</span>
+                        <span style="font-weight:600;">${purchase.delivery_notes}</span>
+                    </div>
+                    ` : ''}
+                    <div style="display:flex;justify-content:space-between;border-top:2px solid #e2e8f0;padding-top:10px;margin-top:10px;font-size:16px;font-weight:800;color:#dc2626;">
+                        <span>TOTAL:</span>
+                        <span>${formatCurrency(purchase.total_price)}</span>
+                    </div>
+                </div>
+                <div style="text-align:center;font-size:10px;color:#94a3b8;margin-top:15px;padding-top:10px;border-top:1px solid #e2e8f0;">
+                    Gracias por tu suscripción<br>GC STORE - Bolivia
+                </div>
+            `;
+
+            document.getElementById('receipt-content').innerHTML = receiptHtml;
+            openModal('receipt-modal');
+        }
+
+        // ---------- Flujo de compra ----------
+        function initiatePurchase() {
+            const totalPrice = selectedQuantity * currentProduct._finalPrice;
+            const email = document.getElementById('delivery-email').value.trim();
+            const notes = document.getElementById('delivery-notes').value.trim();
+
+            document.getElementById('confirmation-text').innerHTML = `
+                <div class="bg-gray-50 p-2 rounded-lg mb-2 text-sm">
+                    <strong>${currentProduct.name}</strong><br>
+                    Cantidad: ${selectedQuantity} cuenta(s)<br>
+                    Total: <strong style="color:var(--primary)">${formatCurrency(totalPrice)}</strong>
+                </div>
+                <div class="text-xs">
+                    <div class="mb-1"><strong>Correo entrega:</strong> ${email}</div>
+                    ${notes ? `<div><strong>Notas:</strong><br>${notes}</div>` : ''}
+                </div>
+            `;
+            openModal('confirmation-modal');
+        }
+
+        async function processPurchase() {
+            const confirmBtn = document.getElementById('confirm-purchase');
+            const confirmText = document.getElementById('confirm-purchase-text');
+            const confirmSpinner = document.getElementById('confirm-purchase-spinner');
+
+            confirmBtn.disabled = true;
+            confirmText.textContent = 'Procesando...';
+            confirmSpinner.classList.remove('hidden');
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                const totalPrice = selectedQuantity * currentProduct._finalPrice;
+                const email = document.getElementById('delivery-email').value.trim();
+                const notes = document.getElementById('delivery-notes').value.trim();
+
+                savePurchaseToHistory({
+                    product_name: currentProduct.name,
+                    quantity: selectedQuantity,
+                    unit_price: currentProduct._finalPrice,
+                    total_price: totalPrice,
+                    delivery_email: email,
+                    delivery_notes: notes
+                });
+
+                currentBalance -= totalPrice;
+                document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
+
+                document.getElementById('result-title').textContent = '¡Suscripción exitosa!';
+                document.getElementById('result-message').textContent = `Se ha descontado ${formatCurrency(totalPrice)} de tu saldo. Recibirás un correo con las instrucciones.`;
+                document.getElementById('result-icon').innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+
+                closeModal('confirmation-modal');
+                closeModal('product-detail-modal');
+                openModal('result-modal');
+
+            } catch (error) {
+                document.getElementById('result-title').textContent = 'Error';
+                document.getElementById('result-message').textContent = 'Error al procesar suscripción';
+                document.getElementById('result-icon').innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                closeModal('confirmation-modal');
+                openModal('result-modal');
+            } finally {
+                confirmBtn.disabled = false;
+                confirmText.textContent = 'Confirmar';
+                confirmSpinner.classList.add('hidden');
+            }
+        }
+
+        // ---------- Inicialización ----------
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            document.getElementById('current-balance').textContent = formatCurrency(currentBalance);
+
+            // Tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+            });
+
+            // Search
+            document.getElementById('product-search').addEventListener('input', (e) => {
+                loadProducts(e.target.value, currentCategory);
+            });
+
+            // Categories
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                    const searchTerm = document.getElementById('product-search').value;
+                    loadProducts(searchTerm, currentCategory);
+                });
+            });
+
+            // Quantity
+            document.getElementById('increase-quantity').addEventListener('click', () => {
+                if (selectedQuantity < currentProduct.stock) { selectedQuantity++; updateQuantityUI(); updateBuyButton(); }
+            });
+            document.getElementById('decrease-quantity').addEventListener('click', () => {
+                if (selectedQuantity > 1) { selectedQuantity--; updateQuantityUI(); updateBuyButton(); }
+            });
+
+            // Email input
+            document.getElementById('delivery-email').addEventListener('input', updateBuyButton);
+
+            // Modals
+            document.getElementById('close-product-detail').addEventListener('click', () => closeModal('product-detail-modal'));
+            document.getElementById('buy-product-btn').addEventListener('click', initiatePurchase);
+            document.getElementById('close-confirmation-modal').addEventListener('click', () => closeModal('confirmation-modal'));
+            document.getElementById('cancel-purchase').addEventListener('click', () => closeModal('confirmation-modal'));
+            document.getElementById('confirm-purchase').addEventListener('click', processPurchase);
+            document.getElementById('close-result-modal').addEventListener('click', () => { 
+                closeModal('result-modal'); 
+                loadProducts(document.getElementById('product-search').value, currentCategory);
+            });
+            document.getElementById('close-receipt-modal').addEventListener('click', () => closeModal('receipt-modal'));
+        });
+    </script>
 </body>
 </html>
