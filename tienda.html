@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <meta name="theme-color" content="#ea580c" id="theme-color">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -251,6 +252,25 @@
         .gmaps-btn:hover {
             background: #ea580c;
         }
+        .download-receipt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            margin-top: 4px;
+            margin-left: 4px;
+            transition: all 0.2s;
+        }
+        .download-receipt-btn:hover {
+            background: #059669;
+        }
 
         /* ---------- MODALS ---------- */
         .modal {
@@ -393,6 +413,25 @@
             color: var(--primary);
             margin-bottom: 4px;
         }
+        .meetup-point-card .mp-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-top: 5px;
+            font-size: 9px;
+            color: #3b82f6;
+            cursor: pointer;
+            font-weight: 600;
+            background: #eff6ff;
+            padding: 3px 6px;
+            border-radius: 3px;
+            border: 1px solid #bfdbfe;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .meetup-point-card .mp-link:hover {
+            background: #dbeafe;
+        }
 
         /* DateTime picker */
         .datetime-container {
@@ -429,6 +468,78 @@
             text-align: center;
             padding: 30px;
             color: #94a3b8;
+        }
+
+        /* Receipt Modal */
+        .receipt-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            margin: 10px 0;
+        }
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .receipt-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+        .receipt-title {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+        .receipt-body {
+            margin-bottom: 15px;
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .receipt-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+        .receipt-value {
+            color: #1e293b;
+            font-weight: 600;
+            text-align: right;
+        }
+        .receipt-total {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .receipt-footer {
+            text-align: center;
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .receipt-qr-placeholder {
+            width: 80px;
+            height: 80px;
+            background: #f1f5f9;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 24px;
+            color: #64748b;
         }
     </style>
 </head>
@@ -494,7 +605,7 @@
         </div>
     </div>
 
-    <!-- Modal de detalle de producto (mismo que antes, pero con cambios) -->
+    <!-- Modal de detalle de producto -->
     <div id="product-detail-modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-3">
@@ -580,6 +691,25 @@
         </div>
     </div>
 
+    <!-- Modal de comprobante -->
+    <div id="receipt-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Comprobante de compra</h3>
+                <button id="close-receipt-modal" class="text-gray-400 hover:text-gray-500"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="receipt-content" class="receipt-container"></div>
+            <div class="flex gap-2 mt-3">
+                <button id="download-receipt" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:var(--primary)">
+                    <i class="fas fa-download mr-2"></i> Descargar
+                </button>
+                <button id="share-receipt" class="flex-1 py-2 px-3 rounded-lg text-white transition-colors font-medium flex items-center justify-center text-sm" style="background:#10b981">
+                    <i class="fas fa-share-alt mr-2"></i> Compartir
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Confirmación -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
@@ -625,39 +755,52 @@
         const TELEGRAM_BOT_TOKEN = '7596286871:AAGFe3sHy-GhykyM_xsFwDU8qrt6SWXSWHY';
         const TELEGRAM_CHAT_ID = '-5155315945';
 
-        // ---------- PUNTOS DE ENCUENTRO FIJOS (Coordenadas de Google Maps) ----------
+        // ---------- PUNTOS DE ENCUENTRO FIJOS (Coordenadas actualizadas) ----------
         const MEETUP_POINTS = [
             {
                 id: 'mp1',
-                name: 'Plaza Murillo',
-                icon: 'fa-landmark',
-                lat: -16.4958,
-                lng: -68.1334,
-                description: 'Plaza principal, frente a la Catedral'
+                name: 'INFOCAL EL ALTO',
+                icon: 'fa-graduation-cap',
+                lat: -16.5043,
+                lng: -68.1496,
+                description: 'Instituto de Formación INFOCAL - El Alto',
+                mapsUrl: 'https://maps.app.goo.gl/gzR21e2SB3sBmTLP9'
             },
             {
                 id: 'mp2',
-                name: 'Estación Central',
-                icon: 'fa-train',
-                lat: -16.4960,
-                lng: -68.1400,
-                description: 'Entrada principal de la estación'
+                name: 'UPEA EL ALTO',
+                icon: 'fa-university',
+                lat: -16.5061,
+                lng: -68.1455,
+                description: 'Universidad Pública de El Alto',
+                mapsUrl: 'https://maps.app.goo.gl/GmVrcDHdcnDCqZeEA'
             },
             {
                 id: 'mp3',
-                name: 'Centro Comercial',
-                icon: 'fa-shopping-mall',
-                lat: -16.5100,
-                lng: -68.1280,
-                description: 'Entrada principal, puerta 2'
+                name: 'PLAZA SAN FRANCISCO LA PAZ',
+                icon: 'fa-church',
+                lat: -16.4959,
+                lng: -68.1338,
+                description: 'Plaza San Francisco - La Paz',
+                mapsUrl: 'https://maps.app.goo.gl/WYmZ4AJhuazMRBNAA'
             },
             {
                 id: 'mp4',
-                name: 'Parque Central',
-                icon: 'fa-tree',
-                lat: -16.5050,
-                lng: -68.1500,
-                description: 'Monumento principal del parque'
+                name: 'OBELISCO TELEFERICO MORADO LA PAZ',
+                icon: 'fa-monument',
+                lat: -16.4999,
+                lng: -68.1337,
+                description: 'Obelisco - Teleférico Morado - La Paz',
+                mapsUrl: 'https://maps.app.goo.gl/xmR2irQtmavQwrD77'
+            },
+            {
+                id: 'mp5',
+                name: 'TELEFERICO AMARILLO SATELITE EL ALTO',
+                icon: 'fa-cable-car',
+                lat: -16.5173,
+                lng: -68.1576,
+                description: 'Estación Teleférico Amarillo - Satélite - El Alto',
+                mapsUrl: 'https://maps.app.goo.gl/3DGGKDuenTcVPUXT9'
             }
         ];
 
@@ -671,6 +814,7 @@
         let products = [];
         let currentCategory = 'all';
         let currentTab = 'shop';
+        let currentReceiptData = null;
 
         // Entrega
         let deliveryMethod = null;
@@ -798,7 +942,6 @@
 
             document.querySelectorAll('.pickup-card').forEach(card => {
                 card.addEventListener('click', (e) => {
-                    // No seleccionar si se hizo clic en el botón de Google Maps
                     if (e.target.closest('.pk-map-btn')) return;
                     
                     document.querySelectorAll('.pickup-card').forEach(c => c.classList.remove('selected'));
@@ -818,11 +961,16 @@
                     <div class="mp-icon"><i class="fas ${point.icon}"></i></div>
                     <div class="mp-name">${point.name}</div>
                     <div class="mp-coords">${point.lat.toFixed(4)}, ${point.lng.toFixed(4)}</div>
+                    <a href="${point.mapsUrl}" target="_blank" class="mp-link" onclick="event.stopPropagation();">
+                        <i class="fas fa-map-marker-alt"></i> Ver mapa
+                    </a>
                 </div>
             `).join('');
 
             document.querySelectorAll('.meetup-point-card').forEach(card => {
-                card.addEventListener('click', () => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.mp-link')) return;
+                    
                     document.querySelectorAll('.meetup-point-card').forEach(c => c.classList.remove('selected'));
                     card.classList.add('selected');
                     const pointId = card.dataset.pointId;
@@ -913,7 +1061,6 @@
             document.getElementById('delivery-date').value = '';
             document.getElementById('delivery-time').value = '';
 
-            // Configurar fecha mínima (hoy)
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('delivery-date').min = today;
 
@@ -993,12 +1140,9 @@
 
         function savePurchaseToHistory(purchaseData) {
             const history = getPurchaseHistory();
-            history.unshift({
-                ...purchaseData,
-                id: 'PUR-' + Date.now(),
-                date: new Date().toISOString()
-            });
-            // Mantener solo las últimas 20 compras
+            purchaseData.id = 'PUR-' + Date.now();
+            purchaseData.date = new Date().toISOString();
+            history.unshift(purchaseData);
             if (history.length > 20) history.pop();
             localStorage.setItem('giko_purchase_history', JSON.stringify(history));
         }
@@ -1044,7 +1188,7 @@
                 }
 
                 return `
-                    <div class="history-item">
+                    <div class="history-item" data-purchase-id="${purchase.id}">
                         <div class="history-item-header">
                             <div class="history-product-name">${purchase.product_name}</div>
                             <div class="history-date">${new Date(purchase.date).toLocaleDateString('es-ES', { 
@@ -1059,9 +1203,163 @@
                         </div>
                         <div class="history-amount">-${formatCurrency(purchase.total_price)}</div>
                         ${deliveryHtml}
+                        <div class="flex gap-2 mt-2">
+                            <button class="download-receipt-btn" onclick="generateReceipt('${purchase.id}')">
+                                <i class="fas fa-download"></i> Descargar comprobante
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        // ---------- Generar comprobante ----------
+        function generateReceipt(purchaseId) {
+            const history = getPurchaseHistory();
+            const purchase = history.find(p => p.id === purchaseId);
+            if (!purchase) {
+                showToast('Compra no encontrada', 'error');
+                return;
+            }
+
+            currentReceiptData = purchase;
+
+            let deliveryInfo = '';
+            if (purchase.delivery_method === 'pickup') {
+                deliveryInfo = `
+                    <div class="receipt-row">
+                        <span class="receipt-label">Sucursal:</span>
+                        <span class="receipt-value">${purchase.pickup_name || 'N/A'}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Dirección:</span>
+                        <span class="receipt-value">${purchase.pickup_address || 'N/A'}</span>
+                    </div>
+                `;
+            } else if (purchase.delivery_method === 'meetup') {
+                deliveryInfo = `
+                    <div class="receipt-row">
+                        <span class="receipt-label">Punto de encuentro:</span>
+                        <span class="receipt-value">${purchase.meetup_name || 'N/A'}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Descripción:</span>
+                        <span class="receipt-value">${purchase.meetup_description || 'N/A'}</span>
+                    </div>
+                `;
+            }
+
+            const receiptHtml = `
+                <div class="receipt-header">
+                    <div class="receipt-logo">GIKO <span style="color:#ea580c">SHOP</span></div>
+                    <div class="receipt-title">Comprobante de compra</div>
+                    <div class="receipt-qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                </div>
+                <div class="receipt-body">
+                    <div class="receipt-row">
+                        <span class="receipt-label">N° Compra:</span>
+                        <span class="receipt-value">${purchase.id}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Fecha de compra:</span>
+                        <span class="receipt-value">${new Date(purchase.date).toLocaleDateString('es-ES', { 
+                            day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' 
+                        })}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Producto:</span>
+                        <span class="receipt-value">${purchase.product_name}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Cantidad:</span>
+                        <span class="receipt-value">${purchase.quantity} unidades</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Precio unitario:</span>
+                        <span class="receipt-value">${formatCurrency(purchase.unit_price)}</span>
+                    </div>
+                    ${deliveryInfo}
+                    <div class="receipt-row">
+                        <span class="receipt-label">Fecha de entrega:</span>
+                        <span class="receipt-value">${purchase.delivery_date || 'N/A'} ${purchase.delivery_time || ''}</span>
+                    </div>
+                    ${purchase.delivery_notes ? `
+                    <div class="receipt-row">
+                        <span class="receipt-label">Notas:</span>
+                        <span class="receipt-value">${purchase.delivery_notes}</span>
+                    </div>
+                    ` : ''}
+                    <div class="receipt-row receipt-total">
+                        <span class="receipt-label">TOTAL:</span>
+                        <span class="receipt-value">${formatCurrency(purchase.total_price)}</span>
+                    </div>
+                </div>
+                <div class="receipt-footer">
+                    Gracias por su compra<br>
+                    GIKO SHOP - Bolivia<br>
+                    Este comprobante es válido como constancia de compra
+                </div>
+            `;
+
+            document.getElementById('receipt-content').innerHTML = receiptHtml;
+            openModal('receipt-modal');
+        }
+
+        async function downloadReceipt() {
+            try {
+                const receiptElement = document.getElementById('receipt-content');
+                const canvas = await html2canvas(receiptElement, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    useCORS: true
+                });
+                
+                const link = document.createElement('a');
+                link.download = `comprobante-${currentReceiptData.id}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                showToast('Comprobante descargado correctamente', 'success');
+            } catch (error) {
+                console.error('Error downloading receipt:', error);
+                showToast('Error al descargar el comprobante', 'error');
+            }
+        }
+
+        async function shareReceipt() {
+            try {
+                const receiptElement = document.getElementById('receipt-content');
+                const canvas = await html2canvas(receiptElement, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    useCORS: true
+                });
+                
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], `comprobante-${currentReceiptData.id}.png`, { type: 'image/png' });
+                
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Comprobante de compra - GIKO SHOP',
+                        text: `Comprobante de compra: ${currentReceiptData.product_name} - ${formatCurrency(currentReceiptData.total_price)}`,
+                        files: [file]
+                    });
+                } else {
+                    // Fallback para navegadores que no soportan Web Share API
+                    const link = document.createElement('a');
+                    link.download = `comprobante-${currentReceiptData.id}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    showToast('Comprobante descargado (compartir no disponible)', 'success');
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Error sharing receipt:', error);
+                    showToast('Error al compartir el comprobante', 'error');
+                }
+            }
         }
 
         // ---------- Usuario / saldo ----------
@@ -1170,9 +1468,11 @@
             document.getElementById('confirm-purchase').addEventListener('click', processPurchase);
             document.getElementById('close-result-modal').addEventListener('click', () => { 
                 closeModal('result-modal'); 
-                // Recargar para actualizar saldo e historial
                 window.location.reload(); 
             });
+            document.getElementById('close-receipt-modal').addEventListener('click', () => closeModal('receipt-modal'));
+            document.getElementById('download-receipt').addEventListener('click', downloadReceipt);
+            document.getElementById('share-receipt').addEventListener('click', shareReceipt);
         });
 
         // ---------- Flujo de compra ----------
@@ -1198,7 +1498,7 @@
                     <div class="mb-1"><strong>Punto de encuentro:</strong><br>${selectedMeetupPoint.name}</div>
                     <div class="mb-1"><strong>Descripción:</strong><br>${selectedMeetupPoint.description}</div>
                     <div class="mb-1"><strong>Coordenadas:</strong><br>${selectedMeetupPoint.lat.toFixed(6)}, ${selectedMeetupPoint.lng.toFixed(6)}</div>
-                    <div class="mb-1"><a href="${gmapsLink}" target="_blank" class="gmaps-link"><i class="fas fa-external-link-alt"></i> Ver en Google Maps</a></div>
+                    <div class="mb-1"><a href="${selectedMeetupPoint.mapsUrl}" target="_blank" class="gmaps-link"><i class="fas fa-external-link-alt"></i> Ver en Google Maps</a></div>
                 `;
             }
 
@@ -1270,14 +1570,13 @@ ${gmapsLink ? `🗺️ Google Maps: ${gmapsLink}` : ''}`;
                     metadata.meetup_description = selectedMeetupPoint.description;
                     metadata.meetup_lat = selectedMeetupPoint.lat;
                     metadata.meetup_lng = selectedMeetupPoint.lng;
-
-                    gmapsLink = generateGoogleMapsLink(selectedMeetupPoint.lat, selectedMeetupPoint.lng, selectedMeetupPoint.name);
+                    metadata.meetup_maps_url = selectedMeetupPoint.mapsUrl;
 
                     deliveryTelegramBlock = `📍 *ENTREGA: Punto de encuentro*
 Lugar: ${selectedMeetupPoint.name}
 Descripción: ${selectedMeetupPoint.description}
 Coordenadas: ${selectedMeetupPoint.lat}, ${selectedMeetupPoint.lng}
-🗺️ Google Maps: ${gmapsLink}`;
+🗺️ Google Maps: ${selectedMeetupPoint.mapsUrl}`;
                 }
 
                 const telegramMessage = `
@@ -1310,10 +1609,8 @@ ${notes ? `📝 *NOTAS*\n${notes}\n` : ''}
                     return;
                 }
 
-                // Descontar stock
                 await decreaseProductStock(currentProduct.id, selectedQuantity);
 
-                // Registrar la compra como transacción
                 const transaction = await createPurchaseTransaction(
                     currentUser.id,
                     totalPrice,
@@ -1322,7 +1619,6 @@ ${notes ? `📝 *NOTAS*\n${notes}\n` : ''}
                 );
                 if (!transaction) throw new Error('Error al registrar la compra');
 
-                // Guardar en historial local
                 savePurchaseToHistory({
                     product_name: currentProduct.name,
                     quantity: selectedQuantity,
