@@ -7,27 +7,26 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0A0E27">
+    <meta name="theme-color" content="#F5F7FA">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="GIKO" />
+    <meta name="apple-mobile-web-app-title" content="Giko" />
     <link rel="manifest" href="/site.webmanifest" />
     <style>
         :root {
-            --navy-deep: #0A0E27;
-            --navy-mid: #1E3A8A;
-            --sky-top: #DBEAFE;
-            --sky-bottom: #EFF6FF;
-            --accent-teal: #00D4FF;
-            --accent-blue: #0066FF;
-            --field-bg: #F0F4FF;
-            --ink: #1E1B4B;
-            --muted: #6B7280;
+            --navy-deep: #55555B;
+            --navy-mid: #74747A;
+            --sky-top: #EAF6FF;
+            --sky-bottom: #F5F7FA;
+            --accent-teal: #27C3E8;
+            --accent-blue: #168FE5;
+            --field-bg: #FFFFFF;
+            --ink: #1C1C1E;
+            --muted: #6B6B70;
         }
 
         * { box-sizing: border-box; }
@@ -37,7 +36,7 @@
             padding: 0;
             font-family: 'Inter', sans-serif;
             color: var(--ink);
-            background-color: #0A0E27;
+            background-color: #E8E8ED;
         }
 
         body {
@@ -50,39 +49,44 @@
         .stage {
             position: relative;
             width: 100%;
-            max-width: 480px;
+            max-width: 460px;
             min-height: 100vh;
+            min-height: 100dvh;
             margin: 0 auto;
-            overflow: hidden;
-            background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-mid) 32%, var(--sky-top) 68%, var(--sky-bottom) 100%);
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: var(--sky-bottom);
         }
 
         .stage:before {
             content: '';
             position: absolute;
-            top: -120px;
-            right: -100px;
-            width: 320px;
-            height: 320px;
+            top: -150px;
+            right: -120px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(0, 102, 255, 0.35), transparent 70%);
+            background: radial-gradient(circle at 30% 30%, rgba(39, 195, 232, 0.15), transparent 70%);
             pointer-events: none;
         }
 
         .content {
             position: relative;
             z-index: 2;
-            padding: 56px 32px 40px;
+            width: 100%;
+            max-width: 460px;
+            padding: 34px 26px 30px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            min-height: 100dvh;
         }
 
         .logo-wrap {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 44px;
+            margin-bottom: 28px;
         }
 
         .logo-mark {
@@ -99,27 +103,37 @@
             margin: 0 -5px;
         }
 
-        .dot.d1 { background: #00D4FF; }
-        .dot.d2 { background: #0066FF; z-index: 1; }
-        .dot.d3 { background: #0044CC; margin-top: 10px; }
+        .dot.d1 { background: #27C3E8; }
+        .dot.d2 { background: #168FE5; z-index: 1; }
+        .dot.d3 { background: #1268B3; margin-top: 10px; }
 
         .brand-name {
             font-size: 2.5rem;
             font-weight: 800;
             letter-spacing: -1px;
-            color: #FFFFFF;
+            color: #1C1C1E;
             text-align: center;
         }
 
         .brand-tag {
-            color: rgba(255,255,255,0.65);
+            color: #77777D;
             font-size: 0.85rem;
             margin-top: 4px;
             text-align: center;
         }
 
+        .brand-tag:after {
+            content: '';
+            display: block;
+            width: 34px;
+            height: 3px;
+            margin: 12px auto 0;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+        }
+
         .panel-heading {
-            color: #FFFFFF;
+            color: #1C1C1E;
             font-weight: 700;
             font-size: 0.85rem;
             letter-spacing: 1.5px;
@@ -129,41 +143,53 @@
 
         .tabs-row {
             display: flex;
-            gap: 24px;
-            margin-bottom: 20px;
+            gap: 4px;
+            margin-bottom: 28px;
+            padding: 4px;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
+            background: #FFFFFF;
         }
 
         .tab-button {
             background: none;
             border: none;
-            padding: 0 0 8px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
+            flex: 1;
+            padding: 10px 8px;
+            border-radius: 9px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #6B6B70;
             cursor: pointer;
             position: relative;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
         .tab-button.active {
             color: #FFFFFF;
+            background: linear-gradient(115deg, #25BCE2, #168FE5);
+            box-shadow: 0 4px 10px rgba(22, 143, 229, 0.2);
         }
 
-        .tab-button.active:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 3px;
-            border-radius: 3px;
-            background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+        .auth-title {
+            color: var(--ink);
+            font-size: 1.65rem;
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 6px;
+        }
+
+        .auth-subtitle {
+            color: #6B6B70;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 26px;
         }
 
         .field {
             position: relative;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         .field-icon {
@@ -171,28 +197,28 @@
             left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6B7280;
+            color: #7FAFD0;
             font-size: 0.95rem;
         }
 
         .input-field {
             width: 100%;
-            border: none;
-            border-radius: 16px;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
             background: var(--field-bg);
             color: var(--ink);
-            padding: 16px 18px 16px 46px;
-            font-size: 0.95rem;
-            box-shadow: 0 2px 10px rgba(10, 14, 39, 0.06);
-            transition: box-shadow 0.2s ease, background 0.2s ease;
+            padding: 14px 44px 14px 44px;
+            font-size: 0.9rem;
+            box-shadow: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .input-field::placeholder { color: #6B7280; }
+        .input-field::placeholder { color: #9A9AA0; }
 
         .input-field:focus {
             outline: none;
-            background: #FFFFFF;
-            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.25);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(22, 143, 229, 0.12);
         }
 
         .password-toggle {
@@ -201,7 +227,7 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #6B7280;
+            color: #77777D;
         }
 
         .password-toggle:hover { color: var(--accent-blue); }
@@ -210,49 +236,47 @@
             display: block;
             font-size: 0.78rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.75);
+            color: #4F6E83;
             margin-bottom: 6px;
         }
 
         .helper-text {
             font-size: 0.72rem;
-            color: rgba(30, 27, 75, 0.55);
+            color: #77777D;
             margin-top: 4px;
         }
 
         .remember-row {
             display: flex;
             align-items: center;
-            margin: 4px 0 24px;
+            margin: 6px 2px 22px;
         }
 
         .remember-row label {
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.75);
+            color: #6B6B70;
         }
 
         .btn-primary {
             width: 100%;
             border: none;
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 12px;
+            padding: 15px;
             font-weight: 700;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 0.96rem;
             color: white;
-            background: linear-gradient(90deg, var(--accent-teal) 0%, var(--accent-blue) 100%);
-            box-shadow: 0 12px 24px -8px rgba(0, 102, 255, 0.55);
+            background: linear-gradient(110deg, #27C3E8 0%, #168FE5 100%);
+            box-shadow: 0 8px 18px rgba(22, 143, 229, 0.22);
             cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 30px -8px rgba(0, 102, 255, 0.65);
+            filter: brightness(0.97);
+            box-shadow: 0 10px 22px rgba(22, 143, 229, 0.28);
         }
 
-        .btn-primary:active { transform: translateY(0); }
+        .btn-primary:active { transform: scale(0.98); }
 
         .btn-primary:disabled {
             opacity: 0.6;
@@ -268,20 +292,20 @@
             border: none;
             margin-top: 18px;
             font-size: 0.85rem;
-            color: var(--accent-blue);
+            color: #168FE5;
             cursor: pointer;
         }
 
         .bottom-note {
             margin-top: auto;
-            padding-top: 40px;
+            padding-top: 30px;
             text-align: center;
             font-size: 0.85rem;
-            color: var(--ink);
+            color: #6B6B70;
         }
 
         .bottom-note a, .bottom-note button.link {
-            color: var(--accent-blue);
+            color: #168FE5;
             font-weight: 700;
             background: none;
             border: none;
@@ -292,11 +316,11 @@
         .terms-note {
             text-align: center;
             font-size: 0.7rem;
-            color: rgba(30, 27, 75, 0.5);
+            color: #8A8A90;
             margin-top: 16px;
         }
 
-        .terms-note a { color: var(--accent-blue); }
+        .terms-note a { color: #168FE5; }
 
         .hidden { display: none !important; }
 
@@ -340,7 +364,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+            background: linear-gradient(180deg, #55555B 0%, #74747A 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -600,11 +624,11 @@
     <!-- Toast Notifications Container -->
     <div id="toast-container"></div>
 
-    <!-- Modal de Recuperación de Contraseña -->
+    <!-- Modal de recuperación de cuenta -->
     <div id="password-recovery-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="text-2xl font-bold">Recuperación de Contraseña</h2>
+                <h2 class="text-2xl font-bold">Recuperación de cuenta</h2>
                 <div class="close-modal" id="close-recovery-modal">
                     <i class="fas fa-times"></i>
                 </div>
@@ -638,7 +662,7 @@
                     <div class="form-group">
                         <label class="form-label">Descripción de tu situación *</label>
                         <textarea id="situation-description" class="form-control" rows="4"
-                                  placeholder="Ej: Olvidé mi contraseña y no tengo acceso al correo de recuperación..."
+                                  placeholder="Ej: Olvidé mi PIN y necesito recuperar el acceso..."
                                   required></textarea>
                     </div>
 
@@ -666,7 +690,7 @@
                                 <li>Se evaluará tu situación mediante el mensaje proporcionado.</li>
                                 <li>Una vez aprobada la solicitud, se procederá a eliminar la cuenta existente asociada al correo electrónico proporcionado.</li>
                                 <li>Podrás crear una nueva cuenta utilizando el mismo correo electrónico.</li>
-                                <li>Durante la creación de la nueva cuenta, establecerás una nueva contraseña.</li>
+                                <li>Durante la creación de la nueva cuenta, establecerás un nuevo PIN.</li>
                                 <li>Una vez creada la nueva cuenta, se transferirá automáticamente el saldo registrado anteriormente en la aplicación.</li>
                                 <li>Todo el proceso será monitoreado y asistido por nuestro equipo de soporte vía WhatsApp.</li>
                                 <li>El tiempo de respuesta puede variar entre 2 a 24 horas hábiles.</li>
@@ -787,23 +811,26 @@
                 <button id="signup-tab" class="tab-button">Registrarse</button>
             </div>
 
+            <h1 class="auth-title" id="auth-title">Bienvenido de nuevo</h1>
+            <p class="auth-subtitle" id="auth-subtitle">Inicia sesión para continuar.</p>
+
             <!-- Contenido de pestañas -->
             <div id="auth-container">
                 <!-- Formulario de Login -->
                 <div id="login-form-container">
                     <form id="login-form">
                         <div class="field">
-                            <i class="field-icon fas fa-user"></i>
-                            <input type="email" id="login-email" required
+                            <i class="field-icon fas fa-phone"></i>
+                            <input type="tel" id="login-phone" inputmode="numeric" autocomplete="tel" pattern="[0-9]{8}" maxlength="8" required
                                    class="input-field"
-                                   placeholder="Usuario">
+                                   placeholder="Celular Bolivia (8 dígitos)">
                         </div>
                         <div class="field">
                             <i class="field-icon fas fa-lock"></i>
-                            <input type="password" id="login-password" required
+                            <input type="password" id="login-pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="current-password" required
                                    class="input-field"
-                                   placeholder="Contraseña">
-                            <i class="password-toggle fas fa-eye" id="toggle-login-password"></i>
+                                   placeholder="PIN de 4 dígitos">
+                            <i class="password-toggle fas fa-eye" id="toggle-login-pin"></i>
                         </div>
                         <div class="remember-row">
                             <input type="checkbox" id="remember-session" class="mr-2" style="accent-color:var(--accent-blue);">
@@ -811,7 +838,7 @@
                         </div>
                         <button type="submit" class="btn-primary">Ingresar</button>
                         <button type="button" id="forgot-password-btn" class="forgot-password-btn">
-                            ¿Olvidaste tu contraseña?
+                            ¿Olvidaste tu PIN?
                         </button>
                     </form>
 
@@ -837,9 +864,9 @@
                         </div>
                         <div class="field">
                             <i class="field-icon fas fa-phone"></i>
-                            <input type="tel" id="signup-phone" pattern="[0-9]{8}" required
+                            <input type="tel" id="signup-phone" inputmode="numeric" autocomplete="tel" pattern="[0-9]{8}" maxlength="8" required
                                    class="input-field"
-                                   placeholder="Número de celular">
+                                   placeholder="Celular Bolivia (8 dígitos)">
                         </div>
                         <div class="field">
                             <i class="field-icon fas fa-star"></i>
@@ -849,12 +876,12 @@
                         </div>
                         <div class="field">
                             <i class="field-icon fas fa-lock"></i>
-                            <input type="password" id="signup-password" required
+                            <input type="password" id="signup-pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="new-password" required
                                    class="input-field"
-                                   placeholder="Crear contraseña">
-                            <i class="password-toggle fas fa-eye" id="toggle-signup-password"></i>
+                                   placeholder="Crear PIN de 4 dígitos">
+                            <i class="password-toggle fas fa-eye" id="toggle-signup-pin"></i>
                         </div>
-                        <p class="helper-text" style="color: rgba(255,255,255,0.6); margin: -10px 0 18px;">Mínimo 8 caracteres con números y letras</p>
+                        <p class="helper-text" style="color: #77777D; margin: -6px 0 18px;">Usa cuatro números como PIN. Confirma tu cuenta por correo e inicia sesión con tu celular y PIN.</p>
                         <button type="submit" class="btn-primary">Crear Cuenta</button>
                     </form>
 
@@ -862,6 +889,7 @@
                         ¿Ya tienes cuenta? <button type="button" id="switch-to-login" class="link">Inicia sesión</button>
                     </div>
                 </div>
+
             </div>
 
             <div id="auth-message" class="hidden"></div>
@@ -878,6 +906,22 @@
         const supabaseUrl = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const pendingProfileStorageKey = 'giko_pending_profile';
+
+        function getPendingSignupProfile() {
+            const storedProfile = localStorage.getItem(pendingProfileStorageKey);
+            if (!storedProfile) return null;
+
+            try {
+                const profile = JSON.parse(storedProfile);
+                if (profile.email && profile.name && profile.phone) return profile;
+                throw new Error('Los datos pendientes del registro están incompletos');
+            } catch (error) {
+                console.error('Error leyendo el registro pendiente:', error);
+                localStorage.removeItem(pendingProfileStorageKey);
+                return null;
+            }
+        }
 
         // Verificar sesión al cargar la página
         async function checkSession() {
@@ -890,6 +934,11 @@
                 }
 
                 if (session) {
+                    const pendingProfile = getPendingSignupProfile();
+                    if (pendingProfile?.email?.toLowerCase() === session.user.email?.toLowerCase()) {
+                        return false;
+                    }
+
                     console.log('Sesión activa encontrada, redirigiendo al dashboard...');
                     showToast('info', 'Sesión activa', 'Redirigiendo al dashboard...');
 
@@ -909,53 +958,79 @@
 
         // Función para validar si el nombre ya existe
         async function checkNameExists(name) {
-            try {
-                const { data, error } = await window.supabase
-                    .from('user_profiles')
-                    .select('full_name')
-                    .eq('full_name', name)
-                    .maybeSingle();
+            const { data, error } = await window.supabase
+                .from('user_profiles')
+                .select('full_name')
+                .eq('full_name', name)
+                .maybeSingle();
 
-                if (error) throw error;
-                return !!data;
-            } catch (error) {
-                console.error('Error verificando nombre:', error);
-                return false;
-            }
+            if (error) throw error;
+            return !!data;
+        }
+
+        async function getEmailForPhone(phone) {
+            const { data, error } = await window.supabase
+                .from('user_profiles')
+                .select('email')
+                .eq('phone', phone)
+                .maybeSingle();
+
+            if (error) throw error;
+            return data?.email || null;
         }
 
         // Función para validar si el email ya existe
         async function checkEmailExists(email) {
-            try {
-                const { data, error } = await window.supabase
-                    .from('user_profiles')
-                    .select('email')
-                    .eq('email', email)
-                    .maybeSingle();
+            const { data, error } = await window.supabase
+                .from('user_profiles')
+                .select('email')
+                .eq('email', email)
+                .maybeSingle();
 
-                if (error) throw error;
-                return !!data;
-            } catch (error) {
-                console.error('Error verificando email:', error);
-                return false;
-            }
+            if (error) throw error;
+            return !!data;
         }
 
         // Función para validar si el teléfono ya existe
         async function checkPhoneExists(phone) {
-            try {
-                const { data, error } = await window.supabase
-                    .from('user_profiles')
-                    .select('phone')
-                    .eq('phone', phone)
-                    .maybeSingle();
+            const { data, error } = await window.supabase
+                .from('user_profiles')
+                .select('phone')
+                .eq('phone', phone)
+                .maybeSingle();
 
-                if (error) throw error;
-                return !!data;
-            } catch (error) {
-                console.error('Error verificando teléfono:', error);
-                return false;
-            }
+            if (error) throw error;
+            return !!data;
+        }
+
+        function getSupabasePasswordFromPin(pin) {
+            return `GIKO-PIN-${pin}`;
+        }
+
+        async function saveNewUserProfile(userData) {
+            const { error } = await window.supabase
+                .from('user_profiles')
+                .upsert({
+                    id: userData.id,
+                    full_name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone,
+                    avatar_url: null
+                }, { onConflict: 'id' });
+
+            if (error) throw error;
+
+            const { error: pinError } = await window.supabase.rpc('set_user_pin_hash', {
+                pin_input: userData.pin
+            });
+            if (pinError) throw pinError;
+
+            await sendNewUserToTelegram({
+                name: userData.name,
+                email: userData.email,
+                phone: userData.phone,
+                creatorCode: userData.creatorCode || 'No proporcionado'
+            });
         }
 
         // Función para enviar notificación a Telegram de nuevo registro
@@ -1003,6 +1078,11 @@
                 return;
             }
 
+            const pendingProfile = getPendingSignupProfile();
+            if (pendingProfile) {
+                document.getElementById('login-phone').value = pendingProfile.phone;
+            }
+
             setTimeout(() => {
                 const splashScreen = document.getElementById('splash-screen');
                 const authContent = document.querySelector('.content');
@@ -1021,12 +1101,16 @@
             const signupForm = document.getElementById('signup-form-container');
             const switchToSignup = document.getElementById('switch-to-signup');
             const switchToLogin = document.getElementById('switch-to-login');
+            const authTitle = document.getElementById('auth-title');
+            const authSubtitle = document.getElementById('auth-subtitle');
 
             function showLogin() {
                 loginTab.classList.add('active');
                 signupTab.classList.remove('active');
                 loginForm.classList.remove('hidden');
                 signupForm.classList.add('hidden');
+                authTitle.textContent = 'Bienvenido de nuevo';
+                authSubtitle.textContent = 'Inicia sesión con tu celular y PIN.';
             }
 
             function showSignup() {
@@ -1034,6 +1118,8 @@
                 loginTab.classList.remove('active');
                 signupForm.classList.remove('hidden');
                 loginForm.classList.add('hidden');
+                authTitle.textContent = 'Crea tu cuenta';
+                authSubtitle.textContent = 'Regístrate para empezar.';
             }
 
             loginTab.addEventListener('click', showLogin);
@@ -1042,10 +1128,10 @@
             switchToLogin.addEventListener('click', showLogin);
 
             // Toggle para mostrar/ocultar contraseña
-            const toggleLoginPassword = document.getElementById('toggle-login-password');
-            const loginPassword = document.getElementById('login-password');
-            const toggleSignupPassword = document.getElementById('toggle-signup-password');
-            const signupPassword = document.getElementById('signup-password');
+            const toggleLoginPassword = document.getElementById('toggle-login-pin');
+            const loginPassword = document.getElementById('login-pin');
+            const toggleSignupPassword = document.getElementById('toggle-signup-pin');
+            const signupPassword = document.getElementById('signup-pin');
 
             toggleLoginPassword.addEventListener('click', function() {
                 const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -1150,8 +1236,8 @@
             document.getElementById('login-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
+                const phone = document.getElementById('login-phone').value.trim();
+                const pin = document.getElementById('login-pin').value;
                 const rememberSession = document.getElementById('remember-session').checked;
 
                 const submitBtn = this.querySelector('button[type="submit"]');
@@ -1160,12 +1246,28 @@
                 submitBtn.disabled = true;
 
                 try {
+                    if (!/^[0-9]{8}$/.test(phone)) throw new Error('Ingresa tu celular boliviano de 8 dígitos.');
+                    if (!/^\d{4}$/.test(pin)) throw new Error('El PIN debe tener exactamente 4 dígitos.');
+
+                    const email = await getEmailForPhone(phone);
+                    if (!email) throw new Error('No encontramos una cuenta con ese número de celular.');
+
                     const { data, error } = await window.supabase.auth.signInWithPassword({
                         email: email,
-                        password: password
+                        password: getSupabasePasswordFromPin(pin)
                     });
 
                     if (error) throw error;
+
+                    const pendingProfile = getPendingSignupProfile();
+                    if (pendingProfile?.email?.toLowerCase() === email.toLowerCase()) {
+                        await saveNewUserProfile({
+                            ...pendingProfile,
+                            id: data.user.id,
+                            pin: pin
+                        });
+                        localStorage.removeItem(pendingProfileStorageKey);
+                    }
 
                     if (rememberSession) {
                         localStorage.setItem('giko_remember_session', 'true');
@@ -1181,6 +1283,7 @@
 
                 } catch (error) {
                     showToast('error', 'Error', error.message || 'Error al iniciar sesión');
+                } finally {
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
                 }
@@ -1193,7 +1296,7 @@
                 const email = document.getElementById('signup-email').value.trim();
                 const phone = document.getElementById('signup-phone').value.trim();
                 const creatorCode = document.getElementById('signup-creator-code').value.trim();
-                const password = document.getElementById('signup-password').value;
+                const pin = document.getElementById('signup-pin').value;
 
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
@@ -1201,6 +1304,9 @@
                 submitBtn.disabled = true;
 
                 try {
+                    if (!/^[0-9]{8}$/.test(phone)) throw new Error('Ingresa un celular boliviano válido de 8 dígitos.');
+                    if (!/^\d{4}$/.test(pin)) throw new Error('El PIN debe tener exactamente 4 dígitos.');
+
                     // VALIDACIONES - Verificar si los datos ya existen
 
                     // 1. Verificar si el nombre ya existe
@@ -1235,61 +1341,41 @@
 
                     const { data: authData, error: authError } = await window.supabase.auth.signUp({
                         email: email,
-                        password: password,
-                        options: {
-                            data: {
-                                phone: phone,
-                                full_name: name
-                            }
-                        }
+                        password: getSupabasePasswordFromPin(pin)
                     });
 
                     if (authError) throw authError;
 
                     const userId = authData.user?.id;
-
                     if (!userId) {
                         throw new Error('No se pudo obtener el ID del usuario');
                     }
 
-                    // Guardar SOLO los datos básicos en user_profiles
-                    const { error: dbError } = await window.supabase
-                        .from('user_profiles')
-                        .insert([
-                            {
-                                id: userId,
-                                full_name: name,
-                                email: email,
-                                phone: phone,
-                                avatar_url: null
-                            }
-                        ]);
-
-                    if (dbError) {
-                        console.error('Error insertando en user_profiles:', dbError);
-                        throw dbError;
-                    }
-
-                    // Enviar notificación a Telegram CON el código de creador (si existe)
-                    await sendNewUserToTelegram({
+                    const pendingProfile = {
+                        id: userId,
                         name: name,
                         email: email,
                         phone: phone,
-                        creatorCode: creatorCode || 'No proporcionado'
-                    });
+                        creatorCode: creatorCode,
+                    };
 
-                    showToast('success', '¡Éxito!', 'Cuenta creada exitosamente.');
-
-                    setTimeout(() => {
+                    if (authData.session) {
+                        await saveNewUserProfile({ ...pendingProfile, pin: pin });
+                        showToast('success', '¡Éxito!', 'Cuenta creada exitosamente.');
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1000);
+                    } else {
+                        localStorage.setItem(pendingProfileStorageKey, JSON.stringify(pendingProfile));
                         showLogin();
-                        document.getElementById('login-email').value = email;
-                        document.getElementById('login-password').value = '';
-                        showToast('info', 'Listo', 'Ahora puedes iniciar sesión con tus credenciales');
-                    }, 2000);
+                        document.getElementById('login-phone').value = phone;
+                        showToast('info', 'Confirma tu correo', 'Revisa tu correo y confirma la cuenta. Después inicia sesión con tu celular y PIN desde este dispositivo.');
+                    }
 
                 } catch (error) {
                     console.error('Error en registro:', error);
-                    showToast('error', 'Error', error.message || 'Error al crear la cuenta');
+                    const errorMessage = error.message || '';
+                    showToast('error', 'Error', errorMessage || 'Error al crear la cuenta');
                 } finally {
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;

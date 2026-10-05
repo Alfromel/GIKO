@@ -2,23 +2,35 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Giko</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" id="apple-status-bar-style">
     <meta name="theme-color" content="#ffffff" id="theme-color">
+    <script>
+        try {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#070b14');
+                document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.setAttribute('content', 'black');
+            }
+        } catch (error) {
+            console.error('No se pudo restaurar el tema guardado:', error);
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e3a8a;
-            --secondary: #1e3a8a;
-            --secondary-dark: #172554;
-            --accent: #3b82f6;
-            --accent-dark: #2563eb;
+            --primary: #168fe5;
+            --primary-dark: #1268b3;
+            --secondary: #555b64;
+            --secondary-dark: #343a43;
+            --accent: #27c3e8;
+            --accent-dark: #168fe5;
             --safe-area-inset-top: env(safe-area-inset-top);
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
             --bg-primary: #f8fafc;
@@ -36,9 +48,15 @@
             --danger: #ef4444;
         }
 
+        html {
+            background-color: var(--bg-primary);
+            color-scheme: light;
+        }
+
         [data-theme="dark"] {
-            --primary: #60a5fa;
-            --primary-dark: #2563eb;
+            color-scheme: dark;
+            --primary: #27c3e8;
+            --primary-dark: #168fe5;
             --bg-primary: #070b14;
             --bg-secondary: #0b1220;
             --text-primary: #e5eefb;
@@ -62,6 +80,70 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        .dashboard-loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 4500;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            background: rgba(248, 250, 252, 0.52);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 300ms ease, visibility 300ms ease;
+        }
+
+        [data-theme="dark"] .dashboard-loading-screen {
+            background: rgba(7, 11, 20, 0.56);
+        }
+
+        .dashboard-loading-screen.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .dashboard-loading-card {
+            display: grid;
+            place-items: center;
+        }
+
+        .dashboard-loader-mark {
+            position: relative;
+            width: 58px;
+            height: 58px;
+            border: 3px solid rgba(22, 143, 229, 0.14);
+            border-top-color: var(--accent);
+            border-right-color: var(--primary);
+            border-radius: 50%;
+            animation: dashboard-loader-spin 850ms cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+            filter: drop-shadow(0 3px 10px rgba(22, 143, 229, 0.2));
+        }
+
+        .dashboard-loader-mark::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 2px solid transparent;
+            border-bottom-color: rgba(39, 195, 232, 0.42);
+            border-left-color: rgba(22, 143, 229, 0.24);
+            border-radius: 50%;
+            animation: dashboard-loader-spin 1.25s linear infinite reverse;
+        }
+
+        @keyframes dashboard-loader-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .dashboard-loader-mark,
+            .dashboard-loader-mark::after {
+                animation: none;
+            }
+        }
+
         .app-toast {
             position: fixed;
             top: 20px;
@@ -79,6 +161,32 @@
             letter-spacing: 0.1px;
             opacity: 1;
             transition: opacity 0.25s ease;
+        }
+
+        .dashboard-refresh-btn {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 50%;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 160ms ease, color 160ms ease;
+        }
+
+        .dashboard-refresh-btn:hover {
+            background: var(--hover-bg);
+            color: var(--primary);
+        }
+
+        .dashboard-refresh-btn:disabled {
+            cursor: wait;
+            opacity: 0.7;
         }
 
         .modal {
@@ -140,6 +248,80 @@
             font-weight: 700;
             text-align: right;
             word-break: break-word;
+        }
+
+        .mobile-balance-visibility,
+        .desktop-balance-visibility {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.82);
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .mobile-balance-visibility:hover,
+        .desktop-balance-visibility:hover {
+            background: rgba(39,195,232,0.28);
+        }
+
+        .mobile-balance-visibility:active,
+        .desktop-balance-visibility:active {
+            background: rgba(39,195,232,0.3);
+            transform: scale(0.94);
+        }
+
+        .mobile-balance-visibility svg,
+        .desktop-balance-visibility svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card-chip-svg {
+            width: 21px;
+            height: 21px;
+            fill: none;
+            stroke: rgba(255,255,255,0.95);
+            stroke-width: 1.35;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .mobile-card-recharge-btn svg,
+        .desktop-card-recharge-btn svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mobile-action-btn,
+            .desktop-quick-action,
+            .btn-primary,
+            .action-card {
+                transition: none !important;
+            }
+
+            .mobile-action-btn:active,
+            .desktop-quick-action:hover,
+            .btn-primary:hover,
+            .action-card:hover {
+                transform: none !important;
+            }
         }
 
         @media (max-width: 768px) {
@@ -248,26 +430,44 @@
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
-                padding: 12px;
-                border-radius: 12px;
-                background: var(--card-bg);
-                box-shadow: 0 2px 8px var(--shadow-color);
-                transition: all 0.2s;
+                min-height: 76px;
+                padding: 8px 4px;
+                border: 0;
+                border-radius: 14px;
+                background: transparent;
+                text-decoration: none;
+                -webkit-tap-highlight-color: transparent;
+                transition: transform 160ms ease, background-color 160ms ease;
             }
 
-            .mobile-action-btn i {
-                width: 40px;
-                height: 40px;
+            .mobile-action-btn:active {
+                transform: scale(0.96) translateZ(0);
+                background: var(--hover-bg);
+            }
+
+            .mobile-action-icon {
+                width: 48px;
+                height: 48px;
                 border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 18px;
-                margin-bottom: 8px;
-                color: white;
+                margin-bottom: 6px;
+                color: #168fe5;
+                background: rgba(22, 143, 229, 0.1);
             }
 
-            .mobile-action-btn span { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+            .mobile-action-icon svg {
+                width: 21px;
+                height: 21px;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 1.8;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .mobile-action-btn > span:last-child { font-size: 11px; font-weight: 600; color: var(--text-primary); }
 
             .mobile-transaction-item {
                 display: flex;
@@ -389,16 +589,18 @@
 
             /* ============ TARJETA DE BALANCE - MOBILE ============ */
             .mobile-balance-card {
-                background: linear-gradient(155deg, #1e1147 0%, #2d1b69 40%, #3b2682 100%);
+                background:
+                    radial-gradient(120% 120% at 100% 0%, rgba(39, 195, 232, 0.3), transparent 52%),
+                    linear-gradient(135deg, #343A43 0%, #555B64 52%, #737B85 100%);
                 color: white;
-                border-radius: 18px;
-                padding: 20px;
+                border-radius: 22px;
+                padding: 21px;
                 margin: 16px;
                 position: relative;
                 overflow: hidden;
-                box-shadow: 0 12px 28px rgba(46, 26, 99, 0.35);
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                min-height: 180px;
+                box-shadow: 0 18px 34px rgba(40, 49, 61, 0.26);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                min-height: 210px;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -412,7 +614,7 @@
                 width: 160px;
                 height: 160px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+                background: radial-gradient(circle, rgba(39, 195, 232, 0.24) 0%, transparent 70%);
                 pointer-events: none;
             }
 
@@ -424,7 +626,7 @@
                 width: 120px;
                 height: 120px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+                background: radial-gradient(circle, rgba(22, 143, 229, 0.2) 0%, transparent 70%);
                 pointer-events: none;
             }
 
@@ -435,19 +637,19 @@
                 right: 0;
                 bottom: 0;
                 background-image:
-                    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
-                    url('https://www.onebagofdreams.com/wp-content/uploads/2023/05/DSC02179-1536x1024.webp');
-                background-size: cover, cover, cover;
+                    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                    repeating-linear-gradient(125deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 34px);
+                background-size: cover, cover, auto;
                 background-position: center, center, center;
                 background-repeat: no-repeat;
                 z-index: 0;
-                filter: brightness(0.5) saturate(1.05);
+                filter: none;
             }
 
             .mobile-balance-card .mascot-overlay {
                 position: absolute;
-                bottom: 0px;
+                bottom: 0;
                 right: 60px;
                 width: 110px;
                 height: 190px;
@@ -477,30 +679,32 @@
             .mobile-card-chip-icon {
                 width: 38px;
                 height: 30px;
-                background: linear-gradient(135deg, #fbbf24, #f59e0b);
-                border-radius: 5px;
+                background: linear-gradient(135deg, rgba(39, 195, 232, 0.95), rgba(22, 143, 229, 0.75));
+                border: 1px solid rgba(255,255,255,0.55);
+                border-radius: 7px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            }
-
-            .mobile-card-chip-icon i {
-                font-size: 14px;
-                color: #1e1147;
+                box-shadow: 0 5px 12px rgba(8, 20, 35, 0.2), inset 0 1px 0 rgba(255,255,255,0.35);
             }
 
             .mobile-card-contactless {
-                font-size: 18px;
+                width: 22px;
+                height: 22px;
                 color: rgba(255,255,255,0.6);
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 1.8;
+                stroke-linecap: round;
             }
 
             .mobile-card-brand {
                 font-size: 18px;
                 font-weight: 700;
                 letter-spacing: 1px;
-                color: rgba(255,255,255,0.9);
-                font-style: italic;
+                color: rgba(255,255,255,0.96);
+                font-style: normal;
+                text-shadow: 0 2px 10px rgba(5, 20, 35, 0.28);
             }
 
             .mobile-card-middle {
@@ -518,12 +722,20 @@
                 font-weight: 500;
             }
 
+            .mobile-card-balance-heading {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                margin-bottom: 3px;
+            }
+
             .mobile-card-balance-amount {
                 font-size: 26px;
                 font-weight: 700;
                 letter-spacing: -0.5px;
                 color: #ffffff;
-                text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                text-shadow: 0 2px 8px rgba(0,0,0,0.22);
+                font-variant-numeric: tabular-nums;
             }
 
             .mobile-card-bottom {
@@ -558,28 +770,28 @@
 
             .mobile-card-recharge-btn {
                 width: 100%;
-                margin-top: 14px;
-                padding: 10px;
-                border-radius: 10px;
-                background: rgba(255,255,255,0.1);
-                backdrop-filter: blur(4px);
-                border: 1px solid rgba(255,255,255,0.18);
+                margin-top: 15px;
+                padding: 11px;
+                border-radius: 12px;
+                background: linear-gradient(110deg, #27C3E8, #168FE5);
+                box-shadow: 0 7px 16px rgba(8, 28, 48, 0.22), inset 0 1px 0 rgba(255,255,255,0.28);
+                border: 1px solid rgba(255,255,255,0.28);
                 color: white;
                 font-size: 13px;
                 font-weight: 600;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 6px;
+                gap: 8px;
                 cursor: pointer;
-                transition: all 0.2s;
+                transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
                 position: relative;
                 z-index: 2;
             }
 
             .mobile-card-recharge-btn:active {
-                background: rgba(255,255,255,0.2);
                 transform: scale(0.98);
+                filter: brightness(0.95);
             }
 
             .mobile-empty-state {
@@ -630,6 +842,59 @@
         @media (min-width: 769px) {
             .mobile-only { display: none !important; }
 
+            .desktop-quick-actions-grid {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .desktop-quick-action {
+                min-height: 92px;
+                padding: 10px 6px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 8px;
+                color: var(--text-primary);
+                background: transparent;
+                border: 0;
+                border-radius: 16px;
+                text-decoration: none;
+                cursor: pointer;
+                transition: transform 160ms ease, background-color 160ms ease;
+            }
+
+            .desktop-quick-action:hover {
+                transform: translateY(-2px);
+                background: var(--hover-bg);
+            }
+
+            .desktop-quick-action-icon {
+                width: 50px;
+                height: 50px;
+                flex: 0 0 50px;
+                display: grid;
+                place-items: center;
+                color: #168fe5;
+                background: rgba(22, 143, 229, 0.1);
+                border-radius: 12px;
+            }
+
+            .desktop-quick-action-icon svg {
+                width: 23px;
+                height: 23px;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 1.8;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .desktop-quick-action-copy { min-width: 0; text-align: center; }
+            .desktop-quick-action-title { display: block; font-size: 12px; font-weight: 600; }
+            .desktop-quick-action-subtitle,
+            .desktop-quick-action-arrow { display: none; }
+
             .glass-card {
                 background: var(--card-bg);
                 backdrop-filter: blur(12px);
@@ -639,13 +904,13 @@
 
             .btn-primary {
                 background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-                box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+                box-shadow: 0 4px 20px rgba(22, 143, 229, 0.22);
                 transition: all 0.3s;
                 border: none;
                 cursor: pointer;
             }
 
-            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); }
+            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(22, 143, 229, 0.3); }
             .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
             .action-card {
@@ -714,15 +979,17 @@
 
             /* ============ TARJETA DE BALANCE - DESKTOP ============ */
             .balance-card {
-                background: linear-gradient(155deg, #1e1147 0%, #2d1b69 40%, #3b2682 100%);
+                background:
+                    radial-gradient(120% 140% at 100% 0%, rgba(39, 195, 232, 0.32), transparent 52%),
+                    linear-gradient(135deg, #343A43 0%, #555B64 52%, #737B85 100%);
                 color: white;
-                border-radius: 18px;
+                border-radius: 22px;
                 padding: 24px;
                 position: relative;
                 overflow: hidden;
-                box-shadow: 0 16px 32px rgba(46, 26, 99, 0.4);
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                min-height: 200px;
+                box-shadow: 0 20px 38px rgba(40, 49, 61, 0.28);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                min-height: 250px;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -736,7 +1003,7 @@
                 width: 200px;
                 height: 200px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+                background: radial-gradient(circle, rgba(39, 195, 232, 0.24) 0%, transparent 70%);
                 pointer-events: none;
             }
 
@@ -748,7 +1015,7 @@
                 width: 160px;
                 height: 160px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+                background: radial-gradient(circle, rgba(22, 143, 229, 0.2) 0%, transparent 70%);
                 pointer-events: none;
             }
 
@@ -759,19 +1026,19 @@
                 right: 0;
                 bottom: 0;
                 background-image:
-                    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                    url('https://comunidadescolar.com.bo/wp-content/uploads/2018/07/LaPazIllimani.jpg');
-                background-size: cover, cover, cover;
+                    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+                    repeating-linear-gradient(125deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 38px);
+                background-size: cover, cover, auto;
                 background-position: center, center, center;
                 background-repeat: no-repeat;
                 z-index: 0;
-                filter: brightness(0.5) saturate(1.05);
+                filter: none;
             }
 
             .balance-card .mascot-overlay {
                 position: absolute;
-                bottom: 0px;
+                bottom: 0;
                 right: -5px;
                 width: 250px;
                 height: 250px;
@@ -801,17 +1068,18 @@
             .desktop-card-chip-icon {
                 width: 42px;
                 height: 34px;
-                background: linear-gradient(135deg, #fbbf24, #f59e0b);
-                border-radius: 6px;
+                background: linear-gradient(135deg, rgba(39, 195, 232, 0.95), rgba(22, 143, 229, 0.75));
+                border: 1px solid rgba(255,255,255,0.55);
+                border-radius: 7px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                box-shadow: 0 5px 12px rgba(8, 20, 35, 0.2), inset 0 1px 0 rgba(255,255,255,0.35);
             }
 
-            .desktop-card-chip-icon i { font-size: 16px; color: #1e1147; }
-            .desktop-card-contactless { font-size: 22px; color: rgba(255,255,255,0.6); }
-            .desktop-card-brand { font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); font-style: italic; }
+            .desktop-card-chip-icon .card-chip-svg { width: 25px; height: 25px; fill: none; stroke: rgba(255,255,255,0.95); stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; }
+            .desktop-card-contactless { width: 24px; height: 24px; color: rgba(255,255,255,0.72); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+            .desktop-card-brand { font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.96); }
 
             .desktop-card-middle {
                 position: relative;
@@ -828,12 +1096,20 @@
                 font-weight: 500;
             }
 
+            .desktop-card-balance-heading {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 4px;
+            }
+
             .desktop-card-balance-amount {
                 font-size: 30px;
                 font-weight: 700;
                 letter-spacing: -0.5px;
                 color: #ffffff;
                 text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                font-variant-numeric: tabular-nums;
             }
 
             .desktop-card-bottom {
@@ -869,11 +1145,11 @@
             .desktop-card-recharge-btn {
                 width: 100%;
                 margin-top: 16px;
-                padding: 11px;
-                border-radius: 10px;
-                background: rgba(255,255,255,0.1);
-                backdrop-filter: blur(4px);
-                border: 1px solid rgba(255,255,255,0.18);
+                padding: 12px;
+                border-radius: 12px;
+                background: linear-gradient(110deg, #27C3E8, #168FE5);
+                box-shadow: 0 7px 16px rgba(8, 28, 48, 0.22), inset 0 1px 0 rgba(255,255,255,0.28);
+                border: 1px solid rgba(255,255,255,0.28);
                 color: white;
                 font-size: 13px;
                 font-weight: 600;
@@ -882,12 +1158,13 @@
                 justify-content: center;
                 gap: 8px;
                 cursor: pointer;
-                transition: all 0.2s;
+                transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
                 position: relative;
                 z-index: 2;
             }
 
-            .desktop-card-recharge-btn:hover { background: rgba(255,255,255,0.18); }
+            .desktop-card-recharge-btn:hover { filter: brightness(0.96); box-shadow: 0 9px 20px rgba(8, 28, 48, 0.28); }
+            .desktop-card-recharge-btn:active { transform: scale(0.985); }
 
             .modal-overlay { background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); }
             .modal-content { background: var(--card-bg); border-radius: 24px; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5); }
@@ -1088,7 +1365,9 @@
             width: 100%;
         }
         .receipt-header {
-            background: linear-gradient(155deg, #1e1147 0%, #2d1b69 45%, #2563eb 140%);
+            background:
+                radial-gradient(120% 120% at 100% 0%, rgba(39,195,232,0.3), transparent 52%),
+                linear-gradient(135deg, #343A43 0%, #555B64 55%, #737B85 100%);
             padding: 26px 22px 22px;
             color: #fff;
             position: relative;
@@ -1134,11 +1413,20 @@
     </style>
 </head>
 <body class="min-h-screen">
+    <div id="dashboard-loading-screen" class="dashboard-loading-screen" role="status" aria-live="polite" aria-label="Cargando datos de tu cuenta">
+        <div class="dashboard-loading-card">
+            <div class="dashboard-loader-mark" aria-hidden="true"></div>
+        </div>
+    </div>
+
     <!-- Versión Mobile -->
     <div class="mobile-only mobile-app-container">
         <div class="mobile-header">
             <div class="mobile-header-title" id="mobile-header-title">Inicio</div>
             <div class="mobile-header-actions">
+                <button type="button" class="dashboard-refresh-btn" aria-label="Actualizar dashboard" title="Actualizar">
+                    <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                </button>
                 <button id="mobile-theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
                 <button id="mobile-logout-btn" style="color: var(--primary);"><i class="fas fa-sign-out-alt"></i></button>
             </div>
@@ -1152,13 +1440,20 @@
                     <div class="mascot-overlay"></div>
                     <div class="mobile-card-top">
                         <div class="mobile-card-chip-area">
-                            <div class="mobile-card-chip-icon"><i class="fas fa-microchip"></i></div>
-                            <i class="fas fa-wifi mobile-card-contactless"></i>
+                            <div class="mobile-card-chip-icon" aria-hidden="true">
+                                <svg class="card-chip-svg" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 5V2.5M15 5V2.5M9 21.5V19M15 21.5V19M5 9H2.5M5 15H2.5M21.5 9H19M21.5 15H19M9 9h6v6H9z"/></svg>
+                            </div>
+                            <svg class="mobile-card-contactless" viewBox="0 0 24 24" aria-label="Pago sin contacto"><path d="M8 8a6 6 0 0 1 0 8M12 5a10 10 0 0 1 0 14M16 2a14 14 0 0 1 0 20"/></svg>
                         </div>
                         <div class="mobile-card-brand">GIKO</div>
                     </div>
                     <div class="mobile-card-middle">
-                        <div class="mobile-card-balance-label">Saldo disponible</div>
+                        <div class="mobile-card-balance-heading">
+                            <div class="mobile-card-balance-label">Saldo disponible</div>
+                            <button type="button" class="mobile-balance-visibility" aria-label="Ocultar saldo" title="Ocultar saldo" onclick="toggleBalanceVisibility()">
+                                <svg class="balance-eye-icon" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
                         <div class="mobile-card-balance-amount" id="mobile-balance">Bs 0.00</div>
                     </div>
                     <div class="mobile-card-bottom">
@@ -1166,24 +1461,23 @@
                         <div class="mobile-card-expiry">MIEMBRO<span>Activo</span></div>
                     </div>
                     <button id="mobile-recharge-balance-btn" class="mobile-card-recharge-btn">
-                        <i class="fas fa-plus-circle"></i> Recargar saldo
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="9"/></svg> Recargar saldo
                     </button>
                 </div>
                 <!-- FIN TARJETA -->
 
-                <div class="mobile-section-title">Acciones rápidas</div>
                 <div class="grid grid-cols-4 gap-3 mx-4 mb-4">
                     <button id="mobile-send-money-btn" class="mobile-action-btn">
-                        <i class="fas fa-paper-plane" style="background: #022f7c;"></i><span>Enviar</span>
+                        <span class="mobile-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"/><path d="M10.1 13.9 15 9"/></svg></span><span>Enviar</span>
                     </button>
                     <a href="tienda.html" class="mobile-action-btn">
-                        <i class="fas fa-store" style="background: #ea580c;"></i><span>Shop</span>
+                        <span class="mobile-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 4.5 4h15L21 9.5"/><path d="M4 10v10h16V10"/><path d="M9 20v-6h6v6"/><path d="M3 9.5a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/></svg></span><span>Shop</span>
                     </a>
                     <a href="store.html" class="mobile-action-btn">
-                        <i class="fas fa-shopping-bag" style="background: #7c3aed;"></i><span>Store</span>
+                        <span class="mobile-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span><span>Store</span>
                     </a>
                     <a href="juegos.html" class="mobile-action-btn">
-                        <i class="fas fa-gamepad" style="background: #000000;"></i><span>Juegos</span>
+                        <span class="mobile-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 9h11a4.5 4.5 0 0 1 4.3 5.8l-1 3a2.2 2.2 0 0 1-3.6 1l-2.4-2.1H9.2l-2.4 2.1a2.2 2.2 0 0 1-3.6-1l-1-3A4.5 4.5 0 0 1 6.5 9Z"/><path d="M7 12v4M5 14h4M16.5 13.5h.01M19 15.5h.01"/></svg></span><span>Juegos</span>
                     </a>
                 </div>
 
@@ -1414,6 +1708,9 @@
                     <h1 class="text-2xl font-bold">Giko</h1>
                 </div>
                 <div class="flex items-center gap-3">
+                    <button type="button" class="dashboard-refresh-btn" aria-label="Actualizar dashboard" title="Actualizar">
+                        <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                    </button>
                     <button id="desktop-theme-toggle" class="theme-toggle-desktop"><i class="fas fa-moon"></i></button>
                     <button id="logout-btn" class="flex items-center space-x-2" style="color: var(--text-secondary);"><span>Cerrar sesión</span><i class="fas fa-sign-out-alt"></i></button>
                 </div>
@@ -1458,38 +1755,47 @@
                         <div class="mascot-overlay"></div>
                         <div class="desktop-card-top">
                             <div class="desktop-card-chip-area">
-                                <div class="desktop-card-chip-icon"><i class="fas fa-microchip"></i></div>
-                                <i class="fas fa-wifi desktop-card-contactless"></i>
+                                <div class="desktop-card-chip-icon" aria-hidden="true">
+                                    <svg class="card-chip-svg" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 5V2.5M15 5V2.5M9 21.5V19M15 21.5V19M5 9H2.5M5 15H2.5M21.5 9H19M21.5 15H19M9 9h6v6H9z"/></svg>
+                                </div>
+                                <svg class="desktop-card-contactless" viewBox="0 0 24 24" aria-label="Pago sin contacto"><path d="M8 8a6 6 0 0 1 0 8M12 5a10 10 0 0 1 0 14M16 2a14 14 0 0 1 0 20"/></svg>
                             </div>
                             <div class="desktop-card-brand">GIKO</div>
                         </div>
                         <div class="desktop-card-middle">
-                            <div class="desktop-card-balance-label">Saldo disponible</div>
+                            <div class="desktop-card-balance-heading">
+                                <div class="desktop-card-balance-label">Saldo disponible</div>
+                                <button type="button" class="desktop-balance-visibility" aria-label="Ocultar saldo" title="Ocultar saldo" onclick="toggleBalanceVisibility()">
+                                    <svg class="balance-eye-icon" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
                             <div class="desktop-card-balance-amount" id="balance">Bs 0.00</div>
                         </div>
                         <div class="desktop-card-bottom">
                             <div class="desktop-card-user-name" id="desktop-card-user-name">USUARIO</div>
                             <div class="desktop-card-expiry">MIEMBRO<span>Activo</span></div>
                         </div>
-                        <button id="recharge-balance-btn" class="desktop-card-recharge-btn"><i class="fas fa-plus-circle"></i> Recargar saldo</button>
+                        <button id="recharge-balance-btn" class="desktop-card-recharge-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="9"/></svg> Recargar saldo</button>
                     </div>
                     <!-- FIN TARJETA -->
 
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-semibold px-2">Acciones rápidas</h3>
-                        <button id="send-money-btn" class="action-card btn-primary w-full p-5 flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-4"><div class="action-icon bg-white bg-opacity-20"><i class="fas fa-paper-plane"></i></div><div class="text-left"><p class="text-sm font-medium">Enviar dinero</p></div></div>
-                            <i class="fas fa-chevron-right"></i>
+                    <div class="desktop-quick-actions-grid">
+                        <button id="send-money-btn" class="desktop-quick-action">
+                            <span class="desktop-quick-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"/><path d="M10.1 13.9 15 9"/></svg></span>
+                            <span class="desktop-quick-action-copy"><span class="desktop-quick-action-title">Enviar dinero</span></span>
                         </button>
-                        <a href="tienda.html" class="action-card w-full p-5 flex items-center justify-between text-white" style="background: #172554;">Shop</a>
-                        <a href="store.html" class="action-card w-full p-5 flex items-center justify-between text-white" style="background: #7c3aed;">
-                            <div class="flex items-center space-x-4">
-                                <div class="action-icon bg-white bg-opacity-20"><i class="fas fa-shopping-bag"></i></div>
-                                <div class="text-left"><p class="text-sm font-medium">Store</p></div>
-                            </div>
-                            <i class="fas fa-chevron-right"></i>
+                        <a href="tienda.html" class="desktop-quick-action">
+                            <span class="desktop-quick-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 4.5 4h15L21 9.5"/><path d="M4 10v10h16V10"/><path d="M9 20v-6h6v6"/><path d="M3 9.5a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/></svg></span>
+                            <span class="desktop-quick-action-copy"><span class="desktop-quick-action-title">Shop</span></span>
                         </a>
-                        <a href="juegos.html" class="action-card w-full p-5 flex items-center justify-between text-white" style="background: #2563eb;">Juegos</a>
+                        <a href="store.html" class="desktop-quick-action">
+                            <span class="desktop-quick-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span>
+                            <span class="desktop-quick-action-copy"><span class="desktop-quick-action-title">Store</span></span>
+                        </a>
+                        <a href="juegos.html" class="desktop-quick-action">
+                            <span class="desktop-quick-action-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 9h11a4.5 4.5 0 0 1 4.3 5.8l-1 3a2.2 2.2 0 0 1-3.6 1l-2.4-2.1H9.2l-2.4 2.1a2.2 2.2 0 0 1-3.6-1l-1-3A4.5 4.5 0 0 1 6.5 9Z"/><path d="M7 12v4M5 14h4M16.5 13.5h.01M19 15.5h.01"/></svg></span>
+                            <span class="desktop-quick-action-copy"><span class="desktop-quick-action-title">Juegos</span></span>
+                        </a>
                     </div>
                 </div>
 
@@ -1617,8 +1923,10 @@
         let currentUser = null;
         let userProfile = null;
         let currentBalance = 0;
+        let balanceVisible = true;
         let currentInvoiceData = null;
         let localAvatarDataUrl = null; // avatar guardado SOLO en este dispositivo (localStorage)
+        let uiRefreshId = 0;
 
         const formatCurrency = (amount) => 'Bs' + parseFloat(amount || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const formatDate = (dateString) => new Date(dateString).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -1693,32 +2001,66 @@
         };
 
         // ==================== PERFIL / TRANSACCIONES (Supabase) ====================
-        const loadUserProfile = async (userId) => {
-            const { data, error } = await supabase.from('user_profiles').select('*').eq('id', userId).single();
-            if (error && error.code !== 'PGRST116') { console.error('Error loading profile:', error); return null; }
+        const loadUserProfile = async (userId, strict = false) => {
+            const { data, error } = await supabase
+                .from('user_profiles')
+                .select('id, full_name, email, phone, avatar_url, created_at')
+                .eq('id', userId)
+                .single();
+            if (error && error.code !== 'PGRST116') {
+                if (strict) throw error;
+                console.error('Error loading profile:', error);
+                return null;
+            }
             return data;
         };
 
         const updateUserProfile = async (userId, updates) => {
-            const { data, error } = await supabase.from('user_profiles').update(updates).eq('id', userId).select().single();
+            const { data, error } = await supabase
+                .from('user_profiles')
+                .update(updates)
+                .eq('id', userId)
+                .select('id, full_name, email, phone, avatar_url, created_at')
+                .single();
             if (error) { console.error('Error updating profile:', error); return null; }
             return data;
         };
 
-        const calculateBalance = async (userId) => {
+        const calculateBalance = async (userId, strict = false) => {
             const { data, error } = await supabase.from('transactions').select('amount, type').eq('user_id', userId).eq('status', 'completed');
-            if (error) { console.error('Error calculating balance:', error); return 0; }
+            if (error) {
+                if (strict) throw error;
+                console.error('Error calculating balance:', error);
+                return 0;
+            }
             let balance = 0;
             data.forEach(t => { if (t.type === 'deposit') balance += t.amount; else balance -= t.amount; });
             return balance;
         };
 
-        const loadTransactions = async (userId, filter = 'all') => {
-            let query = supabase.from('transactions').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(20);
+        const loadTransactions = async (userId, filter = 'all', strict = false) => {
+            let query = supabase
+                .from('transactions')
+                .select('id, amount, type, description, metadata, created_at')
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false })
+                .limit(20);
             if (filter !== 'all') query = query.eq('type', filter);
             const { data, error } = await query;
-            if (error) { console.error('Error loading transactions:', error); return []; }
+            if (error) {
+                if (strict) throw error;
+                console.error('Error loading transactions:', error);
+                return [];
+            }
             return data;
+        };
+
+        const loadDashboardData = async (userId, filter = 'all', strict = false) => {
+            const [balance, transactions] = await Promise.all([
+                calculateBalance(userId, strict),
+                loadTransactions(userId, filter, strict)
+            ]);
+            return { balance, transactions };
         };
 
         const createTransaction = async (userId, amount, type, description = '', metadata = {}) => {
@@ -1958,18 +2300,44 @@
             if (desktopEl) desktopEl.textContent = shortName;
         };
 
-        const updateUI = async () => {
+        function toggleBalanceVisibility() {
+            balanceVisible = !balanceVisible;
+            const balanceText = balanceVisible ? formatCurrency(currentBalance) : '••••••';
+            document.querySelectorAll('#balance, #mobile-balance, #mobile-balance-small').forEach(el => {
+                if (el) el.textContent = balanceText;
+            });
+
+            document.querySelectorAll('.balance-eye-icon').forEach(icon => {
+                icon.innerHTML = balanceVisible
+                    ? '<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/>'
+                    : '<path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.1 3.9M6.2 6.2C3.5 8 2 12 2 12s3.5 7 10 7c1.8 0 3.3-.5 4.6-1.2"/>';
+            });
+
+            document.querySelectorAll('.mobile-balance-visibility, .desktop-balance-visibility').forEach(button => {
+                const label = balanceVisible ? 'Ocultar saldo' : 'Mostrar saldo';
+                button.setAttribute('aria-label', label);
+                button.title = label;
+            });
+        }
+
+        const getActiveTransactionFilter = () => {
+            const filter = document.getElementById('transactions-filter')?.value || 'all';
+            const mobileFilter = document.getElementById('mobile-transactions-filter')?.value || 'all';
+            return filter !== 'all' ? filter : mobileFilter;
+        };
+
+        const updateUI = async (dashboardData = null) => {
             if (!currentUser) return;
-            currentBalance = await calculateBalance(currentUser.id);
+            const refreshId = ++uiRefreshId;
+            const data = dashboardData || await loadDashboardData(currentUser.id, getActiveTransactionFilter());
+            if (refreshId !== uiRefreshId) return;
+            currentBalance = data.balance;
             const balanceEls = document.querySelectorAll('#balance, #mobile-balance, #mobile-balance-small');
-            balanceEls.forEach(el => { if (el) el.textContent = formatCurrency(currentBalance); });
+            balanceEls.forEach(el => { if (el) el.textContent = balanceVisible ? formatCurrency(currentBalance) : '••••••'; });
             updateCardUserName();
             renderAvatarsEverywhere();
 
-            const filter = document.getElementById('transactions-filter')?.value || 'all';
-            const mobileFilter = document.getElementById('mobile-transactions-filter')?.value || 'all';
-            const activeFilter = filter !== 'all' ? filter : mobileFilter;
-            const transactions = await loadTransactions(currentUser.id, activeFilter);
+            const transactions = data.transactions;
             renderTransactions(transactions);
 
             const txCount = document.getElementById('mobile-transactions-count');
@@ -2040,12 +2408,14 @@
         const setTheme = (theme) => {
             if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                document.getElementById('theme-color')?.setAttribute('content', '#000000');
+                document.getElementById('theme-color')?.setAttribute('content', '#070b14');
+                document.getElementById('apple-status-bar-style')?.setAttribute('content', 'black');
                 document.querySelectorAll('.theme-toggle i, .theme-toggle-desktop i').forEach(el => el.className = 'fas fa-sun');
                 localStorage.setItem('theme', 'dark');
             } else {
                 document.documentElement.removeAttribute('data-theme');
-                document.getElementById('theme-color')?.setAttribute('content', '#2563eb');
+                document.getElementById('theme-color')?.setAttribute('content', '#ffffff');
+                document.getElementById('apple-status-bar-style')?.setAttribute('content', 'default');
                 document.querySelectorAll('.theme-toggle i, .theme-toggle-desktop i').forEach(el => el.className = 'fas fa-moon');
                 localStorage.setItem('theme', 'light');
             }
@@ -2056,7 +2426,15 @@
             setTheme(currentTheme === 'dark' ? 'light' : 'dark');
         };
 
+        const hideDashboardLoading = () => {
+            const loadingScreen = document.getElementById('dashboard-loading-screen');
+            if (!loadingScreen) return;
+            loadingScreen.classList.add('is-hidden');
+            loadingScreen.setAttribute('aria-hidden', 'true');
+        };
+
         document.addEventListener('DOMContentLoaded', async () => {
+            try {
             const setVh = () => { const vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh}px`); };
             setVh();
             window.addEventListener('resize', setVh);
@@ -2067,12 +2445,24 @@
             document.getElementById('mobile-theme-toggle')?.addEventListener('click', toggleTheme);
             document.getElementById('desktop-theme-toggle')?.addEventListener('click', toggleTheme);
             document.getElementById('mobile-profile-theme-row')?.addEventListener('click', toggleTheme);
+            document.querySelectorAll('.dashboard-refresh-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    button.disabled = true;
+                    button.setAttribute('aria-busy', 'true');
+                    button.innerHTML = '<i class="fas fa-sync-alt fa-spin" aria-hidden="true"></i>';
+                    window.location.reload();
+                });
+            });
 
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { window.location.href = 'index.html'; return; }
 
             currentUser = session.user;
-            userProfile = await loadUserProfile(currentUser.id);
+            const [profile, dashboardData] = await Promise.all([
+                loadUserProfile(currentUser.id, true),
+                loadDashboardData(currentUser.id, 'all', true)
+            ]);
+            userProfile = profile;
             if (!userProfile) { window.location.href = 'index.html'; return; }
 
             localAvatarDataUrl = loadLocalAvatar(currentUser.id);
@@ -2273,7 +2663,11 @@
             document.getElementById('download-invoice')?.addEventListener('click', (e) => { e.stopPropagation(); downloadInvoiceAsImage(); });
             document.getElementById('share-invoice')?.addEventListener('click', (e) => { e.stopPropagation(); shareInvoice(); });
 
-            await updateUI();
+            await updateUI(dashboardData);
+            hideDashboardLoading();
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
         });
     </script>
 </body>
