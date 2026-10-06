@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101828">
+  <title>Mi tienda asociada | GIKO</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #758096;
+      --line: #e8ebf1;
+      --surface: #fff;
+      --canvas: #f5f7fb;
+      --brand: #f97316;
+      --brand-dark: #dc5a0b;
+      --navy: #101828;
+      --green: #138a5b;
+      --red: #c34242;
+      --shadow: 0 18px 55px rgba(24, 35, 58, .08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--canvas); color: var(--ink); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(22px, calc((100vw - 1200px)/2)); background: rgba(255,255,255,.92); border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 800; letter-spacing: -.3px; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; color: #fff; background: linear-gradient(145deg, #fb923c, #ea580c); box-shadow: 0 7px 18px #f9731638; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .top-link, .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink); text-decoration: none; font-size: 12px; font-weight: 700; transition: .18s ease; }
+    .top-link:hover, .button:hover { transform: translateY(-1px); border-color: #fdba74; }
+    .button.primary { border-color: var(--brand); background: var(--brand); color: white; }
+    .button.primary:hover { background: var(--brand-dark); }
+    .button.danger { color: var(--red); }
+    .button:disabled { opacity: .55; cursor: wait; transform: none; }
+    main { width: min(1160px, calc(100% - 36px)); margin: 34px auto 70px; }
+    .access-wrap { width: min(470px, 100%); margin: 9vh auto; }
+    .access-card, .panel { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); }
+    .access-hero { padding: 32px; color: white; background: radial-gradient(circle at 88% 10%, #fb923c 0, transparent 35%), linear-gradient(135deg, #18243a, #101828 70%); }
+    .access-icon { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 24px; border: 1px solid #ffffff24; border-radius: 16px; background: #ffffff12; color: #fdba74; font-size: 21px; }
+    .access-hero h1 { margin: 0; font-size: 26px; letter-spacing: -.8px; }
+    .access-hero p { margin: 9px 0 0; color: #c6cfde; font-size: 13px; line-height: 1.65; }
+    .access-body { padding: 26px 32px 32px; }
+    .access-body label, .field label { display: block; margin-bottom: 8px; color: #475166; font-size: 11px; font-weight: 750; }
+    .code-input { width: 100%; min-height: 58px; border: 1px solid var(--line); border-radius: 12px; outline: none; text-align: center; letter-spacing: 12px; font-size: 25px; font-weight: 800; color: var(--navy); }
+    .code-input:focus, .field input:focus, .field select:focus, .field textarea:focus { border-color: #fb923c; box-shadow: 0 0 0 4px #f9731618; }
+    .access-body .button { width: 100%; margin-top: 14px; min-height: 48px; }
+    .help { margin: 14px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; text-align: center; }
+    .notice { margin-top: 12px; padding: 11px 13px; border-radius: 10px; background: #fff7ed; color: #9a4d12; font-size: 12px; line-height: 1.5; }
+    .notice.error { background: #fff0f0; color: #a22c35; }
+    .access-hero.blocked { background: radial-gradient(circle at 88% 10%, #ef4444 0, transparent 35%), linear-gradient(135deg, #541b24, #251018 70%); }
+    .hidden { display: none !important; }
+    .dashboard-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; margin-bottom: 22px; }
+    .eyebrow { display: flex; align-items: center; gap: 7px; color: var(--brand-dark); font-size: 10px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; }
+    .dashboard-head h1 { margin: 8px 0 5px; color: var(--navy); font-size: clamp(25px, 4vw, 34px); letter-spacing: -1.1px; }
+    .dashboard-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .store-badge { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 13px; background: white; }
+    .store-badge-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; background: #fff1e5; color: var(--brand-dark); }
+    .store-badge small { display: block; margin-bottom: 3px; color: var(--muted); font-size: 9px; font-weight: 750; letter-spacing: .7px; text-transform: uppercase; }
+    .store-badge strong { display: block; max-width: 210px; overflow: hidden; color: var(--navy); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat { padding: 18px 20px; border: 1px solid var(--line); border-radius: 15px; background: white; box-shadow: 0 5px 20px #18243a08; }
+    .stat-label { color: var(--muted); font-size: 10px; font-weight: 750; letter-spacing: .7px; text-transform: uppercase; }
+    .stat-value { margin-top: 10px; color: var(--navy); font-size: 26px; font-weight: 800; letter-spacing: -.8px; }
+    .workspace { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .side-nav { position: sticky; top: 18px; padding: 9px; border: 1px solid var(--line); border-radius: 15px; background: white; box-shadow: 0 5px 20px #18243a08; }
+    .side-nav button { display: flex; align-items: center; gap: 11px; width: 100%; min-height: 43px; margin: 2px 0; padding: 10px 12px; border: 0; border-radius: 9px; background: transparent; color: #667187; text-align: left; font-size: 12px; font-weight: 700; }
+    .side-nav button.active { background: #fff3e8; color: #c45510; }
+    .side-nav i { width: 17px; text-align: center; }
+    .panel { border-radius: 15px; box-shadow: 0 5px 20px #18243a08; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 19px 22px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { margin: 0; color: var(--navy); font-size: 15px; letter-spacing: -.2px; }
+    .panel-head p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .panel-body { padding: 22px; }
+    .product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .field.full { grid-column: 1 / -1; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 42px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; outline: none; background: white; color: var(--ink); font-size: 12px; }
+    .field textarea { min-height: 86px; resize: vertical; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 9px; grid-column: 1 / -1; }
+    .product-list { display: grid; gap: 10px; }
+    .product-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 13px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 12px; }
+    .product-thumb { width: 58px; height: 58px; object-fit: cover; border-radius: 9px; background: #f2f4f7; }
+    .product-row h3 { margin: 0; overflow: hidden; color: var(--navy); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .product-row p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
+    .product-price { margin-top: 5px; color: var(--brand-dark); font-size: 11px; font-weight: 800; }
+    .status { display: inline-flex; padding: 5px 8px; border-radius: 999px; background: #e8f7ef; color: var(--green); font-size: 9px; font-weight: 800; }
+    .status.off { background: #f1f3f6; color: #6b7280; }
+    .location-list { display: grid; gap: 10px; }
+    .pickup-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; padding: 5px; border: 1px solid var(--line); border-radius: 13px; background: #f7f8fa; }
+    .pickup-tab { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 43px; padding: 9px 12px; border: 0; border-radius: 9px; background: transparent; color: #667085; font-size: 11px; font-weight: 750; }
+    .pickup-tab.active { background: white; color: var(--brand-dark); box-shadow: 0 2px 8px #18243a12; }
+    .pickup-tab-count { min-width: 21px; padding: 3px 6px; border-radius: 999px; background: #f2f4f7; color: #667085; font-size: 9px; }
+    .pickup-tab.active .pickup-tab-count { background: #fff1e5; color: var(--brand-dark); }
+    .pickup-section { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: #fbfcfe; }
+    .pickup-content[hidden] { display: none; }
+    .pickup-section-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .pickup-section-title { display: flex; align-items: flex-start; gap: 10px; }
+    .pickup-section-icon { width: 34px; height: 34px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 10px; background: #fff1e5; color: var(--brand-dark); }
+    .pickup-section-head h3 { margin: 1px 0 4px; color: var(--navy); font-size: 12px; }
+    .pickup-section-head p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .location-card { display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+    .location-card h3 { margin: 0; color: var(--navy); font-size: 12px; }
+    .location-card p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .location-card-main { display: flex; gap: 11px; min-width: 0; }
+    .location-card-icon { width: 32px; height: 32px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; background: #f2f4f7; color: #667085; }
+    .location-card-info { min-width: 0; }
+    .location-card-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .location-card-links a { color: #b45309; font-size: 10px; font-weight: 750; text-decoration: none; }
+    .location-card-links a:hover { text-decoration: underline; }
+    .location-toggle { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; color: #566176; font-size: 10px; font-weight: 700; }
+    .location-toggle input { accent-color: var(--brand); }
+    .location-form { display: grid; gap: 17px; }
+    .location-form-section { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+    .location-form-heading { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
+    .location-form-step { width: 25px; height: 25px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; background: #fff1e5; color: var(--brand-dark); font-size: 10px; font-weight: 800; }
+    .location-form-heading h4 { margin: 1px 0 4px; color: var(--navy); font-size: 11px; }
+    .location-form-heading p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .map-search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; margin-bottom: 9px; }
+    .map-search-row input { min-width: 0; min-height: 40px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px; outline: none; font-size: 11px; }
+    .map-search-row input:focus { border-color: #fb923c; box-shadow: 0 0 0 3px #f9731618; }
+    .map-tool-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; background: white; color: #475166; font-size: 10px; font-weight: 750; }
+    .map-tool-button:hover { border-color: #fdba74; background: #fffaf5; }
+    .map-tool-button:disabled { opacity: .55; cursor: wait; }
+    #seller-pickup-map { height: 330px; border: 1px solid var(--line); border-radius: 11px; background: #eef2f6; z-index: 0; }
+    .map-attribution { margin: 8px 0 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+    .map-results { display: grid; gap: 5px; margin: 0 0 9px; }
+    .map-result { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: white; color: #475166; text-align: left; font-size: 10px; line-height: 1.4; }
+    .map-result:hover { border-color: #fdba74; background: #fffaf5; }
+    .map-result-message { margin: 0 0 9px; color: var(--muted); font-size: 10px; }
+    .map-selection { display: flex; align-items: flex-start; gap: 8px; min-height: 38px; margin-top: 10px; padding: 10px 11px; border-radius: 9px; background: #f4f7fb; color: #667085; font-size: 10px; line-height: 1.5; }
+    .map-selection.selected { background: #edf9f2; color: #16734d; }
+    .map-selection.error { background: #fff0f0; color: #a22c35; }
+    .location-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .field input[readonly] { background: #f8fafc; color: #667085; }
+    .google-map-preview { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; color: #b45309; font-size: 10px; font-weight: 750; text-decoration: none; }
+    .google-map-preview:hover { text-decoration: underline; }
+    .location-form .form-actions { padding-top: 2px; }
+    .location-form-help { margin: 0 0 14px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .empty { padding: 30px 15px; color: var(--muted); text-align: center; font-size: 12px; }
+    .empty i { display: block; margin-bottom: 10px; color: #c4cad5; font-size: 24px; }
+    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 10; max-width: min(420px, calc(100% - 40px)); padding: 13px 16px; border-radius: 11px; background: var(--navy); color: white; box-shadow: var(--shadow); font-size: 12px; }
+    .toast.error { background: #a22c35; }
+    @media (max-width: 760px) {
+      .topbar { height: 62px; padding: 0 16px; }
+      main { width: min(100% - 24px, 560px); margin-top: 22px; }
+      .dashboard-head { align-items: flex-start; flex-direction: column; }
+      .store-badge { width: 100%; }
+      .workspace { grid-template-columns: 1fr; }
+      .side-nav { position: static; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+      .side-nav button { justify-content: center; flex-direction: column; gap: 4px; min-height: 54px; padding: 7px 3px; font-size: 9px; }
+      .side-nav i { font-size: 14px; }
+      .stats { gap: 8px; }
+      .stat { padding: 13px 11px; }
+      .stat-label { font-size: 8px; line-height: 1.4; }
+      .stat-value { font-size: 22px; }
+      .panel-head, .panel-body { padding: 16px; }
+      .product-form { grid-template-columns: 1fr; }
+      .field.full { grid-column: 1 / -1; }
+      .form-actions { grid-column: 1 / -1; }
+      .map-search-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .map-search-row #seller-my-location { grid-column: 1 / -1; }
+      #seller-pickup-map { height: 280px; }
+      .pickup-section { padding: 14px; }
+      .location-form-section { padding: 13px; }
+      .pickup-tabs { gap: 6px; }
+      .access-hero { padding: 25px; }
+      .access-body { padding: 23px 25px 26px; }
+    }
+    @media (max-width: 390px) {
+      .side-nav button { font-size: 8px; }
+      .product-row { grid-template-columns: 48px minmax(0, 1fr); }
+      .product-thumb { width: 48px; height: 48px; }
+      .product-row > .button { grid-column: 2; justify-self: start; }
+      .location-details-grid { grid-template-columns: 1fr; gap: 11px; }
+      .location-card { flex-direction: column; }
+      .location-card-main { width: 100%; }
+      .location-toggle { align-self: flex-end; }
+    }
+    @media (max-width: 360px) {
+      main { width: calc(100% - 20px); margin-top: 16px; }
+      .topbar { padding: 0 10px; }
+      .brand { gap: 7px; font-size: 12px; }
+      .brand-mark { width: 33px; height: 33px; }
+      .top-link { min-height: 36px; padding: 7px 9px; font-size: 10px; }
+      .stats { grid-template-columns: 1fr; }
+      .stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .stat-value { margin-top: 0; font-size: 20px; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .panel-head > .button { width: 100%; }
+      .pickup-tab { gap: 5px; padding: 8px 5px; font-size: 9px; }
+      .pickup-section { padding: 11px; }
+      .map-search-row { grid-template-columns: minmax(0, 1fr) minmax(0, auto); }
+      .map-search-row input { grid-column: 1 / -1; }
+      .map-search-row #seller-my-location { grid-column: 1 / -1; }
+      .map-tool-button { min-width: 0; padding: 8px; font-size: 9px; }
+      #seller-pickup-map { height: 245px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="tienda.html"><span class="brand-mark">G</span><span>GIKO <span style="color:#f97316">ASOCIADOS</span></span></a>
+    <div class="top-actions">
+      <a class="top-link" href="tienda.html"><i class="fas fa-arrow-left"></i><span>Volver a la tienda</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section id="portal-loading" class="access-wrap">
+      <div class="access-card">
+        <div class="access-hero">
+          <div class="access-icon"><i class="fas fa-store"></i></div>
+          <h1 id="portal-title">Abriendo tu tienda</h1>
+          <p id="portal-status">La verificación aún no empezó. Si este mensaje no cambia, el hosting está bloqueando JavaScript y debe corregirse su política CSP para que esta tienda pueda conectarse a Supabase.</p>
+        </div>
+        <div class="access-body"><a class="button" href="tienda.html#seller-access">Volver a la tienda para ingresar</a></div>
+      </div>
+    </section>
+
+    <section id="seller-dashboard" class="hidden">
+      <div class="dashboard-head">
+        <div>
+          <div class="eyebrow"><i class="fas fa-circle-check"></i> Panel de asociado</div>
+          <h1>Hola, <span id="seller-owner-name">asociado</span></h1>
+          <p>Administra tu catálogo y dónde pueden recoger sus pedidos.</p>
+        </div>
+        <div class="store-badge">
+          <span class="store-badge-icon"><i class="fas fa-shop"></i></span>
+          <span><small>Tu tienda</small><strong id="seller-store-name">Cargando...</strong></span>
+        </div>
+      </div>
+
+      <div class="stats">
+        <article class="stat"><div class="stat-label">Productos publicados</div><div class="stat-value" id="stat-products">0</div></article>
+        <article class="stat"><div class="stat-label">Puntos propios</div><div class="stat-value" id="stat-own-locations">0</div></article>
+        <article class="stat"><div class="stat-label">Puntos comunes activos</div><div class="stat-value" id="stat-shared-locations">0</div></article>
+      </div>
+
+      <div class="workspace">
+        <nav class="side-nav" aria-label="Secciones de mi tienda">
+          <button type="button" class="active" data-section="products"><i class="fas fa-box"></i><span>Productos</span></button>
+          <button type="button" data-section="locations"><i class="fas fa-location-dot"></i><span>Recogida</span></button>
+          <button type="button" data-section="store-info"><i class="fas fa-circle-info"></i><span>Mi tienda</span></button>
+        </nav>
+
+        <section id="section-products" class="panel">
+          <div class="panel-head"><span><h2>Tu catálogo</h2><p>Publica y administra los productos de tu tienda.</p></span><button id="show-product-form" type="button" class="button primary"><i class="fas fa-plus"></i> Agregar producto</button></div>
+          <div id="product-form-wrap" class="panel-body hidden">
+            <form id="product-form" class="product-form">
+              <div class="field"><label for="product-name">Nombre</label><input id="product-name" maxlength="160" placeholder="Ej. Bolso artesanal" required></div>
+              <div class="field"><label for="product-category">Categoría</label><select id="product-category" required><option value="">Cargando categorías...</option></select></div>
+              <div class="field"><label for="product-price">Precio (Bs)</label><input id="product-price" type="number" min="0.01" step="0.01" placeholder="0.00" required></div>
+              <div class="field"><label for="product-stock">Unidades en stock</label><input id="product-stock" type="number" min="0" step="1" value="1" required></div>
+              <div class="field full"><label for="product-description">Descripción</label><textarea id="product-description" maxlength="1500" placeholder="Cuenta qué hace especial a tu producto"></textarea></div>
+              <div class="field full"><label for="product-image">Imagen (URL opcional)</label><input id="product-image" type="url" placeholder="https://..."></div>
+              <div class="form-actions"><button id="cancel-product-form" class="button" type="button">Cancelar</button><button id="save-product" class="button primary" type="submit"><i class="fas fa-cloud-arrow-up"></i> Publicar</button></div>
+            </form>
+          </div>
+          <div id="seller-products" class="panel-body product-list"><div class="empty"><i class="fas fa-spinner fa-spin"></i>Cargando productos...</div></div>
+        </section>
+
+        <section id="section-locations" class="panel hidden">
+          <div class="panel-head"><span><h2>Puntos de recogida</h2><p>Elige lugares compartidos y registra tus propios puntos.</p></span></div>
+          <div class="panel-body">
+            <div class="pickup-tabs" role="tablist" aria-label="Tipos de puntos de recogida">
+              <button type="button" class="pickup-tab active" id="shared-pickup-tab" role="tab" aria-selected="true" aria-controls="shared-pickup-content" data-pickup-tab="shared">
+                <i class="fas fa-building-circle-check" aria-hidden="true"></i><span>Puntos de recogida GIKO</span><span class="pickup-tab-count" id="shared-location-count">—</span>
+              </button>
+              <button type="button" class="pickup-tab" id="own-pickup-tab" role="tab" aria-selected="false" aria-controls="own-pickup-content" data-pickup-tab="own">
+                <i class="fas fa-store" aria-hidden="true"></i><span>Puntos de mi tienda</span><span class="pickup-tab-count" id="own-location-tab-count">0</span>
+              </button>
+            </div>
+
+            <div class="pickup-content" id="shared-pickup-content" role="tabpanel" aria-labelledby="shared-pickup-tab">
+            <section class="pickup-section" aria-labelledby="shared-pickup-title">
+              <div class="pickup-section-head">
+                <div class="pickup-section-title">
+                  <span class="pickup-section-icon"><i class="fas fa-building-circle-check" aria-hidden="true"></i></span>
+                  <span><h3 id="shared-pickup-title">Puntos compartidos por GIKO</h3><p>Activa los lugares oficiales que también ofrecerás para entregar pedidos.</p></span>
+                </div>
+              </div>
+              <div id="shared-locations" class="location-list"><div class="empty"><i class="fas fa-spinner fa-spin"></i>Cargando lugares...</div></div>
+            </section>
+            </div>
+
+            <div class="pickup-content" id="own-pickup-content" role="tabpanel" aria-labelledby="own-pickup-tab" hidden>
+            <section class="pickup-section" aria-labelledby="own-pickup-title">
+              <div class="pickup-section-head">
+                <div class="pickup-section-title">
+                  <span class="pickup-section-icon"><i class="fas fa-store" aria-hidden="true"></i></span>
+                  <span><h3 id="own-pickup-title">Puntos de mi tienda</h3><p>Administra tus lugares propios y agrega nuevas opciones de recogida.</p></span>
+                </div>
+                <span id="own-location-count" class="status">0 puntos</span>
+              </div>
+              <div id="own-locations" class="location-list"><div class="empty"><i class="fas fa-spinner fa-spin"></i>Cargando lugares...</div></div>
+            </section>
+
+            <section class="pickup-section" aria-labelledby="new-pickup-title">
+              <div class="pickup-section-head">
+                <div class="pickup-section-title">
+                  <span class="pickup-section-icon"><i class="fas fa-map-location-dot" aria-hidden="true"></i></span>
+                  <span><h3 id="new-pickup-title">Agregar un punto de recogida</h3><p>Busca una dirección, marca el lugar en el mapa o usa tu ubicación actual.</p></span>
+                </div>
+              </div>
+              <form id="location-form" class="location-form">
+                <section class="location-form-section" aria-labelledby="location-map-step-title">
+                  <div class="location-form-heading">
+                    <span class="location-form-step">1</span>
+                    <span><h4 id="location-map-step-title">Selecciona el lugar en OpenStreetMap</h4><p>Busca por nombre o dirección. También puedes hacer clic directamente en el mapa.</p></span>
+                  </div>
+                  <div class="map-search-row">
+                    <input id="seller-map-search" type="search" placeholder="Ej. Av. 16 de Julio, La Paz" autocomplete="off" aria-label="Buscar lugar en el mapa">
+                    <button id="seller-map-search-button" class="map-tool-button" type="button"><i class="fas fa-magnifying-glass" aria-hidden="true"></i> Buscar</button>
+                    <button id="seller-my-location" class="map-tool-button" type="button"><i class="fas fa-location-crosshairs" aria-hidden="true"></i> Mi ubicación</button>
+                  </div>
+                  <div id="seller-map-results" class="map-results" aria-live="polite"></div>
+                  <div id="seller-pickup-map" role="application" aria-label="Mapa OpenStreetMap. Haz clic para marcar el lugar de recogida."></div>
+                  <div id="seller-map-selection" class="map-selection"><i class="fas fa-circle-info" aria-hidden="true"></i><span>Primero marca un lugar en el mapa o selecciona un resultado de búsqueda.</span></div>
+                  <p class="map-attribution">Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>. Las direcciones se consultan con Nominatim. La ubicación actual requiere permiso y conexión segura (HTTPS o localhost).</p>
+                </section>
+
+                <section class="location-form-section" aria-labelledby="location-details-step-title">
+                  <div class="location-form-heading">
+                    <span class="location-form-step">2</span>
+                    <span><h4 id="location-details-step-title">Completa los datos para tus clientes</h4><p>Las coordenadas y el enlace de Google Maps se llenan automáticamente al elegir el punto.</p></span>
+                  </div>
+                  <div class="location-details-grid">
+                    <div class="field"><label for="location-name">Nombre del punto</label><input id="location-name" maxlength="120" placeholder="Ej. Local de la tienda" required></div>
+                    <div class="field"><label for="location-schedule">Horario de atención</label><input id="location-schedule" maxlength="120" placeholder="Lun-Sáb 9:00-18:00"></div>
+                    <div class="field full"><label for="location-address">Dirección detectada</label><input id="location-address" maxlength="240" placeholder="Selecciona primero el punto en el mapa" required></div>
+                    <div class="field"><label for="location-latitude">Latitud</label><input id="location-latitude" type="number" min="-90" max="90" step="any" placeholder="Se completa desde el mapa" readonly required></div>
+                    <div class="field"><label for="location-longitude">Longitud</label><input id="location-longitude" type="number" min="-180" max="180" step="any" placeholder="Se completa desde el mapa" readonly required></div>
+                    <div class="field full"><label for="location-map">Enlace de Google Maps</label><input id="location-map" type="url" placeholder="Se genera automáticamente" readonly><a id="location-map-preview" class="google-map-preview hidden" href="#" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Abrir ubicación en Google Maps</a></div>
+                  </div>
+                </section>
+                <div class="form-actions"><button id="save-location" class="button primary" type="submit"><i class="fas fa-location-dot"></i> Guardar punto de recogida</button></div>
+              </form>
+            </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="section-store-info" class="panel hidden">
+          <div class="panel-head"><span><h2>Información de tu tienda</h2><p>Datos de tu espacio de venta en GIKO.</p></span></div>
+          <div class="panel-body">
+            <div class="location-card"><span><h3 id="info-store-name">—</h3><p id="info-store-description">Tu tienda asociada en GIKO.</p></span><span class="status">ACTIVA</span></div>
+            <p class="help" style="text-align:left">Si necesitas cambiar el nombre o los datos de tu tienda, comunícate con el equipo de GIKO.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function initializeSellerPortal() {
+    if (window.__gikoSellerPortalInitialized) return;
+    window.__gikoSellerPortalInitialized = true;
+    if (!window.supabase?.createClient) {
+      const status = document.getElementById('portal-status');
+      status.textContent = 'Supabase no cargó porque el hosting bloqueó los scripts. Corrige la política CSP (script-src) para permitir el JavaScript de esta página.';
+      status.parentElement.classList.add('error');
+      return;
+    }
+    const SUPABASE_URL = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let sessionUser = null;
+    let sellerStore = null;
+    let sellerCategories = [];
+    let sellerPickupMap = null;
+    let sellerPickupMarker = null;
+    let sellerMapRequestController = null;
+    let sellerMapRequestId = 0;
+    let sellerMapGeolocationRequestId = 0;
+    let pickupLocationsLoaded = false;
+    let pickupLocationsLoading = null;
+    const defaultPickupMapCenter = [-16.5000, -68.1500];
+    const sellerAccessStorageKey = 'giko_verified_seller_access';
+
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
+    const safeImageUrl = value => {
+      try {
+        const url = new URL(value);
+        return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+      } catch {
+        return '';
+      }
+    };
+    const safeMapUrl = value => {
+      try {
+        const url = new URL(value);
+        return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+      } catch {
+        return '';
+      }
+    };
+    const googleMapsUrl = (latitude, longitude) =>
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${latitude},${longitude}`)}`;
+    const showToast = (message, isError = false) => {
+      const toast = document.createElement('div');
+      toast.className = `toast${isError ? ' error' : ''}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      window.setTimeout(() => toast.remove(), 3800);
+    };
+    async function loadSellerDashboard() {
+      document.getElementById('seller-store-name').textContent = sellerStore.name;
+      document.getElementById('info-store-name').textContent = sellerStore.name;
+      document.getElementById('info-store-description').textContent = sellerStore.description || 'Tu tienda asociada en GIKO.';
+
+      const [{ data: memberships, error: membershipsError }, { data: products, error: productsError }, { data: profile, error: profileError }] = await Promise.all([
+        supabase.from('seller_store_categories').select('category_id').eq('store_id', sellerStore.id),
+        supabase.from('products').select('id, name, description, price, stock, category_id, image_url, is_active, created_at')
+          .eq('store_id', sellerStore.id).order('created_at', { ascending: false }),
+        supabase.from('user_profiles').select('full_name').eq('id', sellerStore.owner_user_id).maybeSingle()
+      ]);
+      if (membershipsError) throw membershipsError;
+      if (productsError) throw productsError;
+      if (profileError) throw profileError;
+      document.getElementById('seller-owner-name').textContent =
+        profile?.full_name || sessionUser?.user_metadata?.full_name || sessionUser?.email?.split('@')[0] || 'asociado';
+
+      const categoryIds = [...new Set((memberships || []).map(item => item.category_id))];
+      if (categoryIds.length) {
+        const { data: categories, error: categoriesError } = await supabase.from('product_categories')
+          .select('id, name').in('id', categoryIds).eq('is_active', true).order('sort_order');
+        if (categoriesError) throw categoriesError;
+        sellerCategories = categories || [];
+      } else {
+        sellerCategories = [];
+      }
+      const categorySelect = document.getElementById('product-category');
+      categorySelect.innerHTML = `<option value="">${sellerCategories.length ? 'Elige una categoría' : 'Contacta a GIKO para asignar categorías'}</option>` + sellerCategories
+        .map(category => `<option value="${escapeHtml(category.id)}">${escapeHtml(category.name)}</option>`).join('');
+
+      renderProducts(products || []);
+    }
+
+    function renderProducts(products) {
+      const container = document.getElementById('seller-products');
+      document.getElementById('stat-products').textContent = String(products.length);
+      if (!products.length) {
+        container.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i>Aún no tienes productos.<br>Publica tu primer producto para que aparezca en GIKO Shop.</div>';
+        return;
+      }
+      container.innerHTML = products.map(product => {
+        const category = sellerCategories.find(item => item.id === product.category_id);
+        const image = safeImageUrl(product.image_url);
+        return `<article class="product-row">
+          <img class="product-thumb" src="${escapeHtml(image || 'https://via.placeholder.com/100x100/f2f4f7/667085?text=GIKO')}" alt="">
+          <div>
+            <h3>${escapeHtml(product.name)}</h3>
+            <p>${escapeHtml(category?.name || 'Sin categoría')} · ${Number(product.stock)} unidades</p>
+            <div class="product-price">Bs ${Number(product.price).toFixed(2)}</div>
+          </div>
+          <button type="button" class="button${product.is_active ? ' danger' : ''}" data-product-toggle="${escapeHtml(product.id)}" data-product-active="${product.is_active}">
+            ${product.is_active ? 'Pausar' : 'Activar'}
+          </button>
+        </article>`;
+      }).join('');
+      container.querySelectorAll('[data-product-toggle]').forEach(button => {
+        button.addEventListener('click', () => toggleProduct(button));
+      });
+    }
+
+    async function toggleProduct(button) {
+      button.disabled = true;
+      try {
+        const isActive = button.dataset.productActive !== 'true';
+        const { error } = await supabase.from('products').update({ is_active: isActive })
+          .eq('id', button.dataset.productToggle).eq('store_id', sellerStore.id);
+        if (error) throw error;
+        await loadSellerDashboard();
+        showToast(isActive ? 'Producto activado.' : 'Producto pausado.');
+      } catch (error) {
+        console.error('Error cambiando estado de producto:', error);
+        showToast(error.message || 'No se pudo actualizar el producto.', true);
+        button.disabled = false;
+      }
+    }
+
+    async function loadPickupLocations() {
+      if (pickupLocationsLoading) return pickupLocationsLoading;
+      pickupLocationsLoading = (async () => {
+      const [{ data: shared, error: sharedError }, { data: enabledRows, error: enabledError }, { data: own, error: ownError }] = await Promise.all([
+          supabase.from('pickup_locations').select('id, name, address, latitude, longitude, schedule, maps_url')
+            .is('store_id', null).eq('is_active', true).order('name'),
+          supabase.from('seller_store_pickup_locations').select('pickup_location_id, is_enabled').eq('store_id', sellerStore.id),
+          supabase.from('pickup_locations').select('id, name, address, latitude, longitude, schedule, maps_url')
+            .eq('store_id', sellerStore.id).eq('is_active', true).order('name')
+        ]);
+      if (sharedError) throw sharedError;
+      if (enabledError) throw enabledError;
+      if (ownError) throw ownError;
+
+      const enabledIds = new Set((enabledRows || []).filter(row => row.is_enabled).map(row => row.pickup_location_id));
+      const sharedContainer = document.getElementById('shared-locations');
+      sharedContainer.innerHTML = shared?.length ? shared.map(location => {
+        const mapUrl = safeMapUrl(location.maps_url) || (
+          location.latitude !== null && location.longitude !== null
+            ? googleMapsUrl(location.latitude, location.longitude)
+            : ''
+        );
+        return `
+          <article class="location-card">
+            <div class="location-card-main">
+              <span class="location-card-icon"><i class="fas fa-location-dot" aria-hidden="true"></i></span>
+              <span class="location-card-info"><h3>${escapeHtml(location.name)}</h3><p>${escapeHtml(location.address)}${location.schedule ? ` · ${escapeHtml(location.schedule)}` : ''}</p>
+                ${mapUrl ? `<span class="location-card-links"><a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-location-dot" aria-hidden="true"></i> Ver en el mapa</a></span>` : ''}
+              </span>
+            </div>
+            <label class="location-toggle"><input type="checkbox" data-shared-location="${escapeHtml(location.id)}" ${enabledIds.has(location.id) ? 'checked' : ''}> Aceptar</label>
+          </article>
+        `;
+      }).join('') : '<div class="empty">GIKO aún no ha publicado puntos comunes activos.</div>';
+      sharedContainer.querySelectorAll('[data-shared-location]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => toggleSharedLocation(checkbox));
+      });
+
+      const ownContainer = document.getElementById('own-locations');
+      ownContainer.innerHTML = own?.length ? own.map(location => {
+        const mapUrl = safeMapUrl(location.maps_url) || (
+          location.latitude !== null && location.longitude !== null
+            ? googleMapsUrl(location.latitude, location.longitude)
+            : ''
+        );
+        return `
+          <article class="location-card">
+            <div class="location-card-main">
+              <span class="location-card-icon"><i class="fas fa-shop" aria-hidden="true"></i></span>
+              <span class="location-card-info"><h3>${escapeHtml(location.name)}</h3><p>${escapeHtml(location.address)}${location.schedule ? ` · ${escapeHtml(location.schedule)}` : ''}</p>
+                ${mapUrl ? `<span class="location-card-links"><a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-location-dot" aria-hidden="true"></i> Abrir en Google Maps</a></span>` : ''}
+              </span>
+            </div>
+            <span class="status">ACTIVO</span>
+          </article>
+        `;
+      }).join('') : '<div class="empty">Todavía no agregas un punto propio. Usa el formulario de abajo para crear el primero.</div>';
+      document.getElementById('stat-own-locations').textContent = String(own?.length || 0);
+      document.getElementById('stat-shared-locations').textContent = String(enabledIds.size);
+      document.getElementById('own-location-count').textContent = `${own?.length || 0} ${(own?.length || 0) === 1 ? 'punto' : 'puntos'}`;
+      document.getElementById('own-location-tab-count').textContent = String(own?.length || 0);
+      document.getElementById('shared-location-count').textContent = String(shared?.length || 0);
+      pickupLocationsLoaded = true;
+      })();
+      try {
+        await pickupLocationsLoading;
+      } finally {
+        pickupLocationsLoading = null;
+      }
+    }
+
+    function setPickupMapMessage(message, state = '') {
+      const status = document.getElementById('seller-map-selection');
+      status.className = `map-selection${state ? ` ${state}` : ''}`;
+      status.innerHTML = `<i class="fas ${state === 'selected' ? 'fa-circle-check' : state === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-info'}" aria-hidden="true"></i><span></span>`;
+      status.querySelector('span').textContent = message;
+    }
+
+    function initializeSellerPickupMap() {
+      const mapElement = document.getElementById('seller-pickup-map');
+      if (!mapElement) return;
+      if (!window.L) {
+        setPickupMapMessage('No se pudo cargar OpenStreetMap. Comprueba tu conexión y vuelve a abrir esta sección.', 'error');
+        return;
+      }
+      if (!sellerPickupMap) {
+        sellerPickupMap = window.L.map(mapElement).setView(defaultPickupMapCenter, 13);
+        window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(sellerPickupMap);
+        sellerPickupMap.on('click', event => selectSellerPickupPoint(event.latlng));
+      }
+      window.setTimeout(() => sellerPickupMap?.invalidateSize(), 100);
+    }
+
+    function selectSellerPickupPoint(latlng, address = '') {
+      if (!sellerPickupMap || !Number.isFinite(Number(latlng.lat)) || !Number.isFinite(Number(latlng.lng))) {
+        setPickupMapMessage('El mapa no devolvió coordenadas válidas. Selecciona el lugar otra vez.', 'error');
+        return;
+      }
+      const latitude = Number(Number(latlng.lat).toFixed(6));
+      const longitude = Number(Number(latlng.lng).toFixed(6));
+      const coordinates = { lat: latitude, lng: longitude };
+      const latitudeInput = document.getElementById('location-latitude');
+      const longitudeInput = document.getElementById('location-longitude');
+      const addressInput = document.getElementById('location-address');
+      const mapInput = document.getElementById('location-map');
+      const mapPreview = document.getElementById('location-map-preview');
+      latitudeInput.value = latitude.toFixed(6);
+      longitudeInput.value = longitude.toFixed(6);
+      mapInput.value = googleMapsUrl(latitude, longitude);
+      mapPreview.href = mapInput.value;
+      mapPreview.classList.remove('hidden');
+
+      if (sellerPickupMarker) sellerPickupMarker.setLatLng(coordinates);
+      else sellerPickupMarker = window.L.marker(coordinates).addTo(sellerPickupMap);
+
+      const requestId = ++sellerMapRequestId;
+      if (sellerMapRequestController) sellerMapRequestController.abort();
+      if (address) {
+        addressInput.value = address.slice(0, 240);
+        setPickupMapMessage(`Punto seleccionado: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}. Revisa la dirección y completa los datos del punto.`, 'selected');
+        return;
+      }
+
+      addressInput.value = '';
+      setPickupMapMessage(`Coordenadas seleccionadas (${latitude.toFixed(6)}, ${longitude.toFixed(6)}). Buscando la dirección...`);
+      sellerMapRequestController = new AbortController();
+      const params = new URLSearchParams({
+        format: 'jsonv2',
+        lat: String(latitude),
+        lon: String(longitude),
+        zoom: '18',
+        addressdetails: '1'
+      });
+      fetch(`https://nominatim.openstreetmap.org/reverse?${params}`, {
+        headers: { Accept: 'application/json', 'Accept-Language': 'es' },
+        signal: sellerMapRequestController.signal
+      }).then(response => {
+        if (!response.ok) throw new Error(`OpenStreetMap respondió con estado ${response.status}.`);
+        return response.json();
+      }).then(result => {
+        if (requestId !== sellerMapRequestId) return;
+        if (!result.display_name) throw new Error('No se encontró una dirección para este punto.');
+        addressInput.value = result.display_name.slice(0, 240);
+        setPickupMapMessage('Ubicación y dirección listas. Completa el nombre y el horario del punto.', 'selected');
+      }).catch(error => {
+        if (error.name === 'AbortError' || requestId !== sellerMapRequestId) return;
+        console.error('Error obteniendo dirección de OpenStreetMap:', error);
+        setPickupMapMessage('No se pudo detectar la dirección automáticamente. Escríbela manualmente; las coordenadas y el enlace ya quedaron guardados.', 'error');
+      });
+    }
+
+    async function searchSellerPickupPlace() {
+      const query = document.getElementById('seller-map-search').value.trim();
+      const resultsContainer = document.getElementById('seller-map-results');
+      const searchButton = document.getElementById('seller-map-search-button');
+      resultsContainer.replaceChildren();
+      if (query.length < 3) {
+        resultsContainer.textContent = 'Escribe al menos 3 caracteres para buscar un lugar.';
+        resultsContainer.className = 'map-result-message';
+        return;
+      }
+      if (!sellerPickupMap) initializeSellerPickupMap();
+      if (!sellerPickupMap) return;
+
+      const requestId = ++sellerMapRequestId;
+      if (sellerMapRequestController) sellerMapRequestController.abort();
+      sellerMapRequestController = new AbortController();
+      searchButton.disabled = true;
+      resultsContainer.className = 'map-result-message';
+      resultsContainer.textContent = 'Buscando lugares...';
+      try {
+        const params = new URLSearchParams({
+          format: 'jsonv2',
+          q: query,
+          limit: '5',
+          addressdetails: '1'
+        });
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?${params}`, {
+          headers: { Accept: 'application/json', 'Accept-Language': 'es' },
+          signal: sellerMapRequestController.signal
+        });
+        if (!response.ok) throw new Error(`OpenStreetMap respondió con estado ${response.status}.`);
+        const results = await response.json();
+        if (requestId !== sellerMapRequestId) return;
+        if (!results.length) {
+          resultsContainer.textContent = 'No se encontraron lugares. Prueba con otra dirección o nombre.';
+          return;
+        }
+
+        resultsContainer.className = 'map-results';
+        resultsContainer.replaceChildren();
+        results.forEach(result => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'map-result';
+          button.textContent = result.display_name;
+          button.addEventListener('click', () => {
+            const latlng = { lat: Number(result.lat), lng: Number(result.lon) };
+            if (!Number.isFinite(latlng.lat) || !Number.isFinite(latlng.lng)) {
+              showToast('El resultado no tiene coordenadas válidas.', true);
+              return;
+            }
+            resultsContainer.replaceChildren();
+            sellerPickupMap.setView(latlng, 17);
+            selectSellerPickupPoint(latlng, result.display_name);
+          });
+          resultsContainer.appendChild(button);
+        });
+      } catch (error) {
+        if (error.name === 'AbortError' || requestId !== sellerMapRequestId) return;
+        console.error('Error buscando lugar en OpenStreetMap:', error);
+        resultsContainer.textContent = 'No se pudo buscar el lugar. Comprueba tu conexión e inténtalo otra vez.';
+        showToast(error.message || 'No se pudo buscar el lugar.', true);
+      } finally {
+        if (requestId === sellerMapRequestId) searchButton.disabled = false;
+      }
+    }
+
+    function locateSellerPickupUser() {
+      if (!navigator.geolocation) {
+        showToast('Este navegador no permite obtener la ubicación actual.', true);
+        return;
+      }
+      if (!sellerPickupMap) initializeSellerPickupMap();
+      if (!sellerPickupMap) return;
+
+      const requestId = ++sellerMapGeolocationRequestId;
+      const button = document.getElementById('seller-my-location');
+      button.disabled = true;
+      setPickupMapMessage('Solicitando permiso para usar tu ubicación actual...');
+      navigator.geolocation.getCurrentPosition(position => {
+        if (requestId !== sellerMapGeolocationRequestId) return;
+        button.disabled = false;
+        const latlng = { lat: position.coords.latitude, lng: position.coords.longitude };
+        sellerPickupMap.setView(latlng, 17);
+        selectSellerPickupPoint(latlng);
+      }, error => {
+        if (requestId !== sellerMapGeolocationRequestId) return;
+        button.disabled = false;
+        const messages = {
+          1: 'Permiso denegado. Habilita la ubicación en el navegador para usar esta opción.',
+          2: 'No se pudo determinar tu ubicación actual.',
+          3: 'La solicitud tardó demasiado. Inténtalo de nuevo.'
+        };
+        const message = messages[error.code] || `No se pudo obtener la ubicación: ${error.message}`;
+        setPickupMapMessage(message, 'error');
+        showToast(message, true);
+      }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+    }
+
+    document.getElementById('seller-map-search-button').addEventListener('click', searchSellerPickupPlace);
+    document.getElementById('seller-map-search').addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        searchSellerPickupPlace();
+      }
+    });
+    document.getElementById('seller-my-location').addEventListener('click', locateSellerPickupUser);
+
+    async function toggleSharedLocation(checkbox) {
+      checkbox.disabled = true;
+      try {
+        const { error } = await supabase.from('seller_store_pickup_locations').upsert({
+          store_id: sellerStore.id,
+          pickup_location_id: checkbox.dataset.sharedLocation,
+          is_enabled: checkbox.checked
+        }, { onConflict: 'store_id,pickup_location_id' });
+        if (error) throw error;
+        await loadPickupLocations();
+        showToast(checkbox.checked ? 'Punto agregado a tu tienda.' : 'Punto quitado de tu tienda.');
+      } catch (error) {
+        console.error('Error actualizando punto común:', error);
+        checkbox.checked = !checkbox.checked;
+        showToast(error.message || 'No se pudo actualizar el punto.', true);
+      } finally {
+        checkbox.disabled = false;
+      }
+    }
+
+    document.getElementById('show-product-form').addEventListener('click', () => {
+      document.getElementById('product-form-wrap').classList.remove('hidden');
+      document.getElementById('product-name').focus();
+    });
+    document.getElementById('cancel-product-form').addEventListener('click', () => {
+      document.getElementById('product-form-wrap').classList.add('hidden');
+      document.getElementById('product-form').reset();
+    });
+
+    document.getElementById('product-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const submit = document.getElementById('save-product');
+      submit.disabled = true;
+      try {
+        const category = sellerCategories.find(item => item.id === document.getElementById('product-category').value);
+        if (!category) throw new Error('Selecciona una categoría válida.');
+        const { error: categoryError } = await supabase.from('seller_store_categories').upsert({
+          store_id: sellerStore.id, category_id: category.id
+        }, { onConflict: 'store_id,category_id' });
+        if (categoryError) throw categoryError;
+        const { error } = await supabase.from('products').insert({
+          name: document.getElementById('product-name').value.trim(),
+          description: document.getElementById('product-description').value.trim() || null,
+          price: Number(document.getElementById('product-price').value),
+          stock: Number(document.getElementById('product-stock').value),
+          category: category.name,
+          category_id: category.id,
+          store_id: sellerStore.id,
+          image_url: document.getElementById('product-image').value.trim() || null,
+          is_active: true,
+          is_featured: false,
+          discount_percentage: 0
+        });
+        if (error) throw error;
+        form.reset();
+        document.getElementById('product-form-wrap').classList.add('hidden');
+        await loadSellerDashboard();
+        showToast('Tu producto se publicó correctamente.');
+      } catch (error) {
+        console.error('Error guardando producto asociado:', error);
+        showToast(error.message || 'No se pudo publicar el producto.', true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    document.getElementById('location-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const submit = document.getElementById('save-location');
+      const latitudeValue = document.getElementById('location-latitude').value;
+      const longitudeValue = document.getElementById('location-longitude').value;
+      submit.disabled = true;
+      try {
+        if (latitudeValue === '' || longitudeValue === '') {
+          throw new Error('Selecciona la ubicación del punto en OpenStreetMap antes de guardarlo.');
+        }
+        if (!document.getElementById('location-map').value) {
+          throw new Error('No se pudo generar el enlace de Google Maps. Selecciona nuevamente el punto.');
+        }
+        const { error } = await supabase.from('pickup_locations').insert({
+          store_id: sellerStore.id,
+          name: document.getElementById('location-name').value.trim(),
+          address: document.getElementById('location-address').value.trim(),
+          schedule: document.getElementById('location-schedule').value.trim() || null,
+          latitude: latitudeValue === '' ? null : Number(latitudeValue),
+          longitude: longitudeValue === '' ? null : Number(longitudeValue),
+          maps_url: document.getElementById('location-map').value.trim() || null,
+          is_active: true,
+          is_custom: true
+        });
+        if (error) throw error;
+        form.reset();
+        document.getElementById('location-map-preview').classList.add('hidden');
+        document.getElementById('location-map-preview').removeAttribute('href');
+        document.getElementById('seller-map-results').replaceChildren();
+        setPickupMapMessage('Punto guardado. Busca o marca otra ubicación en el mapa para agregar más.');
+        if (sellerPickupMarker && sellerPickupMap) {
+          sellerPickupMap.removeLayer(sellerPickupMarker);
+          sellerPickupMarker = null;
+          sellerPickupMap.setView(defaultPickupMapCenter, 13);
+        }
+        await loadPickupLocations();
+        showToast('Punto de recogida agregado.');
+      } catch (error) {
+        console.error('Error guardando punto propio:', error);
+        showToast(error.message || 'No se pudo agregar el punto.', true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    async function activatePickupTab(tabName) {
+      const selectedTab = tabName === 'own' ? 'own' : 'shared';
+      document.querySelectorAll('[data-pickup-tab]').forEach(button => {
+        const active = button.dataset.pickupTab === selectedTab;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+      });
+      document.getElementById('shared-pickup-content').hidden = selectedTab !== 'shared';
+      document.getElementById('own-pickup-content').hidden = selectedTab !== 'own';
+
+      try {
+        if (!pickupLocationsLoaded) await loadPickupLocations();
+      } catch (error) {
+        console.error('Error cargando puntos de recogida:', error);
+        showToast(error.message || 'No se pudieron cargar los puntos de recogida.', true);
+      }
+      if (selectedTab === 'own') {
+        initializeSellerPickupMap();
+        window.setTimeout(() => sellerPickupMap?.invalidateSize(), 120);
+      }
+    }
+
+    document.querySelectorAll('[data-pickup-tab]').forEach(button => {
+      button.addEventListener('click', () => activatePickupTab(button.dataset.pickupTab));
+    });
+
+    document.querySelectorAll('[data-section]').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-section]').forEach(item => item.classList.toggle('active', item === button));
+        document.querySelectorAll('[id^="section-"]').forEach(section => section.classList.add('hidden'));
+        document.getElementById(`section-${button.dataset.section}`).classList.remove('hidden');
+        if (button.dataset.section === 'locations') {
+          activatePickupTab('shared');
+        }
+      });
+    });
+
+    async function initializeSellerAccess() {
+      try {
+        const storedAccess = sessionStorage.getItem(sellerAccessStorageKey);
+        if (!storedAccess) throw new Error('Primero ingresa tu código desde el botón “Mi tienda” en la tienda.');
+        let verifiedAccess;
+        try {
+          verifiedAccess = JSON.parse(storedAccess);
+        } catch {
+          sessionStorage.removeItem(sellerAccessStorageKey);
+          throw new Error('El acceso guardado no es válido. Regresa a la tienda e ingresa tu código.');
+        }
+        sessionStorage.removeItem(sellerAccessStorageKey);
+        if (typeof verifiedAccess.code !== 'string' || !/^\d{6}$/.test(verifiedAccess.code)) {
+          throw new Error('No se recibió un código de acceso válido. Regresa a la tienda e inténtalo otra vez.');
+        }
+        const { data: access, error: accessError } = await supabase.rpc('register_seller_access', {
+          p_code: verifiedAccess.code
+        });
+        if (accessError) throw accessError;
+        if (access?.blocked) {
+          document.getElementById('portal-title').textContent = 'ACCESO BLOQUEADO';
+          document.querySelector('#portal-loading .access-hero').classList.add('blocked');
+          document.getElementById('portal-status').textContent = access.error || 'Tu IP o tu tienda está bloqueada. Comunícate con GIKO.';
+          return;
+        }
+        if (!access?.store?.id) throw new Error(access?.error || 'El código no corresponde a una tienda activa.');
+        const store = access.store;
+        sellerStore = store;
+        const { data: { session } } = await supabase.auth.getSession();
+        sessionUser = session?.user || null;
+        document.getElementById('portal-loading').classList.add('hidden');
+        document.getElementById('seller-dashboard').classList.remove('hidden');
+        document.getElementById('portal-status').textContent = 'Acceso verificado.';
+        if (!access.ip_registered) {
+          showToast('Entraste, pero Supabase no proporcionó la IP de esta conexión. Revisa los encabezados del proyecto.', true);
+        }
+
+        const dashboardLoad = loadSellerDashboard().catch(dashboardError => {
+          console.error('Error cargando el panel del asociado:', dashboardError);
+          showToast(`Entraste a tu tienda, pero algunos datos no cargaron: ${dashboardError.message || 'error desconocido'}`, true);
+        });
+        await dashboardLoad;
+      } catch (error) {
+        console.error('Error inicializando acceso del asociado:', error);
+        if (/bloquead|suspendid/i.test(error.message || '')) {
+          document.getElementById('portal-title').textContent = 'ACCESO BLOQUEADO';
+          document.querySelector('#portal-loading .access-hero').classList.add('blocked');
+        }
+        const status = document.getElementById('portal-status');
+        status.textContent = error.message || 'No se pudo comprobar el acceso. Regresa a la tienda e inténtalo nuevamente.';
+        status.parentElement.classList.add('error');
+      }
+    }
+    initializeSellerAccess();
+    })();
+  </script>
+</body>
+</html>

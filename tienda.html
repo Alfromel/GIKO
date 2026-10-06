@@ -45,8 +45,76 @@
             font-weight: 800;
             color: #1e293b;
             letter-spacing: -0.02em;
+            white-space: nowrap;
         }
         .mobile-header-title span { color: var(--primary); }
+        .mobile-header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+        .header-balance {
+            min-width: 72px;
+            padding: 5px 9px;
+            border: 1px solid #ffedd5;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #fffaf5, #fff1e6);
+            text-align: left;
+            white-space: nowrap;
+        }
+        .header-balance-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #9a3412;
+            font-size: 8px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .header-balance-amount {
+            margin-top: 2px;
+            color: #7c2d12;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.2;
+            font-variant-numeric: tabular-nums;
+        }
+        .mobile-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .mobile-header-action {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            background: #fff7ed;
+            color: #c2410c;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .mobile-header-action:hover { background: #ffedd5; }
+        .mobile-header-action.back {
+            border-color: transparent;
+            background: transparent;
+            color: var(--primary-dark);
+            font-size: 17px;
+        }
+        @media (max-width: 370px) {
+            .mobile-header { padding-right: 10px; padding-left: 10px; }
+            .mobile-header-title { font-size: 15px; }
+            .mobile-header-right { gap: 5px; }
+            .header-balance { min-width: 64px; padding: 5px 7px; }
+            .mobile-header-actions { gap: 2px; }
+            .mobile-header-action { width: 29px; height: 29px; }
+        }
 
         /* ---------- TABS ---------- */
         .tabs-container {
@@ -84,13 +152,17 @@
             align-items: center;
             box-shadow: 0 6px 16px rgba(234, 88, 12, 0.25);
         }
-        .balance-label { font-size: 12px; opacity: 0.9; }
-        .balance-amount { font-size: 19px; font-weight: 800; }
-
         /* ---------- SEARCH ---------- */
-        .search-container { padding: 0 12px 10px; }
+        .catalog-filter-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 8px;
+            padding: 0 12px 10px;
+        }
         .search-input {
             width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
             padding: 10px 14px 10px 36px;
             border: 1px solid #e2e8f0;
             border-radius: 20px;
@@ -113,6 +185,43 @@
             scrollbar-width: none;
         }
         .category-filters::-webkit-scrollbar { display: none; }
+        .seller-tools {
+            display: flex;
+            gap: 8px;
+            padding: 0 12px 10px;
+        }
+        .seller-tools button,
+        .seller-tools a,
+        .store-filter {
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            background: white;
+            color: #c2410c;
+            padding: 9px 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .seller-tools button,
+        .seller-tools a { flex: 1; text-align: center; text-decoration: none; }
+        .seller-access-message { min-height: 18px; margin-top: 10px; color: #b91c1c; font-size: 12px; }
+        .store-filter-wrap { min-width: 0; }
+        .store-filter {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            color: #475569;
+            height: 40px;
+            padding: 8px 9px;
+            font-size: 12px;
+        }
+        .product-store-label {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 4px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
         .category-btn {
             flex-shrink: 0;
             padding: 7px 16px;
@@ -547,9 +656,23 @@
 
     <div class="mobile-header">
         <div class="mobile-header-title">GIKO <span>SHOP</span></div>
-        <a href="dashboard.html" class="text-orange-500">
-            <i class="fas fa-arrow-left"></i>
-        </a>
+        <div class="mobile-header-right">
+            <div class="header-balance" aria-label="Saldo disponible">
+                <div class="header-balance-label"><i class="fas fa-wallet" aria-hidden="true"></i> Saldo disponible</div>
+                <div id="current-balance" class="header-balance-amount">Cargando...</div>
+            </div>
+            <div class="mobile-header-actions">
+                <button type="button" id="open-association-request" class="mobile-header-action" aria-label="Quiero asociarme" title="Quiero asociarme">
+                    <i class="fas fa-handshake" aria-hidden="true"></i>
+                </button>
+                <button type="button" id="open-seller-access" class="mobile-header-action" aria-label="Mi tienda" title="Mi tienda">
+                    <i class="fas fa-store" aria-hidden="true"></i>
+                </button>
+                <a href="dashboard.html" class="mobile-header-action back" aria-label="Volver al panel" title="Volver">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Tabs: Tienda / Historial -->
@@ -564,16 +687,13 @@
 
     <!-- Sección Tienda -->
     <div id="shop-section">
-        <div class="balance-display">
-            <div>
-                <div class="balance-label">Saldo disponible</div>
-                <div id="current-balance" class="balance-amount">Cargando...</div>
+        <div class="catalog-filter-row">
+            <input type="text" id="product-search" class="search-input" placeholder="Buscar productos..." aria-label="Buscar productos">
+            <div class="store-filter-wrap">
+                <select id="store-filter" class="store-filter" aria-label="Filtrar por tienda">
+                    <option value="all">Todas las tiendas</option>
+                </select>
             </div>
-            <i class="fas fa-wallet text-white text-lg"></i>
-        </div>
-
-        <div class="search-container">
-            <input type="text" id="product-search" class="search-input" placeholder="Buscar productos...">
         </div>
 
         <div class="category-filters">
@@ -602,6 +722,44 @@
             <i class="fas fa-receipt text-3xl mb-3"></i>
             <p class="font-medium text-sm">Sin compras aún</p>
             <p class="text-xs mt-1">Tus compras aparecerán aquí</p>
+        </div>
+    </div>
+
+    <div id="seller-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-3">
+                <h3 id="seller-modal-title" class="text-lg font-semibold text-gray-800">Asociarme a GIKO</h3>
+                <button type="button" class="text-gray-400" onclick="closeModal('seller-modal')" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div id="association-view">
+                <p class="text-xs text-gray-500 mb-3">Completa tus datos para enviar la solicitud. Tu número de celular se carga desde tu perfil.</p>
+                <form id="association-form">
+                    <input id="association-full-name" class="input-field" placeholder="Nombre completo" required maxlength="160">
+                    <input id="association-phone" class="input-field" placeholder="Número de celular" required maxlength="30">
+                    <input id="association-national-id" class="input-field" placeholder="Número de carnet" required maxlength="40">
+                    <input id="association-nit" class="input-field" placeholder="NIT (opcional)" maxlength="40">
+                    <input id="association-age" class="input-field" type="number" min="18" max="120" placeholder="Edad" required>
+                    <input id="association-backup-phone" class="input-field" type="tel" placeholder="Número de respaldo" required maxlength="30">
+                    <button class="btn-primary" type="submit"><i class="fas fa-paper-plane mr-2"></i>Solicitar asociación</button>
+                </form>
+                <div id="association-status" class="text-xs text-gray-500 mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="seller-access-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Ingresar a mi tienda</h3>
+                <button type="button" class="text-gray-400" data-close-seller-access aria-label="Cerrar"><i class="fas fa-times"></i></button>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">Ingresa el código permanente de 6 dígitos que recibiste por WhatsApp.</p>
+            <form id="seller-access-form">
+                <input id="seller-access-code" class="input-field" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="Código de 6 dígitos" required>
+                <button id="seller-access-submit" class="btn-primary mt-3" type="submit"><i class="fas fa-lock-open mr-2"></i>Validar y entrar</button>
+            </form>
+            <div id="seller-access-message" class="seller-access-message" role="status" aria-live="polite"></div>
         </div>
     </div>
 
@@ -746,6 +904,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        (function initializeGikoShop() {
+        if (window.__gikoShopInitialized) return;
+        window.__gikoShopInitialized = true;
+        if (!window.supabase?.createClient) {
+            console.error('Supabase no cargó. Revisa la política CSP del hosting.');
+            return;
+        }
         // ---------- Configuración Supabase ----------
         const supabaseUrl = 'https://jxpssplhcytqqjiqnpeu.supabase.co';
         const supabaseKey = 'sb_publishable_apHvBdktiuIcsrpx423yIg_o-d7XFMp';
@@ -754,55 +919,6 @@
         // ---------- Bot de Telegram ----------
         const TELEGRAM_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
         const TELEGRAM_CHAT_ID = '-1004493378512';
-
-        // ---------- PUNTOS DE ENCUENTRO FIJOS (Coordenadas actualizadas) ----------
-        const MEETUP_POINTS = [
-            {
-                id: 'mp1',
-                name: 'INFOCAL EL ALTO',
-                icon: 'fa-graduation-cap',
-                lat: -16.5043,
-                lng: -68.1496,
-                description: 'Instituto de Formación INFOCAL - El Alto',
-                mapsUrl: 'https://maps.app.goo.gl/gzR21e2SB3sBmTLP9'
-            },
-            {
-                id: 'mp2',
-                name: 'UPEA EL ALTO',
-                icon: 'fa-university',
-                lat: -16.5061,
-                lng: -68.1455,
-                description: 'Universidad Pública de El Alto',
-                mapsUrl: 'https://maps.app.goo.gl/GmVrcDHdcnDCqZeEA'
-            },
-            {
-                id: 'mp3',
-                name: 'PLAZA SAN FRANCISCO LA PAZ',
-                icon: 'fa-church',
-                lat: -16.4959,
-                lng: -68.1338,
-                description: 'Plaza San Francisco - La Paz',
-                mapsUrl: 'https://maps.app.goo.gl/WYmZ4AJhuazMRBNAA'
-            },
-            {
-                id: 'mp4',
-                name: 'OBELISCO TELEFERICO MORADO LA PAZ',
-                icon: 'fa-monument',
-                lat: -16.4999,
-                lng: -68.1337,
-                description: 'Obelisco - Teleférico Morado - La Paz',
-                mapsUrl: 'https://maps.app.goo.gl/xmR2irQtmavQwrD77'
-            },
-            {
-                id: 'mp5',
-                name: 'TELEFERICO AMARILLO SATELITE EL ALTO',
-                icon: 'fa-cable-car',
-                lat: -16.5173,
-                lng: -68.1576,
-                description: 'Estación Teleférico Amarillo - Satélite - El Alto',
-                mapsUrl: 'https://maps.app.goo.gl/3DGGKDuenTcVPUXT9'
-            }
-        ];
 
         // ---------- Estado global ----------
         let currentUser = null;
@@ -813,6 +929,8 @@
         let currentInvoiceData = null;
         let products = [];
         let currentCategory = 'all';
+        let currentStoreFilter = 'all';
+        let sellerStores = [];
         let currentTab = 'shop';
         let currentReceiptData = null;
 
@@ -828,6 +946,18 @@
 
         // ---------- Utilidades ----------
         const formatCurrency = (amount) => 'Bs ' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[character]);
+        const safeExternalUrl = (value) => {
+            if (typeof value !== 'string' || !value.trim()) return '';
+            try {
+                const url = new URL(value, window.location.href);
+                return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : '';
+            } catch {
+                return '';
+            }
+        };
 
         const showToast = (message, type = 'success') => {
             const toast = document.createElement('div');
@@ -863,6 +993,7 @@
             document.getElementById(modalId).classList.remove('active');
             document.body.style.overflow = '';
         };
+        window.closeModal = closeModal;
 
         // ---------- Tabs ----------
         function switchTab(tab) {
@@ -902,19 +1033,34 @@
             const list = document.getElementById('pickup-list');
             list.innerHTML = '<p class="text-xs text-gray-400">Cargando sucursales...</p>';
 
-            const { data, error } = await supabase
-                .from('pickup_locations')
-                .select('*')
-                .eq('is_active', true)
-                .order('name', { ascending: true });
-
-            if (error) {
+            try {
+                const locationQuery = supabase.from('pickup_locations').select('*').eq('is_active', true);
+                let result;
+                if (currentProduct.store_id) {
+                    const [{ data: ownLocations, error: ownError }, { data: enabledRows, error: enabledError }] = await Promise.all([
+                        locationQuery.eq('store_id', currentProduct.store_id).order('name'),
+                        supabase.from('seller_store_pickup_locations').select('pickup_location_id').eq('store_id', currentProduct.store_id).eq('is_enabled', true)
+                    ]);
+                    if (ownError) throw ownError;
+                    if (enabledError) throw enabledError;
+                    const enabledIds = (enabledRows || []).map(row => row.pickup_location_id);
+                    let sharedLocations = [];
+                    if (enabledIds.length) {
+                        const { data, error } = await supabase.from('pickup_locations').select('*').in('id', enabledIds).eq('is_active', true);
+                        if (error) throw error;
+                        sharedLocations = data || [];
+                    }
+                    result = { data: [...(ownLocations || []), ...sharedLocations] };
+                } else {
+                    result = await locationQuery.is('store_id', null).order('name');
+                    if (result.error) throw result.error;
+                }
+                pickupLocations = result.data || [];
+            } catch (error) {
                 console.error('Error loading pickup locations:', error);
-                list.innerHTML = '<p class="text-xs text-red-500">No se pudieron cargar las sucursales</p>';
+                list.innerHTML = '<p class="text-xs text-red-500">No se pudieron cargar los puntos de recogida</p>';
                 return;
             }
-
-            pickupLocations = data || [];
 
             if (pickupLocations.length === 0) {
                 list.innerHTML = '<p class="text-xs text-gray-400">No hay sucursales disponibles por el momento</p>';
@@ -928,9 +1074,9 @@
                 
                 return `
                     <div class="pickup-card" data-location-id="${loc.id}">
-                        <div class="pk-name"><i class="fas fa-store" style="color:var(--primary)"></i> ${loc.name}</div>
-                        <div class="pk-address">${loc.address}</div>
-                        ${loc.schedule ? `<div class="pk-schedule"><i class="fas fa-clock"></i> ${loc.schedule}</div>` : ''}
+                        <div class="pk-name"><i class="fas fa-store" style="color:var(--primary)"></i> ${escapeHtml(loc.name)}</div>
+                            <div class="pk-address">${escapeHtml(loc.address)}</div>
+                            ${loc.schedule ? `<div class="pk-schedule"><i class="fas fa-clock"></i> ${escapeHtml(loc.schedule)}</div>` : ''}
                         ${gmapsLink ? `
                             <a href="${gmapsLink}" target="_blank" class="pk-map-btn" onclick="event.stopPropagation();">
                                 <i class="fas fa-map-marker-alt"></i> Ver en Google Maps
@@ -953,19 +1099,60 @@
             });
         }
 
-        function renderMeetupPoints() {
+        async function renderMeetupPoints() {
             const list = document.getElementById('meetup-points-list');
-            
-            list.innerHTML = MEETUP_POINTS.map(point => `
-                <div class="meetup-point-card" data-point-id="${point.id}">
-                    <div class="mp-icon"><i class="fas ${point.icon}"></i></div>
-                    <div class="mp-name">${point.name}</div>
-                    <div class="mp-coords">${point.lat.toFixed(4)}, ${point.lng.toFixed(4)}</div>
-                    <a href="${point.mapsUrl}" target="_blank" class="mp-link" onclick="event.stopPropagation();">
-                        <i class="fas fa-map-marker-alt"></i> Ver mapa
-                    </a>
-                </div>
-            `).join('');
+            list.innerHTML = '<p class="text-xs text-gray-400">Cargando puntos de encuentro...</p>';
+            try {
+                let locations = [];
+                if (currentProduct.store_id) {
+                    const [{ data: own, error: ownError }, { data: enabled, error: enabledError }] = await Promise.all([
+                        supabase.from('pickup_locations').select('*').eq('store_id', currentProduct.store_id).eq('is_active', true).order('name'),
+                        supabase.from('seller_store_pickup_locations').select('pickup_location_id').eq('store_id', currentProduct.store_id).eq('is_enabled', true)
+                    ]);
+                    if (ownError) throw ownError;
+                    if (enabledError) throw enabledError;
+                    const ids = (enabled || []).map(item => item.pickup_location_id);
+                    let shared = [];
+                    if (ids.length) {
+                        const { data, error } = await supabase.from('pickup_locations').select('*').in('id', ids).eq('is_active', true);
+                        if (error) throw error;
+                        shared = data || [];
+                    }
+                    locations = [...(own || []), ...shared];
+                } else {
+                    const { data, error } = await supabase.from('pickup_locations').select('*')
+                        .is('store_id', null).eq('is_active', true).order('name');
+                    if (error) throw error;
+                    locations = data || [];
+                }
+                pickupLocations = locations;
+                if (!locations.length) {
+                    list.innerHTML = '<p class="text-xs text-gray-400">Esta tienda no tiene puntos de encuentro disponibles.</p>';
+                    return;
+                }
+
+                list.innerHTML = locations.map(point => {
+                    const lat = Number(point.latitude || 0);
+                    const lng = Number(point.longitude || 0);
+                    const mapsUrl = safeExternalUrl(point.maps_url) || (point.latitude && point.longitude
+                        ? generateGoogleMapsLink(lat, lng, point.name)
+                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(point.address || point.name)}`);
+                    return `
+                        <div class="meetup-point-card" data-point-id="${point.id}">
+                            <div class="mp-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="mp-name">${escapeHtml(point.name)}</div>
+                            <div class="mp-coords">${escapeHtml(point.address)}</div>
+                            <a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener noreferrer" class="mp-link" onclick="event.stopPropagation();">
+                                <i class="fas fa-map-marker-alt"></i> Ver mapa
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error cargando puntos de encuentro:', error);
+                list.innerHTML = '<p class="text-xs text-red-500">No se pudieron cargar los puntos de encuentro.</p>';
+                return;
+            }
 
             document.querySelectorAll('.meetup-point-card').forEach(card => {
                 card.addEventListener('click', (e) => {
@@ -974,7 +1161,18 @@
                     document.querySelectorAll('.meetup-point-card').forEach(c => c.classList.remove('selected'));
                     card.classList.add('selected');
                     const pointId = card.dataset.pointId;
-                    selectedMeetupPoint = MEETUP_POINTS.find(p => p.id === pointId);
+                    const location = pickupLocations.find(p => p.id === pointId);
+                    if (!location) return;
+                    selectedMeetupPoint = {
+                        id: location.id,
+                        name: location.name,
+                        description: location.address,
+                        lat: Number(location.latitude || 0),
+                        lng: Number(location.longitude || 0),
+                        mapsUrl: safeExternalUrl(location.maps_url) || (location.latitude && location.longitude
+                            ? generateGoogleMapsLink(location.latitude, location.longitude, location.name)
+                            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address || location.name)}`)
+                    };
                     updateBuyButton();
                 });
             });
@@ -986,12 +1184,16 @@
                 let query = supabase.from('products').select('*').eq('is_active', true);
                 if (searchTerm) query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
                 if (category !== 'all') query = query.eq('category', category);
+                if (currentStoreFilter !== 'all') query = query.eq('store_id', currentStoreFilter);
                 query = query.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
 
                 const { data, error } = await query;
                 if (error) throw error;
 
-                products = data || [];
+                const activeStoreIds = new Set(sellerStores.map(store => store.id));
+                products = (data || []).filter(product =>
+                    !product.store_id || activeStoreIds.has(product.store_id)
+                );
                 renderProducts(products);
             } catch (error) {
                 console.error('Error loading products:', error);
@@ -1015,18 +1217,20 @@
                 const stockText = product.stock > 10 ? 'Disponible' : product.stock > 0 ? `${product.stock} unid.` : 'Agotado';
                 const hasDiscount = product.discount_percentage > 0;
                 const finalPrice = hasDiscount ? product.price * (1 - product.discount_percentage / 100) : product.price;
+                const store = sellerStores.find(item => item.id === product.store_id);
 
                 return `
                     <div class="product-card" data-product-id="${product.id}">
                         <div class="product-image-wrap">
-                            <img src="${product.image_url || 'https://via.placeholder.com/400x400/f1f5f9/64748b?text=GIKO'}" alt="${product.name}" class="product-image">
+                            <img src="${escapeHtml(safeExternalUrl(product.image_url) || 'https://via.placeholder.com/400x400/f1f5f9/64748b?text=GIKO')}" alt="${escapeHtml(product.name)}" class="product-image">
                             ${hasDiscount ? `<span class="badge-discount">-${product.discount_percentage}%</span>` : ''}
                             ${product.is_featured ? `<span class="badge-featured">★ Destacado</span>` : ''}
                             <span class="stock-badge ${stockClass}">${stockText}</span>
                         </div>
                         <div class="product-info">
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-description">${product.description || ''}</div>
+                            <div class="product-name">${escapeHtml(product.name)}</div>
+                            <div class="product-description">${escapeHtml(product.description || '')}</div>
+                            ${store ? `<div class="product-store-label"><i class="fas fa-store mr-1"></i>${escapeHtml(store.name)}</div>` : ''}
                             <div class="price-row">
                                 <span class="product-price">${formatCurrency(finalPrice)}</span>
                                 ${hasDiscount ? `<span class="product-price-old">${formatCurrency(product.price)}</span>` : ''}
@@ -1048,6 +1252,7 @@
             currentProduct = product;
             selectedQuantity = 1;
             deliveryMethod = null;
+            pickupLocations = [];
             selectedPickupLocation = null;
             selectedMeetupPoint = null;
             selectedDate = '';
@@ -1214,7 +1419,7 @@
         }
 
         // ---------- Generar comprobante ----------
-        function generateReceipt(purchaseId) {
+        window.generateReceipt = function generateReceipt(purchaseId) {
             const history = getPurchaseHistory();
             const purchase = history.find(p => p.id === purchaseId);
             if (!purchase) {
@@ -1369,6 +1574,151 @@
             return data;
         };
 
+        const loadMarketplaceOptions = async () => {
+            const [{ data: stores, error: storesError }, { data: categories, error: categoriesError }] = await Promise.all([
+                supabase.from('seller_stores').select('id, name, slug').eq('status', 'active').order('name'),
+                supabase.from('product_categories').select('id, name, slug').eq('is_active', true).order('sort_order').order('name')
+            ]);
+            if (storesError) throw storesError;
+            if (categoriesError) throw categoriesError;
+            sellerStores = stores || [];
+            sellerStores = stores || [];
+            const categoryFilters = document.querySelector('.category-filters');
+            categoryFilters.innerHTML = '<button class="category-btn active" data-category="all">Todos</button>';
+            (categories || []).forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn';
+                button.dataset.category = category.name;
+                button.textContent = category.name;
+                categoryFilters.appendChild(button);
+            });
+            const storeFilter = document.getElementById('store-filter');
+            storeFilter.innerHTML = '<option value="all">Todas las tiendas</option>';
+            sellerStores.forEach(store => {
+                const option = document.createElement('option');
+                option.value = store.id;
+                option.textContent = store.name;
+                storeFilter.appendChild(option);
+            });
+        };
+
+        const loadAssociationStatus = async () => {
+            const statusEl = document.getElementById('association-status');
+            const { data, error } = await supabase.from('association_applications')
+                .select('status, created_at, admin_notes')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+            if (error) throw error;
+            if (!data) {
+                statusEl.textContent = '';
+                return;
+            }
+            const labels = { pending: 'Pendiente', under_review: 'En revisión', approved: 'Aprobada', rejected: 'Rechazada' };
+            statusEl.textContent = `Estado de tu solicitud: ${labels[data.status] || data.status}${data.admin_notes ? ` — ${data.admin_notes}` : ''}`;
+        };
+
+        document.getElementById('open-association-request').addEventListener('click', async () => {
+            document.getElementById('seller-modal-title').textContent = 'Solicitar asociación';
+            document.getElementById('association-view').classList.remove('hidden');
+            document.getElementById('association-full-name').value = userProfile.full_name || '';
+            document.getElementById('association-phone').value = userProfile.phone || '';
+            document.getElementById('association-phone').readOnly = Boolean(userProfile.phone);
+            try {
+                await loadAssociationStatus();
+                openModal('seller-modal');
+            } catch (error) {
+                console.error('Error consultando solicitud de asociación:', error);
+                showToast('No se pudo consultar el estado de la solicitud', 'error');
+            }
+        });
+
+        const sellerAccessStorageKey = 'giko_verified_seller_access';
+        const sellerAccessMessage = document.getElementById('seller-access-message');
+        const hashSellerAccessCode = async code => {
+            const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code));
+            return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
+        };
+        const openSellerAccess = () => {
+            sellerAccessMessage.textContent = '';
+            document.getElementById('seller-access-code').value = '';
+            openModal('seller-access-modal');
+            document.getElementById('seller-access-code').focus();
+        };
+        document.getElementById('open-seller-access')?.addEventListener('click', openSellerAccess);
+        document.querySelectorAll('[data-close-seller-access]').forEach(button =>
+            button.addEventListener('click', () => closeModal('seller-access-modal'))
+        );
+        document.getElementById('seller-access-form')?.addEventListener('submit', async event => {
+            event.preventDefault();
+            const submit = document.getElementById('seller-access-submit');
+            const code = document.getElementById('seller-access-code').value.trim();
+            sellerAccessMessage.textContent = '';
+            if (!/^\d{6}$/.test(code)) {
+                sellerAccessMessage.textContent = 'El código debe tener exactamente 6 dígitos.';
+                return;
+            }
+            submit.disabled = true;
+            try {
+                const codeHash = await hashSellerAccessCode(code);
+                const { data: accessCode, error: codeError } = await window.supabase
+                    .from('seller_access_codes').select('store_id')
+                    .eq('code_hash', codeHash).is('revoked_at', null)
+                    .maybeSingle();
+                if (codeError) throw codeError;
+                if (!accessCode) throw new Error('El código es incorrecto o fue revocado.');
+                const { data: store, error: storeError } = await window.supabase
+                    .from('seller_stores').select('id, name, description, status, owner_user_id')
+                    .eq('id', accessCode.store_id).eq('status', 'active').maybeSingle();
+                if (storeError) throw storeError;
+                if (!store) throw new Error('El código no corresponde a una tienda activa.');
+                sessionStorage.setItem(sellerAccessStorageKey, JSON.stringify({
+                    code,
+                    validatedAt: Date.now()
+                }));
+                window.location.assign('tienda-asociados.html?v=20261005');
+            } catch (error) {
+                console.error('Error validando el acceso a la tienda asociada:', error);
+                sellerAccessMessage.textContent = error.message || 'No se pudo validar el código.';
+            } finally {
+                submit.disabled = false;
+            }
+        });
+        if (window.location.hash === '#seller-access') openSellerAccess();
+
+        document.getElementById('association-form')?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            try {
+                const { error } = await supabase.from('association_applications').insert({
+                    user_id: currentUser.id,
+                    full_name: document.getElementById('association-full-name').value.trim(),
+                    phone: document.getElementById('association-phone').value.trim(),
+                    national_id: document.getElementById('association-national-id').value.trim(),
+                    nit: document.getElementById('association-nit').value.trim() || null,
+                    age: Number(document.getElementById('association-age').value),
+                    backup_phone: document.getElementById('association-backup-phone').value.trim(),
+                    status: 'pending'
+                });
+                if (error) throw error;
+                document.getElementById('association-status').textContent = 'Solicitud enviada. Su estado es: Pendiente.';
+                if (form?.isConnected) form.reset();
+                document.getElementById('association-full-name').value = userProfile.full_name || '';
+                document.getElementById('association-phone').value = userProfile.phone || '';
+                showToast('Solicitud de asociación enviada');
+            } catch (error) {
+                console.error('Error enviando solicitud de asociación:', error);
+                document.getElementById('association-status').textContent = error.code === '23505'
+                    ? 'Ya tienes una solicitud pendiente o en revisión.'
+                    : `No se pudo enviar la solicitud: ${error.message}`;
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
         const calculateBalance = async (userId) => {
             const { data, error } = await supabase.from('transactions').select('amount, type').eq('user_id', userId).eq('status', 'completed');
             if (error) { console.error('Error calculating balance:', error); return 0; }
@@ -1415,6 +1765,12 @@
             currentBalance = await calculateBalance(currentUser.id);
             updateBalanceDisplay();
 
+            try {
+                await loadMarketplaceOptions();
+            } catch (error) {
+                console.error('Error cargando categorías y tiendas:', error);
+                showToast('No se pudieron cargar las categorías y tiendas asociadas', 'error');
+            }
             await loadProducts();
 
             // Tabs
@@ -1425,6 +1781,10 @@
             // Search
             document.getElementById('product-search').addEventListener('input', (e) => {
                 loadProducts(e.target.value, currentCategory);
+            });
+            document.getElementById('store-filter').addEventListener('change', (event) => {
+                currentStoreFilter = event.target.value;
+                loadProducts(document.getElementById('product-search').value, currentCategory);
             });
 
             // Categories
@@ -1489,22 +1849,22 @@
                     : null;
                 
                 deliveryInfoHtml = `
-                    <div class="mb-1"><strong>Recoger en:</strong><br>${selectedPickupLocation.name} — ${selectedPickupLocation.address}</div>
+                    <div class="mb-1"><strong>Recoger en:</strong><br>${escapeHtml(selectedPickupLocation.name)} — ${escapeHtml(selectedPickupLocation.address)}</div>
                     ${gmapsLink ? `<div class="mb-1"><a href="${gmapsLink}" target="_blank" class="gmaps-link"><i class="fas fa-map-marker-alt"></i> Ver en Google Maps</a></div>` : ''}
                 `;
             } else {
                 const gmapsLink = generateGoogleMapsLink(selectedMeetupPoint.lat, selectedMeetupPoint.lng, selectedMeetupPoint.name);
                 deliveryInfoHtml = `
-                    <div class="mb-1"><strong>Punto de encuentro:</strong><br>${selectedMeetupPoint.name}</div>
-                    <div class="mb-1"><strong>Descripción:</strong><br>${selectedMeetupPoint.description}</div>
+                    <div class="mb-1"><strong>Punto de encuentro:</strong><br>${escapeHtml(selectedMeetupPoint.name)}</div>
+                    <div class="mb-1"><strong>Descripción:</strong><br>${escapeHtml(selectedMeetupPoint.description)}</div>
                     <div class="mb-1"><strong>Coordenadas:</strong><br>${selectedMeetupPoint.lat.toFixed(6)}, ${selectedMeetupPoint.lng.toFixed(6)}</div>
-                    <div class="mb-1"><a href="${selectedMeetupPoint.mapsUrl}" target="_blank" class="gmaps-link"><i class="fas fa-external-link-alt"></i> Ver en Google Maps</a></div>
+                    <div class="mb-1"><a href="${escapeHtml(safeExternalUrl(selectedMeetupPoint.mapsUrl))}" target="_blank" rel="noopener noreferrer" class="gmaps-link"><i class="fas fa-external-link-alt"></i> Ver en Google Maps</a></div>
                 `;
             }
 
             document.getElementById('confirmation-text').innerHTML = `
                 <div class="bg-gray-50 p-2 rounded-lg mb-2 text-sm">
-                    <strong>${currentProduct.name}</strong><br>
+                    <strong>${escapeHtml(currentProduct.name)}</strong><br>
                     Cantidad: ${selectedQuantity} unidades<br>
                     Total: <strong style="color:var(--primary)">${formatCurrency(totalPrice)}</strong>
                 </div>
@@ -1513,7 +1873,7 @@
                     ${deliveryInfoHtml}
                     <div class="mb-1"><strong>Fecha:</strong> ${dateValue}</div>
                     <div class="mb-1"><strong>Hora:</strong> ${timeValue}</div>
-                    ${notes ? `<div><strong>Notas:</strong><br>${notes}</div>` : ''}
+                    ${notes ? `<div><strong>Notas:</strong><br>${escapeHtml(notes)}</div>` : ''}
                 </div>
             `;
             openModal('confirmation-modal');
@@ -1537,6 +1897,7 @@
                 let metadata = {
                     product_id: currentProduct.id,
                     product_name: currentProduct.name,
+                    store_id: currentProduct.store_id || null,
                     quantity: selectedQuantity,
                     unit_price: currentProduct._finalPrice,
                     total_price: totalPrice,
@@ -1662,6 +2023,7 @@ ${notes ? `📝 *NOTAS*\n${notes}\n` : ''}
                 confirmSpinner.classList.add('hidden');
             }
         }
+        })();
     </script>
 </body>
 </html>
