@@ -126,6 +126,12 @@
     .product-row h3 { margin: 0; overflow: hidden; color: var(--navy); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
     .product-row p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
     .product-price { margin-top: 5px; color: var(--brand-dark); font-size: 11px; font-weight: 800; }
+    .product-discount { display: inline-flex; margin-top: 6px; padding: 4px 7px; border-radius: 999px; background: #fff1e5; color: #b54708; font-size: 9px; font-weight: 800; }
+    .product-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+    .product-actions .button { min-height: 34px; padding: 7px 9px; font-size: 10px; }
+    .product-actions .button.danger { border-color: #fee2e2; background: #fff7f7; }
+    .product-actions .button.delete { border-color: #fee2e2; color: #b42318; }
+    .product-actions .button.delete:hover { border-color: #fda29b; background: #fff0ee; }
     .status { display: inline-flex; padding: 5px 8px; border-radius: 999px; background: #e8f7ef; color: var(--green); font-size: 9px; font-weight: 800; }
     .status.off { background: #f1f3f6; color: #6b7280; }
     .location-list { display: grid; gap: 10px; }
@@ -269,7 +275,8 @@
       .form-actions .button { flex: 1; }
       .product-row { grid-template-columns: 52px minmax(0, 1fr) auto; gap: 10px; padding: 10px; }
       .product-thumb { width: 52px; height: 52px; }
-      .product-row > .button { grid-column: auto; justify-self: stretch; padding: 8px; font-size: 10px; }
+      .product-actions { grid-column: 1 / -1; justify-content: flex-end; }
+      .product-actions .button { min-height: 38px; padding: 8px 12px; font-size: 11px; }
       .map-search-row { grid-template-columns: minmax(0, 1fr) auto; }
       .map-search-row #seller-my-location { grid-column: 1 / -1; }
       #seller-pickup-map { height: 280px; }
@@ -287,7 +294,8 @@
       .side-nav button { gap: 7px; padding: 8px; font-size: 10px; }
       .product-row { grid-template-columns: 44px minmax(0, 1fr); }
       .product-thumb { width: 48px; height: 48px; }
-      .product-row > .button { grid-column: 2; justify-self: start; }
+      .product-actions { grid-column: 1 / -1; }
+      .product-actions .button { flex: 1; }
       .location-details-grid { grid-template-columns: 1fr; gap: 11px; }
       .location-card { flex-direction: column; }
       .location-card-main { width: 100%; }
@@ -303,6 +311,7 @@
       .stat { min-height: 75px; }
       .product-row { grid-template-columns: 40px minmax(0, 1fr); }
       .product-thumb { width: 40px; height: 40px; }
+      .product-actions .button { padding: 8px 6px; font-size: 9px; }
       .pickup-tab { gap: 5px; padding: 8px 5px; font-size: 9px; }
       .pickup-section { padding: 11px; }
       .map-search-row { grid-template-columns: minmax(0, 1fr) minmax(0, auto); }
@@ -369,16 +378,17 @@
         </section>
 
         <section id="section-add-product" class="panel hidden">
-          <div class="panel-head"><span><h2>Agregar producto</h2><p>Completa los datos para publicar un artículo en tu tienda.</p></span></div>
+          <div class="panel-head"><span><h2 id="product-form-title">Agregar producto</h2><p id="product-form-description">Completa los datos para publicar un artículo en tu tienda.</p></span></div>
           <div id="product-form-wrap" class="panel-body">
             <form id="product-form" class="product-form">
               <div class="field"><label for="product-name">Nombre</label><input id="product-name" maxlength="160" placeholder="Ej. Bolso artesanal" required></div>
               <div class="field"><label for="product-category">Categoría</label><select id="product-category" required><option value="">Cargando categorías...</option></select></div>
               <div class="field"><label for="product-price">Precio (Bs)</label><input id="product-price" type="number" min="0.01" step="0.01" placeholder="0.00" required></div>
               <div class="field"><label for="product-stock">Unidades en stock</label><input id="product-stock" type="number" min="0" step="1" value="1" required></div>
+              <div class="field"><label for="product-discount">Descuento (%) <span style="font-weight:500;color:#758096">opcional</span></label><input id="product-discount" type="number" min="0" max="100" step="1" value="0" placeholder="0"><small style="display:block;margin-top:6px;color:#758096;font-size:10px">Deja 0 si no quieres ofrecer descuento.</small></div>
               <div class="field full"><label for="product-description">Descripción</label><textarea id="product-description" maxlength="1500" placeholder="Cuenta qué hace especial a tu producto"></textarea></div>
               <div class="field full"><label for="product-image">Imagen (URL opcional)</label><input id="product-image" type="url" placeholder="https://..."></div>
-              <div class="form-actions"><button id="cancel-product-form" class="button" type="button">Cancelar</button><button id="save-product" class="button primary" type="submit"><i class="fas fa-cloud-arrow-up"></i> Publicar</button></div>
+              <div class="form-actions"><button id="cancel-product-form" class="button" type="button">Cancelar</button><button id="save-product" class="button primary" type="submit"><i class="fas fa-cloud-arrow-up"></i> <span id="save-product-label">Publicar</span></button></div>
             </form>
           </div>
         </section>
@@ -490,6 +500,7 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let sessionUser = null;
     let sellerStore = null;
+    let editingProductId = null;
     let sellerCategories = [];
     let sellerPickupMap = null;
     let sellerPickupMarker = null;
@@ -557,7 +568,7 @@
 
       const [{ data: memberships, error: membershipsError }, { data: products, error: productsError }, { data: profile, error: profileError }] = await Promise.all([
         supabase.from('seller_store_categories').select('category_id').eq('store_id', sellerStore.id),
-        supabase.from('products').select('id, name, description, price, stock, category_id, image_url, is_active, created_at')
+        supabase.from('products').select('id, name, description, price, stock, category_id, image_url, is_active, discount_percentage, created_at')
           .eq('store_id', sellerStore.id).order('created_at', { ascending: false }),
         supabase.from('user_profiles').select('full_name').eq('id', sellerStore.owner_user_id).maybeSingle()
       ]);
@@ -593,21 +604,83 @@
       container.innerHTML = products.map(product => {
         const category = sellerCategories.find(item => item.id === product.category_id);
         const image = safeImageUrl(product.image_url);
+        const discountPercentage = Number(product.discount_percentage) || 0;
+        const finalPrice = Number(product.price) * (1 - discountPercentage / 100);
         return `<article class="product-row">
           <img class="product-thumb" src="${escapeHtml(image || 'https://via.placeholder.com/100x100/f2f4f7/667085?text=GIKO')}" alt="" loading="lazy" decoding="async">
           <div>
             <h3>${escapeHtml(product.name)}</h3>
             <p>${escapeHtml(category?.name || 'Sin categoría')} · ${Number(product.stock)} unidades</p>
-            <div class="product-price">Bs ${Number(product.price).toFixed(2)}</div>
+            <div class="product-price">${discountPercentage > 0 ? `Bs ${finalPrice.toFixed(2)} <del style="color:#98a2b3;font-size:10px;font-weight:500">Bs ${Number(product.price).toFixed(2)}</del>` : `Bs ${Number(product.price).toFixed(2)}`}</div>
+            ${discountPercentage > 0 ? `<span class="product-discount">-${discountPercentage}% descuento</span>` : ''}
           </div>
-          <button type="button" class="button${product.is_active ? ' danger' : ''}" data-product-toggle="${escapeHtml(product.id)}" data-product-active="${product.is_active}">
-            ${product.is_active ? 'Pausar' : 'Activar'}
-          </button>
+          <div class="product-actions">
+            <button type="button" class="button" data-product-edit="${escapeHtml(product.id)}"><i class="fas fa-pen" aria-hidden="true"></i> Editar</button>
+            <button type="button" class="button delete" data-product-delete="${escapeHtml(product.id)}"><i class="fas fa-trash" aria-hidden="true"></i> Eliminar</button>
+            <button type="button" class="button${product.is_active ? ' danger' : ''}" data-product-toggle="${escapeHtml(product.id)}" data-product-active="${product.is_active}">
+              ${product.is_active ? 'Pausar' : 'Activar'}
+            </button>
+          </div>
         </article>`;
       }).join('');
+      container.querySelectorAll('[data-product-edit]').forEach(button => {
+        button.addEventListener('click', () => editProduct(button.dataset.productEdit, products));
+      });
+      container.querySelectorAll('[data-product-delete]').forEach(button => {
+        button.addEventListener('click', () => deleteProduct(button));
+      });
       container.querySelectorAll('[data-product-toggle]').forEach(button => {
         button.addEventListener('click', () => toggleProduct(button));
       });
+    }
+
+    function resetProductForm() {
+      editingProductId = null;
+      document.getElementById('product-form').reset();
+      document.getElementById('product-stock').value = '1';
+      document.getElementById('product-discount').value = '0';
+      document.getElementById('product-form-title').textContent = 'Agregar producto';
+      document.getElementById('product-form-description').textContent = 'Completa los datos para publicar un artículo en tu tienda.';
+      document.getElementById('save-product-label').textContent = 'Publicar';
+    }
+
+    function editProduct(productId, products) {
+      const product = products.find(item => item.id === productId);
+      if (!product) {
+        showToast('No se encontró el producto que quieres editar. Actualiza la lista e inténtalo de nuevo.', true);
+        return;
+      }
+      editingProductId = product.id;
+      document.getElementById('product-name').value = product.name || '';
+      document.getElementById('product-category').value = product.category_id || '';
+      document.getElementById('product-price').value = String(product.price ?? '');
+      document.getElementById('product-stock').value = String(product.stock ?? 0);
+      document.getElementById('product-discount').value = String(product.discount_percentage ?? 0);
+      document.getElementById('product-description').value = product.description || '';
+      document.getElementById('product-image').value = product.image_url || '';
+      document.getElementById('product-form-title').textContent = 'Editar producto';
+      document.getElementById('product-form-description').textContent = 'Actualiza los datos y guarda los cambios de tu producto.';
+      document.getElementById('save-product-label').textContent = 'Guardar cambios';
+      showSellerSection('add-product');
+    }
+
+    async function deleteProduct(button) {
+      const product = button.closest('.product-row')?.querySelector('h3')?.textContent || 'este producto';
+      if (!window.confirm(`¿Eliminar "${product}"? Esta acción no se puede deshacer.`)) return;
+      button.disabled = true;
+      try {
+        const { data, error } = await supabase.from('products').delete()
+          .eq('id', button.dataset.productDelete).eq('store_id', sellerStore.id)
+          .select('id').maybeSingle();
+        if (error) throw error;
+        if (!data) throw new Error('No se eliminó el producto. Comprueba que pertenezca a tu tienda y vuelve a intentarlo.');
+        await loadSellerDashboard();
+        showToast('Producto eliminado.');
+      } catch (error) {
+        console.error('Error eliminando producto asociado:', error);
+        showToast(error.message || 'No se pudo eliminar el producto.', true);
+        button.disabled = false;
+      }
     }
 
     async function toggleProduct(button) {
@@ -923,10 +996,11 @@
     }
 
     document.getElementById('show-product-form').addEventListener('click', () => {
+      resetProductForm();
       showSellerSection('add-product');
     });
     document.getElementById('cancel-product-form').addEventListener('click', () => {
-      document.getElementById('product-form').reset();
+      resetProductForm();
       showSellerSection('products');
     });
 
@@ -938,11 +1012,15 @@
       try {
         const category = sellerCategories.find(item => item.id === document.getElementById('product-category').value);
         if (!category) throw new Error('Selecciona una categoría válida.');
+        const discount = Number(document.getElementById('product-discount').value || 0);
+        if (!Number.isFinite(discount) || discount < 0 || discount > 100) {
+          throw new Error('El descuento debe estar entre 0 y 100%.');
+        }
         const { error: categoryError } = await supabase.from('seller_store_categories').upsert({
           store_id: sellerStore.id, category_id: category.id
         }, { onConflict: 'store_id,category_id' });
         if (categoryError) throw categoryError;
-        const { error } = await supabase.from('products').insert({
+        const productChanges = {
           name: document.getElementById('product-name').value.trim(),
           description: document.getElementById('product-description').value.trim() || null,
           price: Number(document.getElementById('product-price').value),
@@ -951,15 +1029,23 @@
           category_id: category.id,
           store_id: sellerStore.id,
           image_url: document.getElementById('product-image').value.trim() || null,
-          is_active: true,
-          is_featured: false,
-          discount_percentage: 0
-        });
+          discount_percentage: discount
+        };
+        const { data, error } = editingProductId
+          ? await supabase.from('products').update(productChanges)
+            .eq('id', editingProductId).eq('store_id', sellerStore.id).select('id').maybeSingle()
+          : await supabase.from('products').insert({
+            ...productChanges,
+            is_active: true,
+            is_featured: false
+          }).select('id').single();
         if (error) throw error;
-        form.reset();
+        if (!data) throw new Error('No se guardaron los cambios. Comprueba que el producto pertenezca a tu tienda.');
+        const wasEditing = Boolean(editingProductId);
+        resetProductForm();
         await loadSellerDashboard();
         showSellerSection('products');
-        showToast('Tu producto se publicó correctamente.');
+        showToast(wasEditing ? 'Producto actualizado correctamente.' : 'Tu producto se publicó correctamente.');
       } catch (error) {
         console.error('Error guardando producto asociado:', error);
         showToast(error.message || 'No se pudo publicar el producto.', true);
@@ -1042,6 +1128,7 @@
 
     document.querySelectorAll('[data-section]').forEach(button => {
       button.addEventListener('click', () => {
+        if (button.dataset.section === 'add-product') resetProductForm();
         showSellerSection(button.dataset.section);
       });
     });
