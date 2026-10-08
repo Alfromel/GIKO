@@ -865,24 +865,24 @@
                 <div class="delivery-method-card" id="method-pickup" data-method="pickup">
                     <i class="fas fa-store"></i>
                     <div class="dm-title">Recoger en tienda</div>
-                    <div class="dm-sub">Tú vas al local</div>
+                    <div class="dm-sub">Punto propio de la tienda</div>
                 </div>
                 <div class="delivery-method-card" id="method-meetup" data-method="meetup">
                     <i class="fas fa-map-marker-alt"></i>
                     <div class="dm-title">Punto de encuentro</div>
-                    <div class="dm-sub">Lugares fijos</div>
+                    <div class="dm-sub">Puntos GIKO habilitados</div>
                 </div>
             </div>
 
-            <!-- Opciones de recogida en tienda (con botón Google Maps) -->
+            <!-- Puntos personalizados registrados por la tienda del producto -->
             <div id="pickup-section" class="hidden">
-                <div class="section-title"><i class="fas fa-shop" style="color:var(--primary)"></i> Elige una sucursal</div>
+                <div class="section-title"><i class="fas fa-shop" style="color:var(--primary)"></i> Punto de recogida de la tienda</div>
                 <div class="pickup-list" id="pickup-list"></div>
             </div>
 
-            <!-- Opciones de punto de encuentro (lugares fijos con coordenadas predefinidas) -->
+            <!-- Puntos comunes de GIKO habilitados por el asociado -->
             <div id="meetup-section" class="hidden">
-                <div class="section-title"><i class="fas fa-map-pin" style="color:var(--primary)"></i> Elige un punto de encuentro</div>
+                <div class="section-title"><i class="fas fa-map-pin" style="color:var(--primary)"></i> Puntos de encuentro de GIKO</div>
                 <div class="meetup-points-grid" id="meetup-points-list"></div>
             </div>
 
@@ -999,7 +999,8 @@
 
         // Entrega
         let deliveryMethod = null;
-        let pickupLocations = [];
+        let storePickupLocations = [];
+        let meetupLocations = [];
         let selectedPickupLocation = null;
         let selectedMeetupPoint = null;
 
@@ -1082,7 +1083,7 @@
             document.getElementById('pickup-section').classList.toggle('hidden', method !== 'pickup');
             document.getElementById('meetup-section').classList.toggle('hidden', method !== 'meetup');
 
-            if (method === 'pickup' && pickupLocations.length === 0) {
+            if (method === 'pickup' && storePickupLocations.length === 0) {
                 loadPickupLocations();
             }
             if (method === 'meetup') {
@@ -1094,43 +1095,32 @@
 
         async function loadPickupLocations() {
             const list = document.getElementById('pickup-list');
-            list.innerHTML = '<p class="text-xs text-gray-400">Cargando sucursales...</p>';
+            list.innerHTML = '<p class="text-xs text-gray-400">Cargando punto de recogida de la tienda...</p>';
 
             try {
-                const locationQuery = supabase.from('pickup_locations').select('*').eq('is_active', true);
-                let result;
-                if (currentProduct.store_id) {
-                    const [{ data: ownLocations, error: ownError }, { data: enabledRows, error: enabledError }] = await Promise.all([
-                        locationQuery.eq('store_id', currentProduct.store_id).order('name'),
-                        supabase.from('seller_store_pickup_locations').select('pickup_location_id').eq('store_id', currentProduct.store_id).eq('is_enabled', true)
-                    ]);
-                    if (ownError) throw ownError;
-                    if (enabledError) throw enabledError;
-                    const enabledIds = (enabledRows || []).map(row => row.pickup_location_id);
-                    let sharedLocations = [];
-                    if (enabledIds.length) {
-                        const { data, error } = await supabase.from('pickup_locations').select('*').in('id', enabledIds).eq('is_active', true);
-                        if (error) throw error;
-                        sharedLocations = data || [];
-                    }
-                    result = { data: [...(ownLocations || []), ...sharedLocations] };
+                if (!currentProduct.store_id) {
+                    storePickupLocations = [];
                 } else {
-                    result = await locationQuery.is('store_id', null).order('name');
-                    if (result.error) throw result.error;
+                    const { data, error } = await supabase.from('pickup_locations').select('*')
+                        .eq('store_id', currentProduct.store_id).eq('is_active', true).order('name');
+                    if (error) throw error;
+                    storePickupLocations = data || [];
                 }
-                pickupLocations = result.data || [];
             } catch (error) {
                 console.error('Error loading pickup locations:', error);
                 list.innerHTML = '<p class="text-xs text-red-500">No se pudieron cargar los puntos de recogida</p>';
                 return;
             }
 
-            if (pickupLocations.length === 0) {
-                list.innerHTML = '<p class="text-xs text-gray-400">No hay sucursales disponibles por el momento</p>';
+            if (storePickupLocations.length === 0) {
+                const emptyMessage = currentProduct.store_id
+                    ? 'Esta tienda todavía no registró un punto propio de recogida.'
+                    : 'Este producto no tiene un punto propio registrado para recogerlo en tienda.';
+                list.innerHTML = `<p class="text-xs text-gray-400">${emptyMessage}</p>`;
                 return;
             }
 
-            list.innerHTML = pickupLocations.map(loc => {
+            list.innerHTML = storePickupLocations.map(loc => {
                 const gmapsLink = loc.latitude && loc.longitude 
                     ? generateGoogleMapsLink(loc.latitude, loc.longitude, loc.name)
                     : null;
@@ -1156,7 +1146,7 @@
                     document.querySelectorAll('.pickup-card').forEach(c => c.classList.remove('selected'));
                     card.classList.add('selected');
                     const locId = card.dataset.locationId;
-                    selectedPickupLocation = pickupLocations.find(l => l.id === locId);
+                    selectedPickupLocation = storePickupLocations.find(l => l.id === locId);
                     updateBuyButton();
                 });
             });
@@ -1168,29 +1158,30 @@
             try {
                 let locations = [];
                 if (currentProduct.store_id) {
-                    const [{ data: own, error: ownError }, { data: enabled, error: enabledError }] = await Promise.all([
-                        supabase.from('pickup_locations').select('*').eq('store_id', currentProduct.store_id).eq('is_active', true).order('name'),
-                        supabase.from('seller_store_pickup_locations').select('pickup_location_id').eq('store_id', currentProduct.store_id).eq('is_enabled', true)
-                    ]);
-                    if (ownError) throw ownError;
+                    const { data: enabled, error: enabledError } = await supabase.from('seller_store_pickup_locations')
+                        .select('pickup_location_id').eq('store_id', currentProduct.store_id).eq('is_enabled', true);
                     if (enabledError) throw enabledError;
                     const ids = (enabled || []).map(item => item.pickup_location_id);
-                    let shared = [];
+                    let gikoPoints = [];
                     if (ids.length) {
-                        const { data, error } = await supabase.from('pickup_locations').select('*').in('id', ids).eq('is_active', true);
+                        const { data, error } = await supabase.from('pickup_locations').select('*')
+                            .in('id', ids).is('store_id', null).eq('is_active', true).order('name');
                         if (error) throw error;
-                        shared = data || [];
+                        gikoPoints = data || [];
                     }
-                    locations = [...(own || []), ...shared];
+                    locations = gikoPoints;
                 } else {
                     const { data, error } = await supabase.from('pickup_locations').select('*')
                         .is('store_id', null).eq('is_active', true).order('name');
                     if (error) throw error;
                     locations = data || [];
                 }
-                pickupLocations = locations;
+                meetupLocations = locations;
                 if (!locations.length) {
-                    list.innerHTML = '<p class="text-xs text-gray-400">Esta tienda no tiene puntos de encuentro disponibles.</p>';
+                    const emptyMessage = currentProduct.store_id
+                        ? 'Esta tienda todavía no habilitó puntos de encuentro de GIKO en su dashboard.'
+                        : 'No hay puntos de encuentro de GIKO activos por el momento.';
+                    list.innerHTML = `<p class="text-xs text-gray-400">${emptyMessage}</p>`;
                     return;
                 }
 
@@ -1224,7 +1215,7 @@
                     document.querySelectorAll('.meetup-point-card').forEach(c => c.classList.remove('selected'));
                     card.classList.add('selected');
                     const pointId = card.dataset.pointId;
-                    const location = pickupLocations.find(p => p.id === pointId);
+                    const location = meetupLocations.find(p => p.id === pointId);
                     if (!location) return;
                     selectedMeetupPoint = {
                         id: location.id,
@@ -1318,7 +1309,8 @@
             currentProduct = product;
             selectedQuantity = 1;
             deliveryMethod = null;
-            pickupLocations = [];
+            storePickupLocations = [];
+            meetupLocations = [];
             selectedPickupLocation = null;
             selectedMeetupPoint = null;
             selectedDate = '';
@@ -1389,7 +1381,7 @@
             } else if (!hasMethod) {
                 buyBtn.innerHTML = '<i class="fas fa-truck mr-2"></i>Elige cómo recibirlo';
             } else if (deliveryMethod === 'pickup' && !hasPickupChoice) {
-                buyBtn.innerHTML = '<i class="fas fa-store mr-2"></i>Elige una sucursal';
+                buyBtn.innerHTML = '<i class="fas fa-store mr-2"></i>Elige un punto de la tienda';
             } else if (deliveryMethod === 'meetup' && !hasMeetupChoice) {
                 buyBtn.innerHTML = '<i class="fas fa-map-pin mr-2"></i>Elige punto de encuentro';
             } else if (!hasDate) {
