@@ -28,6 +28,44 @@
             margin: 0 auto;
         }
 
+        .shop-loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            display: grid;
+            place-items: center;
+            background: rgba(248, 250, 252, .82);
+            transition: opacity 220ms ease, visibility 220ms ease;
+        }
+        .shop-loading-screen.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .shop-loader-mark {
+            position: relative;
+            width: 58px;
+            height: 58px;
+            border: 3px solid rgba(249, 115, 22, .14);
+            border-top-color: #fb923c;
+            border-right-color: #ea580c;
+            border-radius: 50%;
+            animation: shop-loader-spin 850ms cubic-bezier(.5, .1, .4, .9) infinite;
+            will-change: transform;
+        }
+        .shop-loader-mark::after {
+            position: absolute;
+            inset: 6px;
+            border: 2px solid transparent;
+            border-bottom-color: rgba(251, 146, 60, .48);
+            border-left-color: rgba(234, 88, 12, .25);
+            border-radius: 50%;
+            content: "";
+            animation: shop-loader-spin 1.25s linear infinite reverse;
+            will-change: transform;
+        }
+        @keyframes shop-loader-spin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) {
+            .shop-loading-screen { transition: none; }
+            .shop-loader-mark, .shop-loader-mark::after { animation: none; will-change: auto; }
+        }
+
         /* ---------- HEADER ---------- */
         .mobile-header {
             position: sticky;
@@ -101,6 +139,12 @@
             cursor: pointer;
         }
         .mobile-header-action:hover { background: #ffedd5; }
+        .mobile-header-action.is-associated {
+            border-color: #86efac;
+            background: #f0fdf4;
+            color: #15803d;
+        }
+        .mobile-header-action.is-associated:hover { background: #dcfce7; }
         .mobile-header-action.back {
             border-color: transparent;
             background: transparent;
@@ -653,6 +697,9 @@
     </style>
 </head>
 <body>
+    <div id="shop-loading-screen" class="shop-loading-screen" role="status" aria-live="polite" aria-label="Cargando tienda">
+        <div class="shop-loader-mark" aria-hidden="true"></div>
+    </div>
 
     <div class="mobile-header">
         <div class="mobile-header-title">GIKO <span>SHOP</span></div>
@@ -745,6 +792,19 @@
                 </form>
                 <div id="association-status" class="text-xs text-gray-500 mt-3"></div>
             </div>
+            <div id="associated-view" class="hidden">
+                <div class="text-center py-4">
+                    <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600 text-2xl">
+                        <i class="fas fa-circle-check" aria-hidden="true"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800">¡Usted ya está asociado/a!</h4>
+                    <p id="associated-store-message" class="mt-2 text-sm text-gray-500"></p>
+                    <p id="associated-store-name" class="mt-1 font-semibold text-green-700"></p>
+                </div>
+                <button type="button" id="enter-associated-store" class="btn-primary hidden">
+                    <i class="fas fa-store mr-2" aria-hidden="true"></i>Entrar a mi tienda
+                </button>
+            </div>
         </div>
     </div>
 
@@ -754,11 +814,12 @@
                 <h3 class="text-lg font-semibold text-gray-800">Ingresar a mi tienda</h3>
                 <button type="button" class="text-gray-400" data-close-seller-access aria-label="Cerrar"><i class="fas fa-times"></i></button>
             </div>
-            <p class="text-xs text-gray-500 mb-3">Ingresa el código permanente de 6 dígitos que recibiste por WhatsApp.</p>
+            <p class="text-xs text-gray-500 mb-3">Ingresa el código permanente de 6 dígitos que recibiste por WhatsApp. Al validarlo, se recordará en este dispositivo para que puedas entrar directamente la próxima vez. Evita guardar el acceso en equipos compartidos.</p>
             <form id="seller-access-form">
                 <input id="seller-access-code" class="input-field" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="Código de 6 dígitos" required>
                 <button id="seller-access-submit" class="btn-primary mt-3" type="submit"><i class="fas fa-lock-open mr-2"></i>Validar y entrar</button>
             </form>
+            <button type="button" id="replace-seller-access-code" class="hidden mt-3 w-full text-xs font-semibold text-orange-700">Usar otro código</button>
             <div id="seller-access-message" class="seller-access-message" role="status" aria-live="polite"></div>
         </div>
     </div>
@@ -933,6 +994,8 @@
         let sellerStores = [];
         let currentTab = 'shop';
         let currentReceiptData = null;
+        let productLoadRequestId = 0;
+        let searchDebounceTimer = 0;
 
         // Entrega
         let deliveryMethod = null;
@@ -1180,6 +1243,7 @@
 
         // ---------- Productos ----------
         async function loadProducts(searchTerm = '', category = 'all') {
+            const requestId = ++productLoadRequestId;
             try {
                 let query = supabase.from('products').select('*').eq('is_active', true);
                 if (searchTerm) query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
@@ -1189,6 +1253,7 @@
 
                 const { data, error } = await query;
                 if (error) throw error;
+                if (requestId !== productLoadRequestId) return;
 
                 const activeStoreIds = new Set(sellerStores.map(store => store.id));
                 products = (data || []).filter(product =>
@@ -1196,6 +1261,7 @@
                 );
                 renderProducts(products);
             } catch (error) {
+                if (requestId !== productLoadRequestId) return;
                 console.error('Error loading products:', error);
                 showToast('Error al cargar productos', 'error');
             }
@@ -1222,7 +1288,7 @@
                 return `
                     <div class="product-card" data-product-id="${product.id}">
                         <div class="product-image-wrap">
-                            <img src="${escapeHtml(safeExternalUrl(product.image_url) || 'https://via.placeholder.com/400x400/f1f5f9/64748b?text=GIKO')}" alt="${escapeHtml(product.name)}" class="product-image">
+                            <img src="${escapeHtml(safeExternalUrl(product.image_url) || 'https://via.placeholder.com/400x400/f1f5f9/64748b?text=GIKO')}" alt="${escapeHtml(product.name)}" class="product-image" loading="lazy" decoding="async">
                             ${hasDiscount ? `<span class="badge-discount">-${product.discount_percentage}%</span>` : ''}
                             ${product.is_featured ? `<span class="badge-featured">★ Destacado</span>` : ''}
                             <span class="stock-badge ${stockClass}">${stockText}</span>
@@ -1602,31 +1668,53 @@
             });
         };
 
-        const loadAssociationStatus = async () => {
+        const loadUserAssociation = async () => {
+            const [{ data: application, error: applicationError }, { data: store, error: storeError }] = await Promise.all([
+                supabase.from('association_applications').select('status, created_at, admin_notes')
+                    .eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+                supabase.from('seller_stores').select('id, name, status')
+                    .eq('owner_user_id', currentUser.id).eq('status', 'active').maybeSingle()
+            ]);
+            if (applicationError) throw applicationError;
+            if (storeError) throw storeError;
+            return { application, store };
+        };
+        const setAssociationButtonState = associated => {
+            const button = document.getElementById('open-association-request');
+            button.classList.toggle('is-associated', associated);
+            button.setAttribute('aria-label', associated ? 'Ya estás asociado/a' : 'Quiero asociarme');
+            button.title = associated ? 'Ya estás asociado/a' : 'Quiero asociarme';
+        };
+        const renderAssociationStatus = application => {
             const statusEl = document.getElementById('association-status');
-            const { data, error } = await supabase.from('association_applications')
-                .select('status, created_at, admin_notes')
-                .eq('user_id', currentUser.id)
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .maybeSingle();
-            if (error) throw error;
-            if (!data) {
+            if (!application) {
                 statusEl.textContent = '';
                 return;
             }
             const labels = { pending: 'Pendiente', under_review: 'En revisión', approved: 'Aprobada', rejected: 'Rechazada' };
-            statusEl.textContent = `Estado de tu solicitud: ${labels[data.status] || data.status}${data.admin_notes ? ` — ${data.admin_notes}` : ''}`;
+            statusEl.textContent = `Estado de tu solicitud: ${labels[application.status] || application.status}${application.admin_notes ? ` — ${application.admin_notes}` : ''}`;
         };
 
         document.getElementById('open-association-request').addEventListener('click', async () => {
-            document.getElementById('seller-modal-title').textContent = 'Solicitar asociación';
-            document.getElementById('association-view').classList.remove('hidden');
-            document.getElementById('association-full-name').value = userProfile.full_name || '';
-            document.getElementById('association-phone').value = userProfile.phone || '';
-            document.getElementById('association-phone').readOnly = Boolean(userProfile.phone);
             try {
-                await loadAssociationStatus();
+                const { application, store } = await loadUserAssociation();
+                const associated = application?.status === 'approved' || Boolean(store);
+                setAssociationButtonState(associated);
+                document.getElementById('association-view').classList.toggle('hidden', associated);
+                document.getElementById('associated-view').classList.toggle('hidden', !associated);
+                document.getElementById('seller-modal-title').textContent = associated ? 'Mi asociación' : 'Solicitar asociación';
+                if (associated) {
+                    document.getElementById('associated-store-message').textContent = store
+                        ? 'Tu tienda ya está activa en GIKO Shop.'
+                        : 'Tu solicitud fue aprobada. La tienda aparecerá aquí cuando esté activa.';
+                    document.getElementById('associated-store-name').textContent = store?.name || '';
+                    document.getElementById('enter-associated-store').classList.toggle('hidden', !store);
+                } else {
+                    document.getElementById('association-full-name').value = userProfile.full_name || '';
+                    document.getElementById('association-phone').value = userProfile.phone || '';
+                    document.getElementById('association-phone').readOnly = Boolean(userProfile.phone);
+                    renderAssociationStatus(application);
+                }
                 openModal('seller-modal');
             } catch (error) {
                 console.error('Error consultando solicitud de asociación:', error);
@@ -1635,18 +1723,111 @@
         });
 
         const sellerAccessStorageKey = 'giko_verified_seller_access';
+        const rememberedSellerCodeKey = 'giko_seller_access_code';
         const sellerAccessMessage = document.getElementById('seller-access-message');
+        const rememberedSellerCodeCookie = 'giko_seller_access_code';
+        const goToSellerStore = () => window.location.assign('tienda-asociados.html?v=20261008c');
+        const getSellerCodeCookie = () => {
+            const match = document.cookie.match(/(?:^|;\s*)giko_seller_access_code=(\d{6})(?:;|$)/);
+            return match ? match[1] : null;
+        };
+        const saveRememberedSellerCode = code => {
+            let saved = false;
+            try {
+                localStorage.setItem(rememberedSellerCodeKey, code);
+                localStorage.setItem(sellerAccessStorageKey, JSON.stringify({ code, validatedAt: Date.now() }));
+                saved = true;
+            } catch (error) {
+                console.warn('No se pudo guardar el acceso en localStorage:', error);
+            }
+            try {
+                sessionStorage.setItem(rememberedSellerCodeKey, code);
+            } catch (error) {
+                console.warn('No se pudo guardar el acceso en sessionStorage:', error);
+            }
+            const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+            try {
+                document.cookie = `${rememberedSellerCodeCookie}=${code}; Max-Age=31536000; Path=/; SameSite=Lax${secure}`;
+                saved = saved || getSellerCodeCookie() === code;
+            } catch (error) {
+                console.warn('No se pudo guardar el acceso en una cookie:', error);
+            }
+            if (!saved) throw new Error('El navegador no permitió guardar el acceso. Revisa la configuración de privacidad.');
+        };
+        const getRememberedSellerCode = () => {
+            let savedCode = null;
+            try {
+                savedCode = localStorage.getItem(rememberedSellerCodeKey);
+                if (!/^\d{6}$/.test(savedCode || '')) {
+                    const savedAccess = JSON.parse(localStorage.getItem(sellerAccessStorageKey) || 'null');
+                    savedCode = savedAccess?.code;
+                }
+            } catch (error) {
+                console.warn('No se pudo leer el almacenamiento local del acceso asociado:', error);
+            }
+            if (!/^\d{6}$/.test(savedCode || '')) {
+                try {
+                    savedCode = sessionStorage.getItem(rememberedSellerCodeKey);
+                } catch (error) {
+                    console.warn('No se pudo leer la sesión del acceso asociado:', error);
+                }
+            }
+            if (!/^\d{6}$/.test(savedCode || '')) savedCode = getSellerCodeCookie();
+            if (/^\d{6}$/.test(savedCode || '')) {
+                try {
+                    saveRememberedSellerCode(savedCode);
+                } catch (error) {
+                    console.warn('El acceso continúa guardado solo en el almacenamiento disponible:', error);
+                }
+                return savedCode;
+            }
+            return null;
+        };
         const hashSellerAccessCode = async code => {
             const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code));
             return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
         };
         const openSellerAccess = () => {
+            let hasRememberedAccess = false;
+            try {
+                const rememberedCode = getRememberedSellerCode();
+                hasRememberedAccess = Boolean(rememberedCode);
+                if (rememberedCode) {
+                    goToSellerStore();
+                    return;
+                }
+                hasRememberedAccess = Boolean(getSellerCodeCookie());
+            } catch (error) {
+                console.error('No se pudo leer el acceso guardado de la tienda:', error);
+                sellerAccessMessage.textContent = 'No se pudo leer el acceso guardado. Puedes ingresar tu código nuevamente.';
+            }
             sellerAccessMessage.textContent = '';
             document.getElementById('seller-access-code').value = '';
+            document.getElementById('replace-seller-access-code').classList.toggle('hidden', !hasRememberedAccess);
             openModal('seller-access-modal');
             document.getElementById('seller-access-code').focus();
         };
         document.getElementById('open-seller-access')?.addEventListener('click', openSellerAccess);
+        document.getElementById('enter-associated-store')?.addEventListener('click', () => {
+            closeModal('seller-modal');
+            openSellerAccess();
+        });
+        document.getElementById('replace-seller-access-code')?.addEventListener('click', () => {
+            try {
+                localStorage.removeItem(sellerAccessStorageKey);
+                localStorage.removeItem(rememberedSellerCodeKey);
+                sessionStorage.removeItem(sellerAccessStorageKey);
+                sessionStorage.removeItem(rememberedSellerCodeKey);
+                document.cookie = `${rememberedSellerCodeCookie}=; Max-Age=0; Path=/; SameSite=Lax`;
+                document.getElementById('replace-seller-access-code').classList.add('hidden');
+                document.getElementById('seller-access-code').value = '';
+                document.getElementById('seller-access-code').focus();
+                sellerAccessMessage.textContent = 'Escribe el nuevo código de acceso.';
+            } catch (error) {
+                console.error('No se pudo borrar el acceso guardado:', error);
+                sellerAccessMessage.textContent = 'No se pudo borrar el código guardado. Intenta de nuevo.';
+            }
+        });
         document.querySelectorAll('[data-close-seller-access]').forEach(button =>
             button.addEventListener('click', () => closeModal('seller-access-modal'))
         );
@@ -1673,11 +1854,8 @@
                     .eq('id', accessCode.store_id).eq('status', 'active').maybeSingle();
                 if (storeError) throw storeError;
                 if (!store) throw new Error('El código no corresponde a una tienda activa.');
-                sessionStorage.setItem(sellerAccessStorageKey, JSON.stringify({
-                    code,
-                    validatedAt: Date.now()
-                }));
-                window.location.assign('tienda-asociados.html?v=20261005');
+                saveRememberedSellerCode(code);
+                goToSellerStore();
             } catch (error) {
                 console.error('Error validando el acceso a la tienda asociada:', error);
                 sellerAccessMessage.textContent = error.message || 'No se pudo validar el código.';
@@ -1755,23 +1933,44 @@
 
         // ---------- Inicialización ----------
         document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { window.location.href = 'index.html'; return; }
-
-            currentUser = session.user;
-            userProfile = await loadUserProfile(currentUser.id);
-            if (!userProfile) { window.location.href = 'index.html'; return; }
-
-            currentBalance = await calculateBalance(currentUser.id);
-            updateBalanceDisplay();
-
             try {
-                await loadMarketplaceOptions();
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) { window.location.href = 'index.html'; return; }
+
+                currentUser = session.user;
+                const [profileResult, associationResult, balanceResult, marketplaceResult] = await Promise.allSettled([
+                    loadUserProfile(currentUser.id),
+                    loadUserAssociation(),
+                    calculateBalance(currentUser.id),
+                    loadMarketplaceOptions()
+                ]);
+                if (profileResult.status === 'rejected') throw profileResult.reason;
+                userProfile = profileResult.value;
+                if (!userProfile) { window.location.href = 'index.html'; return; }
+
+                if (associationResult.status === 'fulfilled') {
+                    const { application, store } = associationResult.value;
+                    setAssociationButtonState(application?.status === 'approved' || Boolean(store));
+                } else {
+                    console.error('Error cargando el estado de asociado:', associationResult.reason);
+                    showToast('No se pudo comprobar tu estado de asociación', 'error');
+                }
+
+                currentBalance = balanceResult.status === 'fulfilled' ? balanceResult.value : 0;
+                if (balanceResult.status === 'rejected') console.error('Error calculando saldo:', balanceResult.reason);
+                updateBalanceDisplay();
+
+                if (marketplaceResult.status === 'rejected') {
+                    console.error('Error cargando categorías y tiendas:', marketplaceResult.reason);
+                    showToast('No se pudieron cargar las categorías y tiendas asociadas', 'error');
+                }
+                await loadProducts();
             } catch (error) {
-                console.error('Error cargando categorías y tiendas:', error);
-                showToast('No se pudieron cargar las categorías y tiendas asociadas', 'error');
+                console.error('Error inicializando la tienda:', error);
+                showToast(error.message || 'No se pudo cargar la tienda', 'error');
+            } finally {
+                document.getElementById('shop-loading-screen').classList.add('is-hidden');
             }
-            await loadProducts();
 
             // Tabs
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1780,7 +1979,11 @@
 
             // Search
             document.getElementById('product-search').addEventListener('input', (e) => {
-                loadProducts(e.target.value, currentCategory);
+                window.clearTimeout(searchDebounceTimer);
+                const searchTerm = e.target.value;
+                searchDebounceTimer = window.setTimeout(() => {
+                    loadProducts(searchTerm, currentCategory);
+                }, 180);
             });
             document.getElementById('store-filter').addEventListener('change', (event) => {
                 currentStoreFilter = event.target.value;

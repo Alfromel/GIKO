@@ -56,6 +56,43 @@
     .notice.error { background: #fff0f0; color: #a22c35; }
     .access-hero.blocked { background: radial-gradient(circle at 88% 10%, #ef4444 0, transparent 35%), linear-gradient(135deg, #541b24, #251018 70%); }
     .hidden { display: none !important; }
+    .seller-loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      background: rgba(245, 247, 251, .84);
+      transition: opacity 220ms ease, visibility 220ms ease;
+    }
+    .seller-loading-screen.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .seller-loader-mark {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border: 3px solid rgba(249, 115, 22, .14);
+      border-top-color: #fb923c;
+      border-right-color: #ea580c;
+      border-radius: 50%;
+      animation: seller-loader-spin 850ms cubic-bezier(.5, .1, .4, .9) infinite;
+      will-change: transform;
+    }
+    .seller-loader-mark::after {
+      position: absolute;
+      inset: 6px;
+      border: 2px solid transparent;
+      border-bottom-color: rgba(251, 146, 60, .48);
+      border-left-color: rgba(234, 88, 12, .25);
+      border-radius: 50%;
+      content: "";
+      animation: seller-loader-spin 1.25s linear infinite reverse;
+      will-change: transform;
+    }
+    @keyframes seller-loader-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .seller-loading-screen { transition: none; }
+      .seller-loader-mark, .seller-loader-mark::after { animation: none; will-change: auto; }
+    }
     .dashboard-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; margin-bottom: 22px; }
     .eyebrow { display: flex; align-items: center; gap: 7px; color: var(--brand-dark); font-size: 10px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; }
     .dashboard-head h1 { margin: 8px 0 5px; color: var(--navy); font-size: clamp(25px, 4vw, 34px); letter-spacing: -1.1px; }
@@ -146,23 +183,93 @@
     .empty i { display: block; margin-bottom: 10px; color: #c4cad5; font-size: 24px; }
     .toast { position: fixed; right: 20px; bottom: 20px; z-index: 10; max-width: min(420px, calc(100% - 40px)); padding: 13px 16px; border-radius: 11px; background: var(--navy); color: white; box-shadow: var(--shadow); font-size: 12px; }
     .toast.error { background: #a22c35; }
+    .dashboard-head {
+      position: relative;
+      overflow: hidden;
+      min-height: 185px;
+      align-items: center;
+      padding: 28px 32px;
+      border: 1px solid #233149;
+      border-radius: 21px;
+      background: radial-gradient(circle at 78% 5%, #f9731645 0, transparent 35%), linear-gradient(120deg, #101828, #1c2c46 72%, #263750);
+      box-shadow: 0 18px 40px #10182820;
+    }
+    .dashboard-head::after {
+      position: absolute;
+      right: 22%;
+      bottom: -115px;
+      width: 250px;
+      height: 250px;
+      border: 1px solid #ffffff0c;
+      border-radius: 50%;
+      content: "";
+      box-shadow: 0 0 0 28px #ffffff08, 0 0 0 58px #ffffff05;
+      pointer-events: none;
+    }
+    .dashboard-head > div { position: relative; z-index: 1; }
+    .dashboard-head .eyebrow { color: #fed7aa; }
+    .dashboard-head h1 { color: white; }
+    .dashboard-head p { color: #c2ccda; }
+    .store-badge { border-color: #ffffff25; background: #ffffff12; backdrop-filter: blur(8px); }
+    .store-badge-icon { background: #f9731626; color: #fdba74; }
+    .store-badge small { color: #c2ccda; }
+    .store-badge strong { color: white; }
+    .stats { gap: 16px; }
+    .stat {
+      position: relative;
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      align-items: center;
+      column-gap: 13px;
+      min-height: 98px;
+      padding: 18px;
+      border-color: #e7ebf2;
+      border-radius: 16px;
+      box-shadow: 0 8px 22px #18243a08;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .stat:hover { transform: translateY(-2px); box-shadow: 0 12px 26px #18243a12; }
+    .stat-icon { grid-row: span 2; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 14px; background: #fff1e5; color: var(--brand-dark); font-size: 17px; }
+    .stat-label { align-self: end; font-size: 9px; }
+    .stat-value { align-self: start; margin-top: 4px; font-size: 25px; }
+    .workspace { gap: 20px; }
+    .side-nav { padding: 10px; border-radius: 16px; }
+    .side-nav button { min-height: 47px; border-radius: 10px; transition: background .16s ease, color .16s ease; }
+    .side-nav button:not(.active):hover { background: #f8fafc; color: var(--navy); }
+    .panel { border-radius: 17px; }
+    .panel-head { padding: 21px 23px; background: linear-gradient(180deg, #fff, #fcfdff); }
+    .panel-head h2 { font-size: 16px; }
+    .product-row { border-color: #e9edf3; border-radius: 14px; transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
+    .product-row:hover { transform: translateY(-1px); border-color: #fed7aa; box-shadow: 0 8px 20px #18243a0b; }
     @media (max-width: 760px) {
-      .topbar { height: 62px; padding: 0 16px; }
-      main { width: min(100% - 24px, 560px); margin-top: 22px; }
-      .dashboard-head { align-items: flex-start; flex-direction: column; }
+      .top-actions { gap: 6px; }
+      .top-link { padding: 8px 10px; font-size: 10px; }
+      main { width: min(100% - 24px, 560px); margin-top: 18px; }
+      .dashboard-head { min-height: 0; align-items: stretch; gap: 16px; padding: 22px; }
+      .dashboard-head h1 { overflow-wrap: anywhere; font-size: clamp(24px, 7vw, 31px); }
       .store-badge { width: 100%; }
+      .store-badge strong { max-width: none; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-bottom: 15px; }
+      .stat { grid-template-columns: 37px minmax(0, 1fr); gap: 9px; min-height: 82px; padding: 12px; }
+      .stat:last-child { grid-column: 1 / -1; }
+      .stat-icon { width: 37px; height: 37px; border-radius: 11px; font-size: 14px; }
+      .topbar { height: 62px; padding: 0 16px; }
       .workspace { grid-template-columns: 1fr; }
-      .side-nav { position: static; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
-      .side-nav button { justify-content: center; flex-direction: column; gap: 4px; min-height: 54px; padding: 7px 3px; font-size: 9px; }
+      .side-nav { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 7px; }
+      .side-nav button { justify-content: flex-start; flex-direction: row; gap: 9px; min-height: 46px; margin: 0; padding: 9px 11px; font-size: 11px; }
       .side-nav i { font-size: 14px; }
-      .stats { gap: 8px; }
-      .stat { padding: 13px 11px; }
-      .stat-label { font-size: 8px; line-height: 1.4; }
-      .stat-value { font-size: 22px; }
+      .stat-label { font-size: 8px; line-height: 1.35; }
+      .stat-value { margin-top: 3px; font-size: 21px; }
       .panel-head, .panel-body { padding: 16px; }
+      .panel-head { align-items: stretch; flex-direction: column; gap: 12px; }
+      .panel-head > .button { width: 100%; }
       .product-form { grid-template-columns: 1fr; }
       .field.full { grid-column: 1 / -1; }
       .form-actions { grid-column: 1 / -1; }
+      .form-actions .button { flex: 1; }
+      .product-row { grid-template-columns: 52px minmax(0, 1fr) auto; gap: 10px; padding: 10px; }
+      .product-thumb { width: 52px; height: 52px; }
+      .product-row > .button { grid-column: auto; justify-self: stretch; padding: 8px; font-size: 10px; }
       .map-search-row { grid-template-columns: minmax(0, 1fr) auto; }
       .map-search-row #seller-my-location { grid-column: 1 / -1; }
       #seller-pickup-map { height: 280px; }
@@ -173,8 +280,12 @@
       .access-body { padding: 23px 25px 26px; }
     }
     @media (max-width: 390px) {
-      .side-nav button { font-size: 8px; }
-      .product-row { grid-template-columns: 48px minmax(0, 1fr); }
+      .dashboard-head { padding: 17px; }
+      .stat { grid-template-columns: 32px minmax(0, 1fr); gap: 7px; padding: 10px; }
+      .stat-icon { width: 32px; height: 32px; }
+      .stat-value { font-size: 19px; }
+      .side-nav button { gap: 7px; padding: 8px; font-size: 10px; }
+      .product-row { grid-template-columns: 44px minmax(0, 1fr); }
       .product-thumb { width: 48px; height: 48px; }
       .product-row > .button { grid-column: 2; justify-self: start; }
       .location-details-grid { grid-template-columns: 1fr; gap: 11px; }
@@ -188,11 +299,10 @@
       .brand { gap: 7px; font-size: 12px; }
       .brand-mark { width: 33px; height: 33px; }
       .top-link { min-height: 36px; padding: 7px 9px; font-size: 10px; }
-      .stats { grid-template-columns: 1fr; }
-      .stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-      .stat-value { margin-top: 0; font-size: 20px; }
-      .panel-head { align-items: flex-start; flex-direction: column; }
-      .panel-head > .button { width: 100%; }
+      .side-nav button { font-size: 9px; }
+      .stat { min-height: 75px; }
+      .product-row { grid-template-columns: 40px minmax(0, 1fr); }
+      .product-thumb { width: 40px; height: 40px; }
       .pickup-tab { gap: 5px; padding: 8px 5px; font-size: 9px; }
       .pickup-section { padding: 11px; }
       .map-search-row { grid-template-columns: minmax(0, 1fr) minmax(0, auto); }
@@ -204,10 +314,13 @@
   </style>
 </head>
 <body>
+  <div id="seller-loading-screen" class="seller-loading-screen" role="status" aria-live="polite" aria-label="Cargando tienda asociada">
+    <div class="seller-loader-mark" aria-hidden="true"></div>
+  </div>
   <header class="topbar">
     <a class="brand" href="tienda.html"><span class="brand-mark">G</span><span>GIKO <span style="color:#f97316">ASOCIADOS</span></span></a>
     <div class="top-actions">
-      <a class="top-link" href="tienda.html"><i class="fas fa-arrow-left"></i><span>Volver a la tienda</span></a>
+      <a class="top-link" href="tienda.html?v=20261008d"><i class="fas fa-arrow-left"></i><span>Volver a la tienda</span></a>
     </div>
   </header>
 
@@ -219,16 +332,16 @@
           <h1 id="portal-title">Abriendo tu tienda</h1>
           <p id="portal-status">La verificación aún no empezó. Si este mensaje no cambia, el hosting está bloqueando JavaScript y debe corregirse su política CSP para que esta tienda pueda conectarse a Supabase.</p>
         </div>
-        <div class="access-body"><a class="button" href="tienda.html#seller-access">Volver a la tienda para ingresar</a></div>
+        <div class="access-body"><a class="button" href="tienda.html?v=20261008c">Volver a la tienda para ingresar</a></div>
       </div>
     </section>
 
     <section id="seller-dashboard" class="hidden">
       <div class="dashboard-head">
         <div>
-          <div class="eyebrow"><i class="fas fa-circle-check"></i> Panel de asociado</div>
+          <div class="eyebrow"><i class="fas fa-circle-check"></i> Tu espacio de trabajo</div>
           <h1>Hola, <span id="seller-owner-name">asociado</span></h1>
-          <p>Administra tu catálogo y dónde pueden recoger sus pedidos.</p>
+          <p>Administra tu tienda, tus productos y las opciones de recogida desde un solo lugar.</p>
         </div>
         <div class="store-badge">
           <span class="store-badge-icon"><i class="fas fa-shop"></i></span>
@@ -237,21 +350,27 @@
       </div>
 
       <div class="stats">
-        <article class="stat"><div class="stat-label">Productos publicados</div><div class="stat-value" id="stat-products">0</div></article>
-        <article class="stat"><div class="stat-label">Puntos propios</div><div class="stat-value" id="stat-own-locations">0</div></article>
-        <article class="stat"><div class="stat-label">Puntos comunes activos</div><div class="stat-value" id="stat-shared-locations">0</div></article>
+        <article class="stat"><span class="stat-icon"><i class="fas fa-box-open" aria-hidden="true"></i></span><div class="stat-label">Productos publicados</div><div class="stat-value" id="stat-products">0</div></article>
+        <article class="stat"><span class="stat-icon"><i class="fas fa-location-dot" aria-hidden="true"></i></span><div class="stat-label">Puntos propios</div><div class="stat-value" id="stat-own-locations">0</div></article>
+        <article class="stat"><span class="stat-icon"><i class="fas fa-map-location-dot" aria-hidden="true"></i></span><div class="stat-label">Puntos comunes activos</div><div class="stat-value" id="stat-shared-locations">0</div></article>
       </div>
 
       <div class="workspace">
         <nav class="side-nav" aria-label="Secciones de mi tienda">
-          <button type="button" class="active" data-section="products"><i class="fas fa-box"></i><span>Productos</span></button>
+          <button type="button" class="active" data-section="products"><i class="fas fa-box"></i><span>Tus productos</span></button>
+          <button type="button" data-section="add-product"><i class="fas fa-plus"></i><span>Agregar producto</span></button>
           <button type="button" data-section="locations"><i class="fas fa-location-dot"></i><span>Recogida</span></button>
           <button type="button" data-section="store-info"><i class="fas fa-circle-info"></i><span>Mi tienda</span></button>
         </nav>
 
         <section id="section-products" class="panel">
-          <div class="panel-head"><span><h2>Tu catálogo</h2><p>Publica y administra los productos de tu tienda.</p></span><button id="show-product-form" type="button" class="button primary"><i class="fas fa-plus"></i> Agregar producto</button></div>
-          <div id="product-form-wrap" class="panel-body hidden">
+          <div class="panel-head"><span><h2>Tus productos</h2><p>Consulta los artículos de tu tienda y administra su disponibilidad.</p></span><button id="show-product-form" type="button" class="button primary"><i class="fas fa-plus"></i> Agregar producto</button></div>
+          <div id="seller-products" class="panel-body product-list"><div class="empty"><i class="fas fa-spinner fa-spin"></i>Cargando productos...</div></div>
+        </section>
+
+        <section id="section-add-product" class="panel hidden">
+          <div class="panel-head"><span><h2>Agregar producto</h2><p>Completa los datos para publicar un artículo en tu tienda.</p></span></div>
+          <div id="product-form-wrap" class="panel-body">
             <form id="product-form" class="product-form">
               <div class="field"><label for="product-name">Nombre</label><input id="product-name" maxlength="160" placeholder="Ej. Bolso artesanal" required></div>
               <div class="field"><label for="product-category">Categoría</label><select id="product-category" required><option value="">Cargando categorías...</option></select></div>
@@ -262,7 +381,6 @@
               <div class="form-actions"><button id="cancel-product-form" class="button" type="button">Cancelar</button><button id="save-product" class="button primary" type="submit"><i class="fas fa-cloud-arrow-up"></i> Publicar</button></div>
             </form>
           </div>
-          <div id="seller-products" class="panel-body product-list"><div class="empty"><i class="fas fa-spinner fa-spin"></i>Cargando productos...</div></div>
         </section>
 
         <section id="section-locations" class="panel hidden">
@@ -382,6 +500,26 @@
     let pickupLocationsLoading = null;
     const defaultPickupMapCenter = [-16.5000, -68.1500];
     const sellerAccessStorageKey = 'giko_verified_seller_access';
+    const rememberedSellerCodeKey = 'giko_seller_access_code';
+    const getSellerCodeCookie = () => {
+      const match = document.cookie.match(/(?:^|;\s*)giko_seller_access_code=(\d{6})(?:;|$)/);
+      return match ? match[1] : null;
+    };
+    const saveRememberedSellerCode = code => {
+      try {
+        localStorage.setItem(rememberedSellerCodeKey, code);
+        localStorage.setItem(sellerAccessStorageKey, JSON.stringify({ code, validatedAt: Date.now() }));
+      } catch (error) {
+        console.warn('No se pudo guardar el código de acceso en localStorage:', error);
+      }
+      try {
+        sessionStorage.setItem(rememberedSellerCodeKey, code);
+      } catch (error) {
+        console.warn('No se pudo guardar el código de acceso en sessionStorage:', error);
+      }
+      const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie = `giko_seller_access_code=${code}; Max-Age=31536000; Path=/; SameSite=Lax${secure}`;
+    };
 
     const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -411,6 +549,7 @@
       document.body.appendChild(toast);
       window.setTimeout(() => toast.remove(), 3800);
     };
+    const hideSellerLoading = () => document.getElementById('seller-loading-screen').classList.add('is-hidden');
     async function loadSellerDashboard() {
       document.getElementById('seller-store-name').textContent = sellerStore.name;
       document.getElementById('info-store-name').textContent = sellerStore.name;
@@ -455,7 +594,7 @@
         const category = sellerCategories.find(item => item.id === product.category_id);
         const image = safeImageUrl(product.image_url);
         return `<article class="product-row">
-          <img class="product-thumb" src="${escapeHtml(image || 'https://via.placeholder.com/100x100/f2f4f7/667085?text=GIKO')}" alt="">
+          <img class="product-thumb" src="${escapeHtml(image || 'https://via.placeholder.com/100x100/f2f4f7/667085?text=GIKO')}" alt="" loading="lazy" decoding="async">
           <div>
             <h3>${escapeHtml(product.name)}</h3>
             <p>${escapeHtml(category?.name || 'Sin categoría')} · ${Number(product.stock)} unidades</p>
@@ -769,13 +908,26 @@
       }
     }
 
+    function showSellerSection(sectionName) {
+      document.querySelectorAll('[data-section]').forEach(button => {
+        button.classList.toggle('active', button.dataset.section === sectionName);
+      });
+      document.querySelectorAll('[id^="section-"]').forEach(section => section.classList.add('hidden'));
+      const section = document.getElementById(`section-${sectionName}`);
+      if (!section) throw new Error(`No existe la sección del panel: ${sectionName}`);
+      section.classList.remove('hidden');
+      if (sectionName === 'locations') activatePickupTab('shared');
+      if (sectionName === 'add-product') {
+        window.setTimeout(() => document.getElementById('product-name').focus(), 0);
+      }
+    }
+
     document.getElementById('show-product-form').addEventListener('click', () => {
-      document.getElementById('product-form-wrap').classList.remove('hidden');
-      document.getElementById('product-name').focus();
+      showSellerSection('add-product');
     });
     document.getElementById('cancel-product-form').addEventListener('click', () => {
-      document.getElementById('product-form-wrap').classList.add('hidden');
       document.getElementById('product-form').reset();
+      showSellerSection('products');
     });
 
     document.getElementById('product-form').addEventListener('submit', async event => {
@@ -805,8 +957,8 @@
         });
         if (error) throw error;
         form.reset();
-        document.getElementById('product-form-wrap').classList.add('hidden');
         await loadSellerDashboard();
+        showSellerSection('products');
         showToast('Tu producto se publicó correctamente.');
       } catch (error) {
         console.error('Error guardando producto asociado:', error);
@@ -890,44 +1042,70 @@
 
     document.querySelectorAll('[data-section]').forEach(button => {
       button.addEventListener('click', () => {
-        document.querySelectorAll('[data-section]').forEach(item => item.classList.toggle('active', item === button));
-        document.querySelectorAll('[id^="section-"]').forEach(section => section.classList.add('hidden'));
-        document.getElementById(`section-${button.dataset.section}`).classList.remove('hidden');
-        if (button.dataset.section === 'locations') {
-          activatePickupTab('shared');
-        }
+        showSellerSection(button.dataset.section);
       });
     });
 
     async function initializeSellerAccess() {
       try {
-        const storedAccess = sessionStorage.getItem(sellerAccessStorageKey);
-        if (!storedAccess) throw new Error('Primero ingresa tu código desde el botón “Mi tienda” en la tienda.');
-        let verifiedAccess;
+        let savedCode = null;
         try {
-          verifiedAccess = JSON.parse(storedAccess);
-        } catch {
-          sessionStorage.removeItem(sellerAccessStorageKey);
-          throw new Error('El acceso guardado no es válido. Regresa a la tienda e ingresa tu código.');
+          savedCode = localStorage.getItem(rememberedSellerCodeKey);
+          if (!/^\d{6}$/.test(savedCode || '')) {
+            const legacyAccess = JSON.parse(localStorage.getItem(sellerAccessStorageKey) || 'null');
+            savedCode = legacyAccess?.code;
+          }
+        } catch (error) {
+          console.warn('No se pudo recuperar el acceso de localStorage:', error);
         }
-        sessionStorage.removeItem(sellerAccessStorageKey);
-        if (typeof verifiedAccess.code !== 'string' || !/^\d{6}$/.test(verifiedAccess.code)) {
+        if (!/^\d{6}$/.test(savedCode || '')) {
+          try {
+            savedCode = sessionStorage.getItem(rememberedSellerCodeKey);
+            if (!/^\d{6}$/.test(savedCode || '')) {
+              const sessionAccess = sessionStorage.getItem(sellerAccessStorageKey);
+              if (sessionAccess) savedCode = JSON.parse(sessionAccess)?.code;
+            }
+          } catch (error) {
+            console.warn('No se pudo recuperar el acceso de sessionStorage:', error);
+          }
+        }
+        if (!/^\d{6}$/.test(savedCode || '')) savedCode = getSellerCodeCookie();
+        if (!/^\d{6}$/.test(savedCode || '')) {
+          try {
+            localStorage.removeItem(sellerAccessStorageKey);
+            localStorage.removeItem(rememberedSellerCodeKey);
+          } catch (storageError) {
+            console.warn('No se pudo limpiar el acceso inválido:', storageError);
+          }
           throw new Error('No se recibió un código de acceso válido. Regresa a la tienda e inténtalo otra vez.');
         }
-        const { data: access, error: accessError } = await supabase.rpc('register_seller_access', {
-          p_code: verifiedAccess.code
-        });
+        saveRememberedSellerCode(savedCode);
+        const [accessResult, sessionResult] = await Promise.all([
+          supabase.rpc('register_seller_access', { p_code: savedCode }),
+          supabase.auth.getSession()
+        ]);
+        const { data: access, error: accessError } = accessResult;
         if (accessError) throw accessError;
         if (access?.blocked) {
           document.getElementById('portal-title').textContent = 'ACCESO BLOQUEADO';
           document.querySelector('#portal-loading .access-hero').classList.add('blocked');
           document.getElementById('portal-status').textContent = access.error || 'Tu IP o tu tienda está bloqueada. Comunícate con GIKO.';
+          hideSellerLoading();
           return;
         }
-        if (!access?.store?.id) throw new Error(access?.error || 'El código no corresponde a una tienda activa.');
+        if (!access?.store?.id) {
+          try {
+            localStorage.removeItem(sellerAccessStorageKey);
+            localStorage.removeItem(rememberedSellerCodeKey);
+          } catch (storageError) {
+            console.warn('No se pudo limpiar el código revocado:', storageError);
+          }
+          document.cookie = 'giko_seller_access_code=; Max-Age=0; Path=/; SameSite=Lax';
+          throw new Error(access?.error || 'El código no corresponde a una tienda activa. Regresa a la tienda e ingresa un código vigente.');
+        }
         const store = access.store;
         sellerStore = store;
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = sessionResult;
         sessionUser = session?.user || null;
         document.getElementById('portal-loading').classList.add('hidden');
         document.getElementById('seller-dashboard').classList.remove('hidden');
@@ -941,6 +1119,7 @@
           showToast(`Entraste a tu tienda, pero algunos datos no cargaron: ${dashboardError.message || 'error desconocido'}`, true);
         });
         await dashboardLoad;
+        hideSellerLoading();
       } catch (error) {
         console.error('Error inicializando acceso del asociado:', error);
         if (/bloquead|suspendid/i.test(error.message || '')) {
@@ -950,6 +1129,7 @@
         const status = document.getElementById('portal-status');
         status.textContent = error.message || 'No se pudo comprobar el acceso. Regresa a la tienda e inténtalo nuevamente.';
         status.parentElement.classList.add('error');
+        hideSellerLoading();
       }
     }
     initializeSellerAccess();
