@@ -148,6 +148,10 @@
     .pickup-section-head h3 { margin: 1px 0 4px; color: var(--navy); font-size: 12px; }
     .pickup-section-head p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
     .location-card { display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+    .location-card-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+    .location-card-actions .button { min-height: 34px; padding: 7px 10px; font-size: 10px; }
+    .location-card-actions .button.delete { border-color: #fee2e2; color: #b42318; }
+    .location-card-actions .button.delete:hover { border-color: #fda29b; background: #fff0ee; }
     .location-card h3 { margin: 0; color: var(--navy); font-size: 12px; }
     .location-card p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
     .location-card-main { display: flex; gap: 11px; min-width: 0; }
@@ -299,7 +303,7 @@
       .location-details-grid { grid-template-columns: 1fr; gap: 11px; }
       .location-card { flex-direction: column; }
       .location-card-main { width: 100%; }
-      .location-toggle { align-self: flex-end; }
+      .location-toggle, .location-card-actions { align-self: flex-end; }
     }
     @media (max-width: 360px) {
       main { width: calc(100% - 20px); margin-top: 16px; }
@@ -752,10 +756,18 @@
                 ${mapUrl ? `<span class="location-card-links"><a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-location-dot" aria-hidden="true"></i> Abrir en Google Maps</a></span>` : ''}
               </span>
             </div>
-            <span class="status">ACTIVO</span>
+            <div class="location-card-actions">
+              <span class="status">ACTIVO</span>
+              <button type="button" class="button delete" data-own-location-delete="${escapeHtml(location.id)}" aria-label="Eliminar punto ${escapeHtml(location.name)}">
+                <i class="fas fa-trash" aria-hidden="true"></i> Eliminar
+              </button>
+            </div>
           </article>
         `;
       }).join('') : '<div class="empty">Todavía no agregas un punto propio. Usa el formulario de abajo para crear el primero.</div>';
+      ownContainer.querySelectorAll('[data-own-location-delete]').forEach(button => {
+        button.addEventListener('click', () => deleteOwnPickupLocation(button));
+      });
       document.getElementById('stat-own-locations').textContent = String(own?.length || 0);
       document.getElementById('stat-shared-locations').textContent = String(enabledIds.size);
       document.getElementById('own-location-count').textContent = `${own?.length || 0} ${(own?.length || 0) === 1 ? 'punto' : 'puntos'}`;
@@ -978,6 +990,25 @@
         showToast(error.message || 'No se pudo actualizar el punto.', true);
       } finally {
         checkbox.disabled = false;
+      }
+    }
+
+    async function deleteOwnPickupLocation(button) {
+      const locationName = button.closest('.location-card')?.querySelector('h3')?.textContent || 'este punto';
+      if (!window.confirm(`¿Eliminar "${locationName}" de los puntos de tu tienda? Esta acción no se puede deshacer.`)) return;
+      button.disabled = true;
+      try {
+        const { data, error } = await supabase.from('pickup_locations').delete()
+          .eq('id', button.dataset.ownLocationDelete).eq('store_id', sellerStore.id)
+          .select('id').maybeSingle();
+        if (error) throw error;
+        if (!data) throw new Error('No se eliminó el punto. Comprueba que pertenezca a tu tienda y vuelve a intentarlo.');
+        await loadPickupLocations();
+        showToast('Punto de recogida eliminado.');
+      } catch (error) {
+        console.error('Error eliminando punto propio:', error);
+        showToast(error.message || 'No se pudo eliminar el punto de recogida.', true);
+        button.disabled = false;
       }
     }
 
